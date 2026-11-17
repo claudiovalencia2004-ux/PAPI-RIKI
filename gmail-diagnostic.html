@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+ content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b1220">
+<title>PAPI RIKI | Diagnóstico Gmail</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:#0b1220;
+ color:#edf2fa;
+ font-family:system-ui,-apple-system,Arial,sans-serif;
+ padding:24px 16px;
+}
+main{max-width:460px;margin:30px auto}
+h1{color:#38d9a9}
+p{color:#aab8ca;line-height:1.5}
+.card{
+ background:#17243a;
+ border:1px solid #34465e;
+ border-radius:18px;
+ padding:22px;
+}
+label{display:block;margin:15px 0}
+input{
+ display:block;
+ width:100%;
+ padding:14px;
+ margin-top:8px;
+ background:#0b1220;
+ color:white;
+ border:1px solid #52647d;
+ border-radius:10px;
+ font:inherit;
+ font-size:16px;
+}
+button{
+ width:100%;
+ padding:15px;
+ margin-top:14px;
+ background:#38d9a9;
+ color:#09241d;
+ border:0;
+ border-radius:11px;
+ font:inherit;
+ font-weight:700;
+ cursor:pointer;
+}
+button:disabled{opacity:.5}
+#result{
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ line-height:1.8;
+}
+.ok{color:#38d9a9}
+.bad{color:#ff9d9d}
+</style>
+</head>
+<body>
+<main>
+<h1>🔍 PAPI RIKI</h1>
+<h2>Diagnóstico de Gmail OAuth</h2>
+<p>
+Comprueba la configuración del servidor
+sin mostrar claves secretas.
+</p>
+
+<div class="card">
+ <form id="loginForm">
+  <label>Correo de PAPI RIKI
+   <input id="email" type="email"
+    autocomplete="username" required>
+  </label>
+  <label>Contraseña
+   <input id="password" type="password"
+    autocomplete="current-password" required>
+  </label>
+  <button id="loginButton" type="submit">
+   Iniciar sesión
+  </button>
+ </form>
+
+ <div id="diagnosticBox" hidden>
+  <p class="ok">Sesión verificada.</p>
+  <button id="checkButton" type="button">
+   🔍 Diagnosticar configuración
+  </button>
+ </div>
+
+ <p id="result" role="status"></p>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+"use strict";
+
+const URL_SUPABASE =
+ "https://kbwrxebdcpgsplfjpkxv.supabase.co";
+
+const PUBLIC_KEY =
+ "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+
+const $=id=>document.getElementById(id);
+
+const client=window.supabase.createClient(
+ URL_SUPABASE,
+ PUBLIC_KEY,
+ {
+  auth:{
+   persistSession:false,
+   autoRefreshToken:false,
+   detectSessionInUrl:false
+  }
+ }
+);
+
+$("loginForm").onsubmit=async e=>{
+ e.preventDefault();
+
+ const button=$("loginButton");
+ button.disabled=true;
+
+ try{
+  const {data,error}=
+   await client.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+   });
+
+  if(error)throw error;
+  if(!data?.session)throw Error("Sesión inválida");
+
+  $("password").value="";
+  $("loginForm").hidden=true;
+  $("diagnosticBox").hidden=false;
+  $("result").textContent="Sesión correcta.";
+
+ }catch(error){
+  $("result").textContent=error.message;
+ }finally{
+  button.disabled=false;
+ }
+};
+
+$("checkButton").onclick=async()=>{
+ const button=$("checkButton");
+ button.disabled=true;
+
+ try{
+  $("result").textContent="Comprobando...";
+
+  const {data,error}=await client.auth.getSession();
+
+  if(error||!data?.session?.access_token){
+   throw Error("La sesión caducó.");
+  }
+
+  const response=await fetch(
+   "/api/gmail-diagnostic",
+   {
+    method:"POST",
+    headers:{
+     Authorization:
+      "Bearer "+data.session.access_token
+    }
+   }
+  );
+
+  const result=await response.json();
+
+  if(!response.ok||!result.ok){
+   throw Error(result.message||"Error de diagnóstico");
+  }
+
+  let output="RESULTADO:\n\n";
+
+  for(const [key,value] of Object.entries(result.checks)){
+   output+=(value?"✅ ":"❌ ")+key+"\n";
+  }
+
+  output+="\n"+
+   (result.allConfigured
+    ?"Configuración completa."
+    :"Hay variables por corregir.");
+
+  $("result").textContent=output;
+
+ }catch(error){
+  $("result").textContent="Error: "+error.message;
+ }finally{
+  button.disabled=false;
+ }
+};
+</script>
+</body>
+</html>
