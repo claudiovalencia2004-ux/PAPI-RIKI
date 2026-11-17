@@ -5,427 +5,152 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PAPI RIKI | Finanzas personales</title>
-
 <style>
-:root {
-  font-family: Arial, sans-serif;
-  color: #edf2fa;
-  background: #0b1220;
-  color-scheme: dark;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-}
-
-[hidden] { display: none !important; }
-
-button, input { font: inherit; }
-
-header {
-  background: #121e32;
-  border-bottom: 1px solid #29374c;
-  padding: 20px 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-}
-
-.logo {
-  font-size: 23px;
-  font-weight: bold;
-}
-
-.logo span { color: #38d9a9; }
-
-main {
-  max-width: 1150px;
-  margin: auto;
-  padding: 30px 20px;
-}
-
-h1 {
-  font-size: 29px;
-  margin-bottom: 8px;
-}
-
-p {
-  color: #aab8ca;
-  line-height: 1.5;
-}
-
-.login-wrapper {
-  min-height: 75vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 25px;
-}
-
-.login-card {
-  background: #17243a;
-  border: 1px solid #2b3b53;
-  border-radius: 20px;
-  padding: 35px;
-  width: 100%;
-  max-width: 420px;
-}
-
-.login-card h2 {
-  margin: 0 0 15px;
-  font-size: 25px;
-}
-
-.field-label {
-  display: block;
-  margin: 20px 0 8px;
-  font-size: 14px;
-  color: #cbd5e1;
-}
-
-.field-input {
-  display: block;
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #40516a;
-  border-radius: 9px;
-  background: #0b1220;
-  color: #ffffff;
-}
-
-.field-input:focus {
-  outline: 2px solid #38d9a9;
-  outline-offset: 1px;
-}
-
-/* CASILLA RECORDARME */
-
-.remember {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  margin: 20px 0 0;
-  cursor: pointer;
-  color: #cbd5e1;
-  font-size: 14px;
-}
-
-.remember input[type="checkbox"] {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  min-width: 18px;
-  margin: 0;
-  padding: 0;
-  accent-color: #38d9a9;
-  cursor: pointer;
-}
-
-/* BOTON PRINCIPAL */
-
-.btn-primary {
-  display: block;
-  width: 100%;
-  margin-top: 22px;
-  padding: 14px 18px;
-  border: none;
-  border-radius: 9px;
-  background: #38d9a9;
-  color: #09241d;
-  font-weight: 700;
-  font-size: 15px;
-  text-align: center;
-  cursor: pointer;
-  transition: background .2s;
-}
-
-.btn-primary:hover {
-  background: #61e9c1;
-}
-
-.btn-primary:disabled {
-  opacity: .6;
-  cursor: wait;
-}
-
-.logout {
-  background: transparent;
-  color: white;
-  border: 1px solid #53657e;
-  border-radius: 9px;
-  padding: 10px 14px;
-  cursor: pointer;
-}
-
-.logout:hover {
-  background: #26364e;
-}
-
-/* DASHBOARD */
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin: 24px 0;
-}
-
-.card {
-  background: #17243a;
-  border: 1px solid #2b3b53;
-  border-radius: 15px;
-  padding: 23px;
-}
-
-.card h3 {
-  color: #aab8ca;
-  font-size: 14px;
-  margin: 0 0 12px;
-}
-
-.value {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.green { color: #38d9a9; }
-.purple { color: #ad9aff; }
-
-.note {
-  font-size: 12px;
-  color: #9daec4;
-}
-
-.progress {
-  background: #33445e;
-  border-radius: 12px;
-  height: 12px;
-  margin-top: 15px;
-  overflow: hidden;
-}
-
-.bar {
-  background: #38d9a9;
-  height: 100%;
-}
-
-.message {
-  font-size: 13px;
-  line-height: 1.6;
-  margin-top: 15px;
-  min-height: 18px;
-  overflow-wrap: anywhere;
-}
-
-.error { color: #ff9d9d; }
-
-#loading {
-  padding: 50px 20px;
-  text-align: center;
-  color: #aab8ca;
-}
-
-@media(max-width:650px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  h1 { font-size: 24px; }
-
-  .value { font-size: 25px; }
-
-  .login-card { padding: 24px; }
-
-  header { padding: 17px 20px; }
+:root{font-family:Arial,sans-serif;background:#0b1220;color:#edf2fa;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh}
+[hidden]{display:none!important}
+button,input{font:inherit}
+header{background:#121e32;border-bottom:1px solid #29374c;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.logo{font-size:23px;font-weight:bold}
+.logo span{color:#38d9a9}
+main{max-width:1150px;margin:auto;padding:30px 20px}
+h1{font-size:29px;margin-bottom:8px}
+p{color:#aab8ca;line-height:1.5}
+.login-wrapper{min-height:75vh;display:flex;justify-content:center;align-items:center;padding:25px}
+.login-card{background:#17243a;border:1px solid #2b3b53;border-radius:20px;padding:35px;width:100%;max-width:420px}
+.login-card h2{margin:0 0 15px}
+.field-label{display:block;margin:20px 0 8px;font-size:14px;color:#cbd5e1}
+.field-input{width:100%;padding:13px;border:1px solid #40516a;border-radius:9px;background:#0b1220;color:white}
+.field-input:focus{outline:2px solid #38d9a9}
+.remember{display:flex;align-items:center;gap:11px;margin:20px 0 0;cursor:pointer;color:#cbd5e1;font-size:14px}
+.remember input{width:18px;height:18px;min-width:18px;margin:0;accent-color:#38d9a9}
+.btn-primary{display:block;width:100%;margin-top:22px;padding:14px 18px;border:0;border-radius:9px;background:#38d9a9;color:#09241d;font-weight:700;cursor:pointer}
+.btn-primary:hover{background:#61e9c1}
+.btn-primary:disabled{opacity:.6;cursor:wait}
+.logout{background:transparent;color:white;border:1px solid #53657e;border-radius:9px;padding:10px 14px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:24px 0}
+.card{background:#17243a;border:1px solid #2b3b53;border-radius:15px;padding:23px}
+.card h3{color:#aab8ca;font-size:14px;margin:0 0 12px}
+.value{font-size:28px;font-weight:bold}
+.green{color:#38d9a9}
+.purple{color:#ad9aff}
+.note{font-size:12px;color:#9daec4}
+.progress{background:#33445e;border-radius:12px;height:12px;overflow:hidden;margin-top:15px}
+.bar{background:#38d9a9;height:100%}
+.message{font-size:13px;line-height:1.6;margin-top:15px;min-height:18px;overflow-wrap:anywhere}
+.error{color:#ff9d9d}
+.success{color:#38d9a9}
+#loading{text-align:center;padding:50px 20px;color:#aab8ca}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+h1{font-size:24px}
+.value{font-size:25px}
+.login-card{padding:24px}
+header{padding:17px 20px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">
-    💸 PAPI <span>RIKI</span>
-  </div>
-
-  <button
-    id="logoutBtn"
-    class="logout"
-    type="button"
-    hidden
-  >
-    Cerrar sesión
-  </button>
+<div class="logo">💸 PAPI <span>RIKI</span></div>
+<button id="logoutBtn" class="logout" type="button" hidden>Cerrar sesión</button>
 </header>
 
-<div id="loading">
-  Verificando acceso...
-</div>
-
-<!-- INICIO DE SESION -->
+<div id="loading">Verificando acceso...</div>
 
 <section id="loginSection" class="login-wrapper" hidden>
-  <div class="login-card">
-
-    <h2>🔐 Iniciar sesión</h2>
-
-    <p>Accede a tus finanzas personales.</p>
-
-    <form id="loginForm">
-
-      <label class="field-label" for="email">
-        Correo electrónico
-      </label>
-
-      <input
-        class="field-input"
-        id="email"
-        type="email"
-        autocomplete="username"
-        required
-      >
-
-      <label class="field-label" for="password">
-        Contraseña
-      </label>
-
-      <input
-        class="field-input"
-        id="password"
-        type="password"
-        autocomplete="current-password"
-        required
-      >
-
-      <label class="remember" for="rememberMe">
-        <input
-          id="rememberMe"
-          type="checkbox"
-          checked
-        >
-        <span>Recordarme en este dispositivo</span>
-      </label>
-
-      <button
-        id="loginBtn"
-        class="btn-primary"
-        type="submit"
-      >
-        Entrar a mis finanzas
-      </button>
-
-    </form>
-
-    <p
-      id="loginMessage"
-      class="message"
-      role="status"
-      aria-live="polite"
-    ></p>
-
-    <p class="note">
-      Acceso personal · Registro público desactivado
-    </p>
-
-  </div>
+<div class="login-card">
+<h2>🔐 Iniciar sesión</h2>
+<p>Accede a tus finanzas personales.</p>
+<form id="loginForm">
+<label class="field-label" for="email">Correo electrónico</label>
+<input class="field-input" id="email" type="email" autocomplete="username" required>
+<label class="field-label" for="password">Contraseña</label>
+<input class="field-input" id="password" type="password" autocomplete="current-password" required>
+<label class="remember" for="rememberMe">
+<input id="rememberMe" type="checkbox" checked>
+<span>Recordarme en este dispositivo</span>
+</label>
+<button id="loginBtn" class="btn-primary" type="submit">Entrar a mis finanzas</button>
+</form>
+<p id="loginMessage" class="message" role="status" aria-live="polite"></p>
+<p class="note">Acceso personal · Registro público desactivado</p>
+</div>
 </section>
 
-<!-- DASHBOARD -->
-
 <main id="dashboard" hidden>
+<h1>Mi dashboard financiero</h1>
+<p>Controla tu dinero, tus inversiones y tu futuro.</p>
+<p class="note">Datos de configuración · Sin conexión bancaria</p>
 
-  <h1>Mi dashboard financiero</h1>
-  
-<div id="accountsStatus"
-     class="card"
-     role="status"
-     aria-live="polite">
-  <h3>🔐 Estado de mis cuentas</h3>
-  <p id="accountsMessage">
-    Esperando conexión con Supabase...
-  </p>
+<section class="card" aria-label="Estado de mis cuentas">
+<h3>🔐 Estado de mis cuentas</h3>
+<p id="accountsMessage" role="status" aria-live="polite">
+Esperando conexión con Supabase...
+</p>
+</section>
+
+<section class="card" style="margin-top:16px" aria-label="Prueba de escritura segura">
+<h3>🧪 Prueba de escritura segura</h3>
+<p class="note">
+Crea una cuenta ficticia, comprueba su lectura y la elimina.
+No utiliza dinero ni información bancaria real.
+</p>
+<button id="testAccountBtn" class="btn-primary" type="button">
+Crear cuenta de prueba
+</button>
+<p id="testAccountResult" class="message" role="status" aria-live="polite"></p>
+</section>
+
+<div class="grid">
+<div class="card">
+<h3>💰 Patrimonio neto</h3>
+<div class="value">Por configurar</div>
+<p>Meta: S/ 10,000</p>
+</div>
+<div class="card">
+<h3>🏦 Saldo BCP</h3>
+<div class="value">Por configurar</div>
+<p>Cuenta principal</p>
+</div>
+<div class="card">
+<h3>🏦 Saldo BBVA</h3>
+<div class="value">Por configurar</div>
+<p>Cuenta secundaria</p>
+</div>
+<div class="card">
+<h3>💵 Ingreso mensual</h3>
+<div class="value green">S/ 1,350</div>
+<p>Ingreso fijo programado</p>
+</div>
+<div class="card">
+<h3>🛒 Presupuesto mensual estimado</h3>
+<div class="value">S/ 700</div>
+<p>Gastos habituales</p>
+</div>
+<div class="card">
+<h3>📈 Objetivo de inversión</h3>
+<div class="value purple">S/ 650</div>
+<p>Meta flexible según disponibilidad</p>
+<div class="progress"><div class="bar" style="width:0%"></div></div>
+<p class="note">Aportes pendientes de registrar</p>
+</div>
 </div>
 
-
-  <p>
-    Controla tu dinero, tus inversiones y tu futuro.
-  </p>
-
-  <p class="note">
-    Datos de configuración · Sin conexión bancaria
-  </p>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>💰 Patrimonio neto</h3>
-      <div class="value">Por configurar</div>
-      <p>Meta: S/ 10,000</p>
-    </div>
-
-    <div class="card">
-      <h3>🏦 Saldo BCP</h3>
-      <div class="value">Por configurar</div>
-      <p>Cuenta principal</p>
-    </div>
-
-    <div class="card">
-      <h3>🏦 Saldo BBVA</h3>
-      <div class="value">Por configurar</div>
-      <p>Cuenta secundaria</p>
-    </div>
-
-    <div class="card">
-      <h3>💵 Ingreso mensual</h3>
-      <div class="value green">S/ 1,350</div>
-      <p>Ingreso fijo programado</p>
-    </div>
-
-    <div class="card">
-      <h3>🛒 Presupuesto mensual estimado</h3>
-      <div class="value">S/ 700</div>
-      <p>Gastos habituales</p>
-    </div>
-
-    <div class="card">
-      <h3>📈 Objetivo de inversión</h3>
-      <div class="value purple">S/ 650</div>
-      <p>Meta flexible según disponibilidad</p>
-
-      <div class="progress">
-        <div class="bar" style="width:0%"></div>
-      </div>
-
-      <p class="note">
-        Aportes pendientes de registrar
-      </p>
-    </div>
-
-  </div>
-
-  <div class="card">
-    <h3>🎯 Mi objetivo patrimonial</h3>
-    <div class="value green">S/ 10,000</div>
-    <p>Progreso pendiente de configurar.</p>
-
-    <div class="progress">
-      <div class="bar" style="width:0%"></div>
-    </div>
-  </div>
-
+<div class="card">
+<h3>🎯 Mi objetivo patrimonial</h3>
+<div class="value green">S/ 10,000</div>
+<p>Progreso pendiente de configurar.</p>
+<div class="progress"><div class="bar" style="width:0%"></div></div>
+</div>
 </main>
 
-<!-- BIBLIOTECA SUPABASE -->
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 <script>
 // =====================================
-// PAPI RIKI - SUPABASE
+// CONFIGURACION SUPABASE
 // =====================================
 
 const SUPABASE_URL =
@@ -434,78 +159,43 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-// Nunca colocar claves secretas aqui.
+const $ = id => document.getElementById(id);
 
-// =====================================
-// ELEMENTOS
-// =====================================
-
-const loading =
-  document.getElementById("loading");
-
-const loginSection =
-  document.getElementById("loginSection");
-
-const dashboard =
-  document.getElementById("dashboard");
-
-const logoutBtn =
-  document.getElementById("logoutBtn");
-
-const loginForm =
-  document.getElementById("loginForm");
-
-const loginBtn =
-  document.getElementById("loginBtn");
-
-const loginMessage =
-  document.getElementById("loginMessage");
-
-const rememberMe =
-  document.getElementById("rememberMe");
-
-const passwordInput =
-  document.getElementById("password");
-
-// =====================================
-// ALMACENAMIENTO DE SESION
-// =====================================
+const loading = $("loading");
+const loginSection = $("loginSection");
+const dashboard = $("dashboard");
+const logoutBtn = $("logoutBtn");
+const loginForm = $("loginForm");
+const loginBtn = $("loginBtn");
+const loginMessage = $("loginMessage");
+const rememberMe = $("rememberMe");
+const passwordInput = $("password");
 
 const REMEMBER_KEY = "papi_riki_remember";
 const AUTH_STORAGE_KEY =
   "sb-kbwrxebdcpgsplfjpkxv-auth-token";
 
-// Si no hay preferencia guardada, recordar.
 let shouldRemember =
   localStorage.getItem(REMEMBER_KEY) !== "false";
 
 rememberMe.checked = shouldRemember;
 
-// Adaptador para Supabase.
-// Usa almacenamiento local o de pestaña.
-const sessionStorageAdapter = {
-
+const authStorage = {
   getItem(key) {
-    const storage = shouldRemember
-      ? localStorage
-      : sessionStorage;
-
-    return storage.getItem(key);
+    return (shouldRemember ? localStorage : sessionStorage)
+      .getItem(key);
   },
-
   setItem(key, value) {
-    const storage = shouldRemember
-      ? localStorage
-      : sessionStorage;
-
-    storage.setItem(key, value);
+    (shouldRemember ? localStorage : sessionStorage)
+      .setItem(key, value);
   },
-
   removeItem(key) {
     localStorage.removeItem(key);
     sessionStorage.removeItem(key);
   }
 };
+
+let client = null;
 
 // =====================================
 // PANTALLAS
@@ -523,12 +213,9 @@ function showDashboard() {
   loginSection.hidden = true;
   dashboard.hidden = false;
   logoutBtn.hidden = false;
-
   passwordInput.value = "";
-  loginMessage.textContent = ""
-    
-loadAccounts();
-;
+  loginMessage.textContent = "";
+  void loadAccounts();
 }
 
 function showError(text) {
@@ -536,113 +223,41 @@ function showError(text) {
   loginMessage.className = "message error";
 }
 
-// =====================================
-// MENSAJES DE ERROR
-// =====================================
-
 function explainError(error) {
   const code = error?.code || "";
   const status = error?.status || 0;
   const msg = error?.message || "";
 
-  if (code === "invalid_credentials") {
+  if (code === "invalid_credentials")
     return "Correo o contraseña incorrectos.";
-  }
 
-  if (code === "email_not_confirmed") {
-    return "El correo no esta confirmado.";
-  }
+  if (code === "email_not_confirmed")
+    return "El correo no está confirmado.";
 
-  if (code === "invalid_api_key") {
-    return "La clave de Supabase no es valida.";
-  }
+  if (code === "invalid_api_key")
+    return "La clave publicable no es válida.";
 
   if (
     error?.name === "AuthRetryableFetchError" ||
     /fetch|network/i.test(msg)
-  ) {
+  )
     return "No se pudo conectar con Supabase.";
-  }
 
-  if (status === 429) {
+  if (status === 429)
     return "Demasiados intentos. Espera un momento.";
-  }
 
   return "Error de acceso: " +
     (code || status || "desconocido");
 }
 
 // =====================================
-// INICIALIZACION
-// =====================================
-
-let client = null;
-
-async function initialize() {
-
-  if (!window.supabase) {
-    loading.textContent =
-      "No se pudo cargar la biblioteca de Supabase.";
-    return;
-  }
-
-  try {
-
-    client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth: {
-          storageKey: AUTH_STORAGE_KEY,
-          storage: sessionStorageAdapter,
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
-    );
-
-    client.auth.onAuthStateChange(
-      (event, session) => {
-
-        if (event === "SIGNED_OUT") {
-          showLogin();
-        }
-
-        if (
-          event === "SIGNED_IN" &&
-          session?.user
-        ) {
-          showDashboard();
-        }
-      }
-    );
-
-    const { data, error } =
-      await client.auth.getUser();
-
-    if (error || !data?.user) {
-      showLogin();
-    } else {
-      showDashboard();
-    }
-
-  } catch (error) {
-    console.error("Inicializacion:", error);
-    loading.textContent =
-      "No se pudo iniciar la autenticacion.";
-  }
-}
-
-// =====================================
-// CONSULTAR CUENTAS EN SUPABASE
+// CONSULTAR CUENTAS
 // =====================================
 
 async function loadAccounts() {
-  const status =
-    document.getElementById("accountsMessage");
+  const status = $("accountsMessage");
 
-  if (!client || !status) return;
+  if (!client || dashboard.hidden) return;
 
   status.textContent = "Consultando cuentas...";
 
@@ -658,7 +273,7 @@ async function loadAccounts() {
 
     const { data, error } = await client
       .from("accounts")
-      .select("id, name, institution, account_type, currency")
+      .select("id,name,institution,account_type,currency")
       .order("created_at", { ascending: true });
 
     if (error) {
@@ -668,21 +283,14 @@ async function loadAccounts() {
       });
 
       status.textContent =
-        "No se pudieron consultar las cuentas. " +
-        "Código: " + (error.code || "sin código");
+        "No se pudieron consultar las cuentas. Código: " +
+        (error.code || "sin código");
       return;
     }
 
-    if (!data || data.length === 0) {
-      status.textContent =
-        "Conexión correcta. " +
-        "Todavía no tienes cuentas registradas.";
-      return;
-    }
-
-    status.textContent =
-      "Conexión correcta. " +
-      "Cuentas registradas: " + data.length;
+    status.textContent = data?.length
+      ? "Conexión correcta. Cuentas registradas: " + data.length
+      : "Conexión correcta. Todavía no tienes cuentas registradas.";
 
   } catch (error) {
     console.error("Error de conexión:", error);
@@ -692,127 +300,228 @@ async function loadAccounts() {
 }
 
 // =====================================
-// INICIO DE SESION
+// INICIALIZAR AUTENTICACION
 // =====================================
 
-loginForm.addEventListener(
-  "submit",
-  async (event) => {
+async function initialize() {
+  if (!window.supabase) {
+    loading.textContent =
+      "No se pudo cargar la biblioteca de Supabase.";
+    return;
+  }
 
-    event.preventDefault();
+  try {
+    client = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY,
+      {
+        auth: {
+          storageKey: AUTH_STORAGE_KEY,
+          storage: authStorage,
+          persistSession: true,
+          autoRefreshToken: true,
+          detectSessionInUrl: true
+        }
+      }
+    );
 
-    if (!client) {
-      showError("Supabase no esta disponible.");
+    client.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") showLogin();
+
+      if (event === "SIGNED_IN" && session?.user)
+        showDashboard();
+    });
+
+    const { data, error } =
+      await client.auth.getUser();
+
+    if (error || !data?.user)
+      showLogin();
+    else
+      showDashboard();
+
+  } catch (error) {
+    console.error("Inicialización:", error);
+    loading.textContent =
+      "No se pudo iniciar la autenticación.";
+  }
+}
+
+// =====================================
+// INICIAR SESION
+// =====================================
+
+loginForm.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!client) {
+    showError("Supabase no está disponible.");
+    return;
+  }
+
+  loginBtn.disabled = true;
+  loginBtn.textContent = "Conectando...";
+  loginMessage.textContent = "";
+
+  const email = $("email").value.trim();
+  const password = passwordInput.value;
+
+  try {
+    shouldRemember = rememberMe.checked;
+
+    localStorage.setItem(
+      REMEMBER_KEY,
+      shouldRemember ? "true" : "false"
+    );
+
+    localStorage.removeItem(AUTH_STORAGE_KEY);
+    sessionStorage.removeItem(AUTH_STORAGE_KEY);
+
+    const { data, error } =
+      await client.auth.signInWithPassword({
+        email,
+        password
+      });
+
+    if (error) {
+      console.error("Autenticación:", {
+        codigo: error.code,
+        estado: error.status,
+        mensaje: error.message
+      });
+
+      showError(explainError(error));
       return;
     }
 
-    loginBtn.disabled = true;
-    loginBtn.textContent = "Conectando...";
-    loginMessage.textContent = "";
+    if (data?.session && data?.user)
+      showDashboard();
+    else
+      showError("No se recibió una sesión válida.");
 
-    const email =
-      document.getElementById("email")
-        .value.trim();
-
-    const password = passwordInput.value;
-
-    try {
-
-      // Guardar preferencia antes del login.
-      shouldRemember = rememberMe.checked;
-
-      localStorage.setItem(
-        REMEMBER_KEY,
-        shouldRemember ? "true" : "false"
-      );
-
-      // Eliminar sesiones anteriores para evitar
-      // que se reutilice el almacenamiento equivocado.
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      sessionStorage.removeItem(AUTH_STORAGE_KEY);
-
-      const { data, error } =
-        await client.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if (error) {
-        console.error("Autenticacion:", {
-          codigo: error.code,
-          estado: error.status,
-          mensaje: error.message
-        });
-
-        showError(explainError(error));
-        return;
-      }
-
-      if (data?.session && data?.user) {
-        showDashboard();
-      } else {
-        showError(
-          "No se recibio una sesion valida."
-        );
-      }
-
-    } catch (error) {
-      console.error(
-        "Error de conexion:",
-        error?.message
-      );
-
-      showError(
-        "No se pudo conectar con Supabase."
-      );
-
-    } finally {
-      loginBtn.disabled = false;
-      loginBtn.textContent =
-        "Entrar a mis finanzas";
-    }
+  } catch (error) {
+    console.error("Error de conexión:", error?.message);
+    showError("No se pudo conectar con Supabase.");
+  } finally {
+    loginBtn.disabled = false;
+    loginBtn.textContent = "Entrar a mis finanzas";
   }
-);
+});
 
 // =====================================
 // CERRAR SESION
 // =====================================
 
-logoutBtn.addEventListener(
-  "click",
-  async () => {
+logoutBtn.addEventListener("click", async () => {
+  if (!client) return;
 
-    if (!client) return;
+  logoutBtn.disabled = true;
 
-    logoutBtn.disabled = true;
+  try {
+    const { error } = await client.auth.signOut();
 
-    try {
+    if (error) {
+      alert("No se pudo cerrar sesión.");
+    } else {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+      sessionStorage.removeItem(AUTH_STORAGE_KEY);
+      showLogin();
+    }
 
-      const { error } =
-        await client.auth.signOut();
+  } catch (error) {
+    alert("Error de conexión al cerrar sesión.");
+  } finally {
+    logoutBtn.disabled = false;
+  }
+});
 
-      if (error) {
-        alert("No se pudo cerrar sesion.");
-      } else {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
-        sessionStorage.removeItem(AUTH_STORAGE_KEY);
-        showLogin();
-      }
+// =====================================
+// PRUEBA DE ESCRITURA SEGURA
+// =====================================
 
-    } catch (error) {
-      alert(
-        "Error de conexion al cerrar sesion."
+$("testAccountBtn").addEventListener("click", async () => {
+  const button = $("testAccountBtn");
+  const result = $("testAccountResult");
+
+  button.disabled = true;
+  result.textContent = "Creando cuenta ficticia...";
+
+  let createdId = null;
+
+  try {
+    const { data: authData, error: authError } =
+      await client.auth.getUser();
+
+    if (authError || !authData?.user)
+      throw new Error("Sesión no válida");
+
+    const { data, error } = await client
+      .from("accounts")
+      .insert({
+        user_id: authData.user.id,
+        name: "PRUEBA PAPI RIKI",
+        institution: "TEST",
+        account_type: "bank",
+        currency: "PEN"
+      })
+      .select("id,name")
+      .single();
+
+    if (error) throw error;
+
+    createdId = data.id;
+    result.textContent =
+      "Cuenta creada. Verificando lectura...";
+
+    const { data: verified, error: readError } =
+      await client
+        .from("accounts")
+        .select("id")
+        .eq("id", createdId)
+        .single();
+
+    if (readError || !verified)
+      throw new Error(
+        "La cuenta se creó, pero no se pudo verificar."
       );
 
-    } finally {
-      logoutBtn.disabled = false;
-    }
-  }
-);
+    result.textContent =
+      "Lectura correcta. Eliminando cuenta ficticia...";
 
-// =====================================
-// INICIAR PAPI RIKI
-// =====================================
+    const { data: deleted, error: deleteError } =
+      await client
+        .from("accounts")
+        .delete()
+        .eq("id", createdId)
+        .select("id");
+
+    if (deleteError || deleted?.length !== 1)
+      throw new Error(
+        "No se pudo confirmar la eliminación. " +
+        "Revisa la tabla accounts."
+      );
+
+    createdId = null;
+
+    result.textContent =
+      "Prueba completada: creación, lectura " +
+      "y eliminación correctas.";
+
+    await loadAccounts();
+
+  } catch (error) {
+    console.error("Prueba de escritura:", error);
+
+    result.textContent =
+      "Error: " + (error.message || "desconocido") +
+      (createdId
+        ? ". Puede quedar una cuenta ficticia pendiente de eliminar."
+        : "");
+
+  } finally {
+    button.disabled = false;
+  }
+});
 
 initialize();
 </script>
