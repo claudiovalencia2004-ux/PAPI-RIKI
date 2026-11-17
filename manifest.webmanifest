@@ -1,0 +1,14 @@
+
+{
+  "id": "/",
+  "name": "PAPI RIKI - Finanzas Personales",
+  "short_name": "PAPI RIKI",
+  "description": "Mi aplicación personal para controlar gastos, cuentas, inversiones y patrimonio.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0b1220",
+  "theme_color": "#0b1220",
+  "lang": "es-PE",
+  "orientation": "portrait-primary"
+}
