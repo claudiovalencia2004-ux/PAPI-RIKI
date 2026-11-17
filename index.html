@@ -6,153 +6,289 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PAPI RIKI | Finanzas personales</title>
 <style>
-:root{font-family:Arial,sans-serif;background:#0b1220;color:#edf2fa;color-scheme:dark}
+:root {
+  font-family: Arial,sans-serif;
+  background:#0b1220;
+  color:#edf2fa;
+  color-scheme:dark;
+}
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh}
 [hidden]{display:none!important}
 button,input{font:inherit}
-header{background:#121e32;border-bottom:1px solid #29374c;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;gap:15px}
+header{
+  background:#121e32;
+  border-bottom:1px solid #29374c;
+  padding:20px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
 .logo{font-size:23px;font-weight:bold}
 .logo span{color:#38d9a9}
 main{max-width:1150px;margin:auto;padding:30px 20px}
 h1{font-size:29px;margin-bottom:8px}
 p{color:#aab8ca;line-height:1.5}
-.login-wrapper{min-height:75vh;display:flex;justify-content:center;align-items:center;padding:25px}
-.login-card{background:#17243a;border:1px solid #2b3b53;border-radius:20px;padding:35px;width:100%;max-width:420px}
-.login-card h2{margin:0 0 15px}
-.field-label{display:block;margin:20px 0 8px;font-size:14px;color:#cbd5e1}
-.field-input{width:100%;padding:13px;border:1px solid #40516a;border-radius:9px;background:#0b1220;color:white}
+.login-wrapper{
+  min-height:75vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:25px;
+}
+.login-card{
+  background:#17243a;
+  border:1px solid #2b3b53;
+  border-radius:20px;
+  padding:35px;
+  width:100%;
+  max-width:420px;
+}
+.field-label{
+  display:block;
+  margin:20px 0 8px;
+  color:#cbd5e1;
+  font-size:14px;
+}
+.field-input{
+  width:100%;
+  padding:13px;
+  border:1px solid #40516a;
+  border-radius:9px;
+  background:#0b1220;
+  color:white;
+}
 .field-input:focus{outline:2px solid #38d9a9}
-.remember{display:flex;align-items:center;gap:11px;margin:20px 0 0;cursor:pointer;color:#cbd5e1;font-size:14px}
-.remember input{width:18px;height:18px;min-width:18px;margin:0;accent-color:#38d9a9}
-.btn-primary{display:block;width:100%;margin-top:22px;padding:14px 18px;border:0;border-radius:9px;background:#38d9a9;color:#09241d;font-weight:700;cursor:pointer}
+.remember{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  margin:20px 0 0;
+  cursor:pointer;
+  color:#cbd5e1;
+  font-size:14px;
+}
+.remember input{
+  width:18px;
+  height:18px;
+  min-width:18px;
+  margin:0;
+  accent-color:#38d9a9;
+}
+.btn-primary{
+  display:block;
+  width:100%;
+  margin-top:20px;
+  padding:14px 18px;
+  border:0;
+  border-radius:9px;
+  background:#38d9a9;
+  color:#09241d;
+  font-weight:700;
+  cursor:pointer;
+}
 .btn-primary:hover{background:#61e9c1}
 .btn-primary:disabled{opacity:.6;cursor:wait}
-.logout{background:transparent;color:white;border:1px solid #53657e;border-radius:9px;padding:10px 14px;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:24px 0}
-.card{background:#17243a;border:1px solid #2b3b53;border-radius:15px;padding:23px}
-.card h3{color:#aab8ca;font-size:14px;margin:0 0 12px}
+.logout{
+  background:transparent;
+  color:white;
+  border:1px solid #53657e;
+  border-radius:9px;
+  padding:10px 14px;
+  cursor:pointer;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+  margin:24px 0;
+}
+.card{
+  background:#17243a;
+  border:1px solid #2b3b53;
+  border-radius:15px;
+  padding:23px;
+  margin-bottom:16px;
+}
+.card h3{
+  color:#aab8ca;
+  font-size:14px;
+  margin:0 0 12px;
+}
 .value{font-size:28px;font-weight:bold}
 .green{color:#38d9a9}
 .purple{color:#ad9aff}
 .note{font-size:12px;color:#9daec4}
-.progress{background:#33445e;border-radius:12px;height:12px;overflow:hidden;margin-top:15px}
-.bar{background:#38d9a9;height:100%}
-.message{font-size:13px;line-height:1.6;margin-top:15px;min-height:18px;overflow-wrap:anywhere}
+.message{
+  font-size:14px;
+  line-height:1.7;
+  margin-top:15px;
+  overflow-wrap:anywhere;
+  white-space:pre-line;
+}
 .error{color:#ff9d9d}
 .success{color:#38d9a9}
-#loading{text-align:center;padding:50px 20px;color:#aab8ca}
+.progress{
+  background:#33445e;
+  border-radius:12px;
+  height:12px;
+  overflow:hidden;
+  margin-top:15px;
+}
+.bar{height:100%;background:#38d9a9}
+#loading{
+  padding:50px 20px;
+  text-align:center;
+  color:#aab8ca;
+}
 @media(max-width:650px){
-.grid{grid-template-columns:1fr}
-h1{font-size:24px}
-.value{font-size:25px}
-.login-card{padding:24px}
-header{padding:17px 20px}
+  .grid{grid-template-columns:1fr}
+  h1{font-size:24px}
+  .value{font-size:25px}
+  .login-card{padding:24px}
+  header{padding:17px 20px}
 }
 </style>
 </head>
 <body>
 
 <header>
-<div class="logo">💸 PAPI <span>RIKI</span></div>
-<button id="logoutBtn" class="logout" type="button" hidden>Cerrar sesión</button>
+  <div class="logo">💸 PAPI <span>RIKI</span></div>
+  <button id="logoutBtn" class="logout"
+    type="button" hidden>Cerrar sesión</button>
 </header>
 
 <div id="loading">Verificando acceso...</div>
 
 <section id="loginSection" class="login-wrapper" hidden>
-<div class="login-card">
-<h2>🔐 Iniciar sesión</h2>
-<p>Accede a tus finanzas personales.</p>
-<form id="loginForm">
-<label class="field-label" for="email">Correo electrónico</label>
-<input class="field-input" id="email" type="email" autocomplete="username" required>
-<label class="field-label" for="password">Contraseña</label>
-<input class="field-input" id="password" type="password" autocomplete="current-password" required>
-<label class="remember" for="rememberMe">
-<input id="rememberMe" type="checkbox" checked>
-<span>Recordarme en este dispositivo</span>
-</label>
-<button id="loginBtn" class="btn-primary" type="submit">Entrar a mis finanzas</button>
-</form>
-<p id="loginMessage" class="message" role="status" aria-live="polite"></p>
-<p class="note">Acceso personal · Registro público desactivado</p>
-</div>
+  <div class="login-card">
+    <h2>🔐 Iniciar sesión</h2>
+    <p>Accede a tus finanzas personales.</p>
+
+    <form id="loginForm">
+      <label class="field-label" for="email">
+        Correo electrónico
+      </label>
+      <input class="field-input" id="email"
+        type="email" autocomplete="username" required>
+
+      <label class="field-label" for="password">
+        Contraseña
+      </label>
+      <input class="field-input" id="password"
+        type="password"
+        autocomplete="current-password" required>
+
+      <label class="remember" for="rememberMe">
+        <input id="rememberMe" type="checkbox" checked>
+        <span>Recordarme en este dispositivo</span>
+      </label>
+
+      <button id="loginBtn" class="btn-primary"
+        type="submit">Entrar a mis finanzas</button>
+    </form>
+
+    <p id="loginMessage" class="message"
+      role="status" aria-live="polite"></p>
+    <p class="note">
+      Acceso personal · Registro público desactivado
+    </p>
+  </div>
 </section>
 
 <main id="dashboard" hidden>
-<h1>Mi dashboard financiero</h1>
-<p>Controla tu dinero, tus inversiones y tu futuro.</p>
-<p class="note">Datos de configuración · Sin conexión bancaria</p>
+  <h1>Mi dashboard financiero</h1>
+  <p>Controla tu dinero, tus inversiones y tu futuro.</p>
+  <p class="note">
+    Versión de pruebas · Sin conexión bancaria
+  </p>
 
-<section class="card" aria-label="Estado de mis cuentas">
-<h3>🔐 Estado de mis cuentas</h3>
-<p id="accountsMessage" role="status" aria-live="polite">
-Esperando conexión con Supabase...
-</p>
-</section>
+  <section class="card">
+    <h3>🔐 Estado de mis cuentas</h3>
+    <p id="accountsMessage" role="status">
+      Esperando conexión...
+    </p>
+  </section>
 
-<section class="card" style="margin-top:16px" aria-label="Prueba de escritura segura">
-<h3>🧪 Prueba de escritura segura</h3>
-<p class="note">
-Crea una cuenta ficticia, comprueba su lectura y la elimina.
-No utiliza dinero ni información bancaria real.
-</p>
-<button id="testAccountBtn" class="btn-primary" type="button">
-Crear cuenta de prueba
-</button>
-<p id="testAccountResult" class="message" role="status" aria-live="polite"></p>
-</section>
+  <section class="card">
+    <h3>🧪 Prueba de seguridad de saldos</h3>
+    <p>
+      Comprobaremos la creación, modificación,
+      lectura y eliminación de una cuenta ficticia.
+    </p>
 
-<div class="grid">
-<div class="card">
-<h3>💰 Patrimonio neto</h3>
-<div class="value">Por configurar</div>
-<p>Meta: S/ 10,000</p>
-</div>
-<div class="card">
-<h3>🏦 Saldo BCP</h3>
-<div class="value">Por configurar</div>
-<p>Cuenta principal</p>
-</div>
-<div class="card">
-<h3>🏦 Saldo BBVA</h3>
-<div class="value">Por configurar</div>
-<p>Cuenta secundaria</p>
-</div>
-<div class="card">
-<h3>💵 Ingreso mensual</h3>
-<div class="value green">S/ 1,350</div>
-<p>Ingreso fijo programado</p>
-</div>
-<div class="card">
-<h3>🛒 Presupuesto mensual estimado</h3>
-<div class="value">S/ 700</div>
-<p>Gastos habituales</p>
-</div>
-<div class="card">
-<h3>📈 Objetivo de inversión</h3>
-<div class="value purple">S/ 650</div>
-<p>Meta flexible según disponibilidad</p>
-<div class="progress"><div class="bar" style="width:0%"></div></div>
-<p class="note">Aportes pendientes de registrar</p>
-</div>
-</div>
+    <p class="note">
+      Saldo inicial: S/ 100 ·
+      Saldo de prueba modificado: S/ 150
+    </p>
 
-<div class="card">
-<h3>🎯 Mi objetivo patrimonial</h3>
-<div class="value green">S/ 10,000</div>
-<p>Progreso pendiente de configurar.</p>
-<div class="progress"><div class="bar" style="width:0%"></div></div>
-</div>
+    <button id="testBtn" class="btn-primary"
+      type="button">
+      Ejecutar prueba completa
+    </button>
+
+    <p id="testResult" class="message"
+      role="status" aria-live="polite"></p>
+  </section>
+
+  <div class="grid">
+    <div class="card">
+      <h3>💰 Patrimonio neto</h3>
+      <div class="value">Por configurar</div>
+      <p>Meta: S/ 10,000</p>
+    </div>
+
+    <div class="card">
+      <h3>🏦 Saldo BCP</h3>
+      <div class="value">Por configurar</div>
+      <p>Cuenta principal</p>
+    </div>
+
+    <div class="card">
+      <h3>🏦 Saldo BBVA</h3>
+      <div class="value">Por configurar</div>
+      <p>Cuenta secundaria</p>
+    </div>
+
+    <div class="card">
+      <h3>💵 Ingreso mensual</h3>
+      <div class="value green">S/ 1,350</div>
+      <p>Ingreso fijo programado</p>
+    </div>
+
+    <div class="card">
+      <h3>🛒 Presupuesto mensual</h3>
+      <div class="value">S/ 700</div>
+      <p>Gastos habituales estimados</p>
+    </div>
+
+    <div class="card">
+      <h3>📈 Objetivo de inversión</h3>
+      <div class="value purple">S/ 650</div>
+      <p>Objetivo flexible según disponibilidad</p>
+      <div class="progress">
+        <div class="bar" style="width:0%"></div>
+      </div>
+      <p class="note">Aportes pendientes de registrar</p>
+    </div>
+  </div>
+
+  <section class="card">
+    <h3>🎯 Meta patrimonial</h3>
+    <div class="value green">S/ 10,000</div>
+    <p>Progreso pendiente de configurar.</p>
+    <div class="progress">
+      <div class="bar" style="width:0%"></div>
+    </div>
+  </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// =====================================
-// CONFIGURACION SUPABASE
-// =====================================
+"use strict";
 
+// CONFIGURACION PUBLICABLE
 const SUPABASE_URL =
   "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
@@ -179,15 +315,18 @@ let shouldRemember =
   localStorage.getItem(REMEMBER_KEY) !== "false";
 
 rememberMe.checked = shouldRemember;
+let client = null;
+let activeUserId = null;
 
+// ALMACENAMIENTO DE SESION
 const authStorage = {
   getItem(key) {
     return (shouldRemember ? localStorage : sessionStorage)
       .getItem(key);
   },
-  setItem(key, value) {
+  setItem(key,value) {
     (shouldRemember ? localStorage : sessionStorage)
-      .setItem(key, value);
+      .setItem(key,value);
   },
   removeItem(key) {
     localStorage.removeItem(key);
@@ -195,20 +334,17 @@ const authStorage = {
   }
 };
 
-let client = null;
-
-// =====================================
-// PANTALLAS
-// =====================================
-
 function showLogin() {
+  activeUserId = null;
   loading.hidden = true;
   loginSection.hidden = false;
   dashboard.hidden = true;
   logoutBtn.hidden = true;
+  $("testResult").textContent = "";
 }
 
-function showDashboard() {
+function showDashboard(user) {
+  if (user?.id) activeUserId = user.id;
   loading.hidden = true;
   loginSection.hidden = true;
   dashboard.hidden = false;
@@ -225,7 +361,6 @@ function showError(text) {
 
 function explainError(error) {
   const code = error?.code || "";
-  const status = error?.status || 0;
   const msg = error?.message || "";
 
   if (code === "invalid_credentials")
@@ -234,75 +369,41 @@ function explainError(error) {
   if (code === "email_not_confirmed")
     return "El correo no está confirmado.";
 
-  if (code === "invalid_api_key")
-    return "La clave publicable no es válida.";
-
-  if (
-    error?.name === "AuthRetryableFetchError" ||
-    /fetch|network/i.test(msg)
-  )
+  if (/fetch|network/i.test(msg))
     return "No se pudo conectar con Supabase.";
 
-  if (status === 429)
-    return "Demasiados intentos. Espera un momento.";
-
   return "Error de acceso: " +
-    (code || status || "desconocido");
+    (code || error?.status || "desconocido");
 }
 
-// =====================================
 // CONSULTAR CUENTAS
-// =====================================
-
 async function loadAccounts() {
   const status = $("accountsMessage");
-
   if (!client || dashboard.hidden) return;
 
-  status.textContent = "Consultando cuentas...";
+  status.textContent = "Consultando Supabase...";
 
   try {
-    const { data: authData, error: authError } =
-      await client.auth.getUser();
-
-    if (authError || !authData?.user) {
-      status.textContent =
-        "No hay una sesión autenticada válida.";
-      return;
-    }
-
-    const { data, error } = await client
+    const {data,error} = await client
       .from("accounts")
       .select("id,name,institution,account_type,currency")
-      .order("created_at", { ascending: true });
+      .order("created_at",{ascending:true});
 
-    if (error) {
-      console.error("Error consultando accounts:", {
-        codigo: error.code,
-        mensaje: error.message
-      });
+    if (error) throw error;
 
-      status.textContent =
-        "No se pudieron consultar las cuentas. Código: " +
-        (error.code || "sin código");
-      return;
-    }
+    status.textContent = data.length
+      ? "Conexión correcta. Cuentas registradas: " +
+        data.length
+      : "Conexión correcta. No hay cuentas registradas.";
 
-    status.textContent = data?.length
-      ? "Conexión correcta. Cuentas registradas: " + data.length
-      : "Conexión correcta. Todavía no tienes cuentas registradas.";
-
-  } catch (error) {
-    console.error("Error de conexión:", error);
+  } catch(error) {
     status.textContent =
-      "No fue posible conectar con Supabase.";
+      "Error de consulta: " +
+      (error.code || "sin código");
   }
 }
 
-// =====================================
-// INICIALIZAR AUTENTICACION
-// =====================================
-
+// INICIALIZAR SUPABASE
 async function initialize() {
   if (!window.supabase) {
     loading.textContent =
@@ -315,60 +416,47 @@ async function initialize() {
       SUPABASE_URL,
       SUPABASE_KEY,
       {
-        auth: {
-          storageKey: AUTH_STORAGE_KEY,
-          storage: authStorage,
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
+        auth:{
+          storageKey:AUTH_STORAGE_KEY,
+          storage:authStorage,
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:true
         }
       }
     );
 
-    client.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_OUT") showLogin();
-
-      if (event === "SIGNED_IN" && session?.user)
-        showDashboard();
+    client.auth.onAuthStateChange((event,session)=>{
+      if(event==="SIGNED_OUT") showLogin();
+      if(event==="SIGNED_IN" && session?.user)
+        showDashboard(session.user);
     });
 
-    const { data, error } =
-      await client.auth.getUser();
+    const {data,error} = await client.auth.getUser();
 
-    if (error || !data?.user)
+    if(error || !data?.user)
       showLogin();
     else
-      showDashboard();
+      showDashboard(data.user);
 
-  } catch (error) {
-    console.error("Inicialización:", error);
+  } catch(error) {
+    console.error(error);
     loading.textContent =
       "No se pudo iniciar la autenticación.";
   }
 }
 
-// =====================================
-// INICIAR SESION
-// =====================================
-
-loginForm.addEventListener("submit", async event => {
+// INICIO DE SESION
+loginForm.addEventListener("submit",async event=>{
   event.preventDefault();
-
-  if (!client) {
-    showError("Supabase no está disponible.");
-    return;
-  }
+  if(!client) return;
 
   loginBtn.disabled = true;
   loginBtn.textContent = "Conectando...";
   loginMessage.textContent = "";
 
-  const email = $("email").value.trim();
-  const password = passwordInput.value;
-
   try {
     shouldRemember = rememberMe.checked;
-
     localStorage.setItem(
       REMEMBER_KEY,
       shouldRemember ? "true" : "false"
@@ -377,30 +465,23 @@ loginForm.addEventListener("submit", async event => {
     localStorage.removeItem(AUTH_STORAGE_KEY);
     sessionStorage.removeItem(AUTH_STORAGE_KEY);
 
-    const { data, error } =
+    const {data,error} =
       await client.auth.signInWithPassword({
-        email,
-        password
+        email:$("email").value.trim(),
+        password:passwordInput.value
       });
 
-    if (error) {
-      console.error("Autenticación:", {
-        codigo: error.code,
-        estado: error.status,
-        mensaje: error.message
-      });
-
+    if(error) {
       showError(explainError(error));
       return;
     }
 
-    if (data?.session && data?.user)
-      showDashboard();
+    if(data?.user && data?.session)
+      showDashboard(data.user);
     else
       showError("No se recibió una sesión válida.");
 
-  } catch (error) {
-    console.error("Error de conexión:", error?.message);
+  } catch(error) {
     showError("No se pudo conectar con Supabase.");
   } finally {
     loginBtn.disabled = false;
@@ -408,117 +489,169 @@ loginForm.addEventListener("submit", async event => {
   }
 });
 
-// =====================================
 // CERRAR SESION
-// =====================================
-
-logoutBtn.addEventListener("click", async () => {
-  if (!client) return;
-
+logoutBtn.addEventListener("click",async()=>{
+  if(!client) return;
   logoutBtn.disabled = true;
 
   try {
-    const { error } = await client.auth.signOut();
+    const {error} = await client.auth.signOut();
+    if(error) throw error;
 
-    if (error) {
-      alert("No se pudo cerrar sesión.");
-    } else {
-      localStorage.removeItem(AUTH_STORAGE_KEY);
-      sessionStorage.removeItem(AUTH_STORAGE_KEY);
-      showLogin();
-    }
+    authStorage.removeItem(AUTH_STORAGE_KEY);
+    showLogin();
 
-  } catch (error) {
-    alert("Error de conexión al cerrar sesión.");
+  } catch(error) {
+    alert("No se pudo cerrar sesión.");
   } finally {
     logoutBtn.disabled = false;
   }
 });
 
-// =====================================
-// PRUEBA DE ESCRITURA SEGURA
-// =====================================
-
-$("testAccountBtn").addEventListener("click", async () => {
-  const button = $("testAccountBtn");
-  const result = $("testAccountResult");
-
+// PRUEBA INSERT / UPDATE / SELECT / DELETE
+$("testBtn").addEventListener("click",async()=>{
+  const button = $("testBtn");
+  const output = $("testResult");
   button.disabled = true;
-  result.textContent = "Creando cuenta ficticia...";
 
   let createdId = null;
+  let cleanupConfirmed = false;
+  const steps = [];
+
+  function report(text) {
+    steps.push(text);
+    output.textContent = steps.join("\n");
+  }
 
   try {
-    const { data: authData, error: authError } =
+    if(!client || dashboard.hidden)
+      throw new Error("Debes iniciar sesión.");
+
+    const {data:authData,error:authError} =
       await client.auth.getUser();
 
-    if (authError || !authData?.user)
-      throw new Error("Sesión no válida");
+    if(authError || !authData?.user)
+      throw new Error("Sesión no válida.");
 
-    const { data, error } = await client
-      .from("accounts")
-      .insert({
-        user_id: authData.user.id,
-        name: "PRUEBA PAPI RIKI",
-        institution: "TEST",
-        account_type: "bank",
-        currency: "PEN"
-      })
-      .select("id,name")
-      .single();
+    if(
+      activeUserId &&
+      authData.user.id !== activeUserId
+    ) {
+      throw new Error("La sesión cambió.");
+    }
 
-    if (error) throw error;
+    report("1. Creando cuenta ficticia...");
 
-    createdId = data.id;
-    result.textContent =
-      "Cuenta creada. Verificando lectura...";
-
-    const { data: verified, error: readError } =
-      await client
-        .from("accounts")
-        .select("id")
-        .eq("id", createdId)
+    const {data:created,error:insertError} =
+      await client.from("accounts")
+        .insert({
+          user_id:authData.user.id,
+          name:"PRUEBA UPDATE PAPI RIKI",
+          institution:"TEST",
+          account_type:"bank",
+          currency:"PEN",
+          opening_balance:100
+        })
+        .select("id,opening_balance")
         .single();
 
-    if (readError || !verified)
+    if(insertError) throw insertError;
+
+    createdId = created.id;
+
+    if(Number(created.opening_balance)!==100)
+      throw new Error("Saldo inicial incorrecto.");
+
+    report("OK: cuenta creada con S/ 100.");
+
+    const {data:updated,error:updateError} =
+      await client.from("accounts")
+        .update({opening_balance:150})
+        .eq("id",createdId)
+        .eq("user_id",authData.user.id)
+        .select("id,opening_balance");
+
+    if(updateError) throw updateError;
+
+    if(
+      updated?.length!==1 ||
+      Number(updated[0].opening_balance)!==150
+    ) {
       throw new Error(
-        "La cuenta se creó, pero no se pudo verificar."
+        "UPDATE no modificó exactamente una cuenta."
+      );
+    }
+
+    report("OK: UPDATE a S/ 150.");
+
+    const {data:verified,error:readError} =
+      await client.from("accounts")
+        .select("id,opening_balance")
+        .eq("id",createdId)
+        .single();
+
+    if(readError) throw readError;
+
+    if(Number(verified.opening_balance)!==150)
+      throw new Error(
+        "SELECT no confirmó el saldo S/ 150."
       );
 
-    result.textContent =
-      "Lectura correcta. Eliminando cuenta ficticia...";
+    report("OK: SELECT confirmó S/ 150.");
 
-    const { data: deleted, error: deleteError } =
-      await client
-        .from("accounts")
-        .delete()
-        .eq("id", createdId)
-        .select("id");
+  } catch(error) {
+    console.error("Prueba financiera:",error);
+    report(
+      "ERROR: " +
+      (error.message || "Error desconocido.")
+    );
+  } finally {
+    // Intentar limpieza aunque falle UPDATE o SELECT.
+    if(createdId && client) {
+      try {
+        const {data:deleted,error:deleteError} =
+          await client.from("accounts")
+            .delete()
+            .eq("id",createdId)
+            .select("id");
 
-    if (deleteError || deleted?.length !== 1)
-      throw new Error(
-        "No se pudo confirmar la eliminación. " +
-        "Revisa la tabla accounts."
-      );
+        if(deleteError) throw deleteError;
 
-    createdId = null;
+        if(deleted?.length!==1)
+          throw new Error(
+            "No se confirmó la eliminación."
+          );
 
-    result.textContent =
-      "Prueba completada: creación, lectura " +
-      "y eliminación correctas.";
+        const {data:remaining,error:checkError} =
+          await client.from("accounts")
+            .select("id")
+            .eq("id",createdId);
+
+        if(checkError) throw checkError;
+
+        if(remaining.length!==0)
+          throw new Error(
+            "La cuenta todavía aparece en Supabase."
+          );
+
+        cleanupConfirmed = true;
+        report("OK: DELETE y limpieza confirmados.");
+
+      } catch(error) {
+        console.error("Limpieza:",error);
+        report(
+          "ATENCIÓN: revisa en Supabase la cuenta " +
+          "de prueba. ID: " + createdId
+        );
+      }
+    }
+
+    if(cleanupConfirmed &&
+       !steps.some(s=>s.startsWith("ERROR:"))) {
+      report("PRUEBA COMPLETADA CORRECTAMENTE.");
+    }
 
     await loadAccounts();
-
-  } catch (error) {
-    console.error("Prueba de escritura:", error);
-
-    result.textContent =
-      "Error: " + (error.message || "desconocido") +
-      (createdId
-        ? ". Puede quedar una cuenta ficticia pendiente de eliminar."
-        : "");
-
-  } finally {
     button.disabled = false;
   }
 });
