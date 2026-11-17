@@ -1,43 +1,36 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PAPI RIKI | Mis finanzas</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAPI RIKI | Finanzas personales</title>
 <style>
 :root {
   font-family: Arial, sans-serif;
-  color: #edf2fa;
   background: #0b1220;
+  color: #edf2fa;
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-height: 100vh; }
-button, input { font: inherit; }
-button { cursor: pointer; }
 [hidden] { display: none !important; }
-
+button,input { font: inherit; }
 header {
+  padding: 20px 6%;
   background: #121e32;
   border-bottom: 1px solid #29374c;
-  padding: 20px 6%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 15px;
 }
 .logo { font-size: 23px; font-weight: bold; }
 .logo span { color: #38d9a9; }
-
 main {
   max-width: 1150px;
   margin: auto;
   padding: 30px 20px;
 }
-h1 { font-size: 29px; margin-bottom: 8px; }
+h1 { margin-bottom: 8px; }
 p { color: #aab8ca; line-height: 1.5; }
-
 .login-wrapper {
   min-height: 75vh;
   display: flex;
@@ -53,47 +46,45 @@ p { color: #aab8ca; line-height: 1.5; }
   width: 100%;
   max-width: 420px;
 }
-.login-card h2 { margin-top: 0; }
-
 label {
   display: block;
-  font-size: 14px;
-  margin: 20px 0 8px;
+  margin: 18px 0 8px;
   color: #cbd5e1;
 }
 input {
   width: 100%;
   padding: 13px;
-  border-radius: 9px;
   border: 1px solid #40516a;
+  border-radius: 9px;
   background: #0b1220;
   color: white;
 }
-input:focus {
-  outline: 2px solid #38d9a9;
-  outline-offset: 1px;
-}
+input:focus { outline: 2px solid #38d9a9; }
 .btn {
+  padding: 13px 18px;
   border: 0;
   border-radius: 9px;
-  padding: 13px 18px;
-  font-weight: bold;
   background: #38d9a9;
   color: #09241d;
+  font-weight: bold;
+  cursor: pointer;
 }
 .btn:disabled { opacity: .6; cursor: wait; }
-.login-card .btn { width: 100%; margin-top: 22px; }
-
+.login-card .btn {
+  width: 100%;
+  margin-top: 22px;
+}
 .logout {
   background: transparent;
-  border: 1px solid #53657e;
   color: white;
-  padding: 10px 14px;
+  border: 1px solid #53657e;
   border-radius: 9px;
+  padding: 10px;
+  cursor: pointer;
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2,1fr);
   gap: 16px;
   margin: 24px 0;
 }
@@ -108,89 +99,80 @@ input:focus {
   font-size: 14px;
   margin: 0 0 12px;
 }
-.value { font-size: 27px; font-weight: bold; }
+.value { font-size: 28px; font-weight: bold; }
 .green { color: #38d9a9; }
 .purple { color: #ad9aff; }
-.note { font-size: 12px; color: #9daec4; }
+.note { font-size: 12px; }
 .progress {
   background: #33445e;
   border-radius: 12px;
   height: 12px;
-  margin-top: 15px;
   overflow: hidden;
+  margin-top: 15px;
 }
 .bar { background: #38d9a9; height: 100%; }
 .message {
   font-size: 13px;
+  line-height: 1.6;
   margin-top: 15px;
-  min-height: 20px;
+  overflow-wrap: anywhere;
 }
 .error { color: #ff9d9d; }
-.success { color: #38d9a9; }
 #loading {
-  padding: 45px 20px;
   text-align: center;
+  padding: 50px 20px;
   color: #aab8ca;
 }
-@media (max-width: 650px) {
+@media(max-width:650px) {
   .grid { grid-template-columns: 1fr; }
   h1 { font-size: 24px; }
-  .value { font-size: 24px; }
   .login-card { padding: 24px; }
 }
 </style>
 </head>
-
 <body>
+
 <header>
   <div class="logo">💸 PAPI <span>RIKI</span></div>
-  <button id="logoutBtn" class="logout" hidden>
+  <button id="logout" class="logout" hidden>
     Cerrar sesión
   </button>
 </header>
 
-<div id="loading">Verificando acceso seguro...</div>
+<div id="loading">Verificando acceso...</div>
 
-<section id="loginSection" class="login-wrapper" hidden>
+<section id="login" class="login-wrapper" hidden>
   <div class="login-card">
     <h2>🔐 Iniciar sesión</h2>
-    <p>Accede a tu espacio financiero personal.</p>
+    <p>Accede a tus finanzas personales.</p>
 
-    <form id="loginForm">
+    <form id="form">
       <label for="email">Correo electrónico</label>
-      <input
-        id="email"
-        type="email"
-        autocomplete="username"
-        required
-      >
+      <input id="email" type="email"
+        autocomplete="username" required>
 
       <label for="password">Contraseña</label>
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-        required
-      >
+      <input id="password" type="password"
+        autocomplete="current-password" required>
 
-      <button id="loginBtn" class="btn" type="submit">
+      <button id="submit" class="btn" type="submit">
         Entrar a mis finanzas
       </button>
     </form>
 
-    <p id="loginMessage" class="message"
-       role="status" aria-live="polite"></p>
+    <p id="message" class="message"
+      role="status" aria-live="polite"></p>
     <p class="note">
-      Acceso privado. El registro público está desactivado.
+      Acceso personal · Registro público desactivado
     </p>
   </div>
 </section>
 
 <main id="dashboard" hidden>
   <h1>Mi dashboard financiero</h1>
-  <p>Controla tu dinero, tus inversiones y tu futuro.</p>
+  <p>Controla tu dinero, inversiones y futuro.</p>
   <p class="note">
-    Configuración inicial · Sin conexión bancaria
+    Datos de configuración · Sin conexión bancaria
   </p>
 
   <div class="grid">
@@ -219,15 +201,15 @@ input:focus {
     </div>
 
     <div class="card">
-      <h3>🛒 Presupuesto mensual estimado</h3>
+      <h3>🛒 Presupuesto estimado</h3>
       <div class="value">S/ 700</div>
-      <p>Incluye gastos habituales</p>
+      <p>Gastos mensuales habituales</p>
     </div>
 
     <div class="card">
       <h3>📈 Objetivo de inversión</h3>
       <div class="value purple">S/ 650</div>
-      <p>Meta flexible según disponibilidad</p>
+      <p>Objetivo flexible según disponibilidad</p>
       <div class="progress">
         <div class="bar" style="width:0%"></div>
       </div>
@@ -236,7 +218,7 @@ input:focus {
   </div>
 
   <div class="card">
-    <h3>🎯 Mi objetivo patrimonial</h3>
+    <h3>🎯 Meta patrimonial</h3>
     <div class="value green">S/ 10,000</div>
     <p>Progreso pendiente de configurar.</p>
     <div class="progress">
@@ -248,65 +230,95 @@ input:focus {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
 <script>
-// ======================================
-// PAPI RIKI - CONFIGURACION SUPABASE
-// ======================================
+// =====================================
+// CONFIGURACION DE PAPI RIKI
+// =====================================
 
-// Sustituir por la URL de tu proyecto.
-const SUPABASE_URL = "https://kbwrxebdcpgsplfjpkxv.supabase.co/rest/v1/";
+const SUPABASE_URL =
+  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
-// Sustituir SOLO por la clave publicable.
-const SUPABASE_KEY = "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+const SUPABASE_KEY =
+  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-// Nunca colocar service_role ni sb_secret aqui.
+// Nunca colocar claves secretas aqui.
 
-// ======================================
-// ELEMENTOS DE LA PAGINA
-// ======================================
+// =====================================
+// ELEMENTOS
+// =====================================
 
 const loading = document.getElementById("loading");
-const loginSection = document.getElementById("loginSection");
+const login = document.getElementById("login");
 const dashboard = document.getElementById("dashboard");
-const logoutBtn = document.getElementById("logoutBtn");
-const loginForm = document.getElementById("loginForm");
-const loginBtn = document.getElementById("loginBtn");
-const loginMessage = document.getElementById("loginMessage");
+const logout = document.getElementById("logout");
+const form = document.getElementById("form");
+const submit = document.getElementById("submit");
+const message = document.getElementById("message");
 
-let client = null;
+let client;
 
 function showLogin() {
   loading.hidden = true;
-  loginSection.hidden = false;
+  login.hidden = false;
   dashboard.hidden = true;
-  logoutBtn.hidden = true;
+  logout.hidden = true;
 }
 
 function showDashboard() {
   loading.hidden = true;
-  loginSection.hidden = true;
+  login.hidden = true;
   dashboard.hidden = false;
-  logoutBtn.hidden = false;
+  logout.hidden = false;
   document.getElementById("password").value = "";
 }
 
-function showError(message) {
-  loginMessage.textContent = message;
-  loginMessage.className = "message error";
+function showError(text) {
+  message.textContent = text;
+  message.className = "message error";
 }
 
-async function initialize() {
-  if (
-    SUPABASE_URL.startsWith("PEGA_AQUI") ||
-    SUPABASE_KEY.startsWith("PEGA_AQUI")
-  ) {
-    loading.textContent =
-      "Falta configurar la URL y la clave publicable.";
-    return;
+// =====================================
+// DIAGNOSTICO DE ERRORES
+// =====================================
+
+function explainError(error) {
+  const code = error?.code || "";
+  const status = error?.status || 0;
+  const msg = error?.message || "";
+
+  if (code === "invalid_credentials") {
+    return "Correo o contraseña incorrectos.";
   }
 
+  if (code === "email_not_confirmed") {
+    return "Tu correo no esta confirmado.";
+  }
+
+  if (code === "invalid_api_key") {
+    return "La clave publicable no es valida.";
+  }
+
+  if (
+    error?.name === "AuthRetryableFetchError" ||
+    /fetch|network|failed to fetch/i.test(msg)
+  ) {
+    return "Error de red: no se pudo contactar con Supabase.";
+  }
+
+  if (status === 429) {
+    return "Demasiados intentos. Espera un momento.";
+  }
+
+  return "Error: " + (code || status || msg || "desconocido");
+}
+
+// =====================================
+// INICIALIZAR SUPABASE
+// =====================================
+
+async function initialize() {
   if (!window.supabase) {
     loading.textContent =
-      "No se pudo cargar Supabase. Revisa tu conexión.";
+      "No se pudo cargar la biblioteca de Supabase.";
     return;
   }
 
@@ -323,95 +335,111 @@ async function initialize() {
       }
     );
 
-    client.auth.onAuthStateChange((_event, session) => {
-      if (session && session.user) {
-        showDashboard();
-      } else {
+    client.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_OUT") {
         showLogin();
+      }
+
+      if (event === "SIGNED_IN" && session?.user) {
+        showDashboard();
       }
     });
 
-    const { data, error } = await client.auth.getUser();
+    const { data, error } =
+      await client.auth.getUser();
 
-    if (error || !data.user) {
+    if (error || !data?.user) {
       showLogin();
     } else {
       showDashboard();
     }
+
   } catch (error) {
-    console.error("Error de inicialización:", error);
+    console.error("Error inicial:", error);
     loading.textContent =
-      "No se pudo iniciar la autenticación.";
+      "Error al inicializar la autenticacion.";
   }
 }
 
-// ======================================
-// INICIO DE SESION
-// ======================================
+// =====================================
+// INICIAR SESION
+// =====================================
 
-loginForm.addEventListener("submit", async (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  if (!client) return;
+  if (!client) {
+    showError("Supabase no esta disponible.");
+    return;
+  }
 
-  loginBtn.disabled = true;
-  loginBtn.textContent = "Verificando...";
-  loginMessage.textContent = "";
+  submit.disabled = true;
+  submit.textContent = "Conectando...";
+  message.textContent = "";
 
-  const email = document.getElementById("email")
-    .value.trim();
-  const password = document.getElementById("password")
-    .value;
+  const email =
+    document.getElementById("email").value.trim();
+
+  const password =
+    document.getElementById("password").value;
 
   try {
-    const { error } = await client.auth.signInWithPassword({
-      email,
-      password
-    });
+    const { data, error } =
+      await client.auth.signInWithPassword({
+        email,
+        password
+      });
 
+    if (error) {
+      console.error("Autenticacion:", {
+        codigo: error.code,
+        estado: error.status,
+        mensaje: error.message
+      });
 
-if (error) {
-  console.error("Error de autenticación:", {
-    codigo: error.code,
-    estado: error.status,
-    mensaje: error.message
-  });
+      showError(explainError(error));
+      return;
+    }
 
-  showError(
-    "Error de acceso: " +
-    (error.code || "desconocido")
-  );
-}
+    if (data?.session && data?.user) {
+      showDashboard();
+    } else {
+      showError("No se recibio una sesion valida.");
+    }
 
   } catch (error) {
-    showError("Error de conexión. Intenta nuevamente.");
+    console.error("Conexion:", error?.message);
+    showError(
+      "No se pudo conectar con Supabase. " +
+      "Comprueba la red y la URL del proyecto."
+    );
   } finally {
-    loginBtn.disabled = false;
-    loginBtn.textContent = "Entrar a mis finanzas";
+    submit.disabled = false;
+    submit.textContent = "Entrar a mis finanzas";
   }
 });
 
-// ======================================
+// =====================================
 // CERRAR SESION
-// ======================================
+// =====================================
 
-logoutBtn.addEventListener("click", async () => {
+logout.addEventListener("click", async () => {
   if (!client) return;
 
-  logoutBtn.disabled = true;
+  logout.disabled = true;
 
   try {
     const { error } = await client.auth.signOut();
 
     if (error) {
-      alert("No se pudo cerrar sesión. Intenta nuevamente.");
+      alert("No se pudo cerrar sesion.");
     } else {
       showLogin();
     }
   } catch (error) {
-    alert("Error de conexión al cerrar sesión.");
+    alert("Error de conexion al cerrar sesion.");
   } finally {
-    logoutBtn.disabled = false;
+    logout.disabled = false;
   }
 });
 
