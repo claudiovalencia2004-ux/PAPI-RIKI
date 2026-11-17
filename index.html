@@ -3,966 +3,797 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PAPI RIKI | Mis finanzas</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAPI RIKI | Finanzas</title>
 <style>
-:root{
-  font-family:Arial,sans-serif;
-  color:#edf2fa;
-  background:#0b1220;
-  color-scheme:dark;
-}
+:root{font-family:Arial,sans-serif;background:#0b1220;color:#edf2fa;color-scheme:dark}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh}
+body{margin:0}
 [hidden]{display:none!important}
 button,input,select{font:inherit}
 button{cursor:pointer}
-header{
-  background:#121e32;
-  border-bottom:1px solid #29374c;
-  padding:18px 5%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-}
+header{background:#142137;padding:18px 5%;display:flex;justify-content:space-between;align-items:center}
 .logo{font-size:23px;font-weight:bold}
-.logo span{color:#38d9a9}
-main{max-width:1150px;margin:auto;padding:30px 20px}
-h1{font-size:29px;margin:0 0 8px}
-h2{font-size:21px}
-p{color:#aab8ca;line-height:1.5}
-.note{font-size:12px;color:#9daec4}
-.card{
-  background:#17243a;
-  border:1px solid #2b3b53;
-  border-radius:15px;
-  padding:23px;
-  margin-bottom:16px;
-}
-.card h3{
-  color:#aab8ca;
-  font-size:14px;
-  margin:0 0 12px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:16px;
-  margin:20px 0;
-}
-.value{font-size:27px;font-weight:bold}
-.green{color:#38d9a9}
-.purple{color:#ad9aff}
-.btn{
-  padding:12px 17px;
-  border:0;
-  border-radius:9px;
-  background:#38d9a9;
-  color:#09241d;
-  font-weight:bold;
-}
-.btn:hover{background:#65e9c3}
-.btn:disabled{opacity:.6;cursor:wait}
-.btn-secondary{
-  background:#263852;
-  color:#edf2fa;
-  border:1px solid #4c617c;
-}
-.btn-secondary:hover{background:#344963}
-.btn-danger{
-  background:#572c38;
-  color:#ffd4dc;
-  border:1px solid #92505e;
-}
-.logout{
-  padding:10px 14px;
-  background:transparent;
-  border:1px solid #53657e;
-  color:white;
-  border-radius:9px;
-}
-.field-label{
-  display:block;
-  margin:17px 0 7px;
-  color:#cbd5e1;
-  font-size:14px;
-}
-.field{
-  display:block;
-  width:100%;
-  padding:12px;
-  border:1px solid #40516a;
-  border-radius:9px;
-  background:#0b1220;
-  color:white;
-}
-.field:focus{outline:2px solid #38d9a9}
-.login-wrapper{
-  min-height:75vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-}
-.login-card{
-  width:100%;
-  max-width:420px;
-  padding:32px;
-  border-radius:20px;
-  background:#17243a;
-  border:1px solid #2b3b53;
-}
-.login-card .btn{width:100%;margin-top:20px}
-.remember{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:20px;
-  color:#cbd5e1;
-  font-size:14px;
-  cursor:pointer;
-}
-.remember input{
-  width:18px;
-  height:18px;
-  margin:0;
-  accent-color:#38d9a9;
-}
-.message{
-  min-height:18px;
-  margin-top:13px;
-  font-size:13px;
-  overflow-wrap:anywhere;
-  line-height:1.5;
-}
+.logo span,.green{color:#38d9a9}
+main{max-width:1150px;margin:auto;padding:25px 18px}
+h1{font-size:27px}
+p,small{color:#aab8ca}
+.card{background:#17243a;border:1px solid #30435b;border-radius:15px;padding:20px;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.value{font-size:26px;font-weight:bold}
+.btn{background:#38d9a9;color:#09241d;border:0;border-radius:9px;padding:12px 17px;font-weight:bold}
+.btn:disabled{opacity:.5}
+.alt{background:#31435b;color:white}
+.danger{background:#753849;color:white}
+.field{width:100%;padding:12px;background:#0b1220;color:white;border:1px solid #435772;border-radius:8px;margin:6px 0 14px}
+label{display:block;color:#cbd5e1;font-size:14px}
+.auth{min-height:75vh;display:grid;place-items:center;padding:20px}
+.auth .card{width:100%;max-width:420px;padding:30px}
+.remember{display:flex;align-items:center;gap:10px;margin:10px 0 20px}
+.remember input{width:18px;height:18px;accent-color:#38d9a9}
+nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:20px}
+nav button{background:#20324b;color:white;border:0;padding:12px;border-radius:8px;white-space:nowrap}
+nav button.active{background:#38d9a9;color:#09241d}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.list{display:grid;gap:10px}
+.item{padding:15px;background:#101d30;border:1px solid #34465e;border-radius:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.message{color:#aab8ca;white-space:pre-wrap;overflow-wrap:anywhere}
 .error{color:#ff9d9d}
-.success{color:#38d9a9}
-.toolbar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-bottom:16px;
-}
-.account{
-  background:#101c2e;
-  border:1px solid #34455e;
-  border-radius:12px;
-  padding:18px;
-}
-.account h3{
-  margin:0 0 8px;
-  color:#edf2fa;
-  font-size:17px;
-}
-.account-balance{
-  font-size:25px;
-  font-weight:bold;
-  margin:10px 0;
-}
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:15px;
-}
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:0 16px;
-}
-.form-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:20px;
-}
-.progress{
-  height:12px;
-  background:#33445e;
-  border-radius:12px;
-  overflow:hidden;
-  margin-top:14px;
-}
-.progress .bar{
-  height:100%;
-  background:#38d9a9;
-}
-#loading{
-  padding:50px 20px;
-  text-align:center;
-  color:#aab8ca;
-}
-@media(max-width:650px){
-  .grid,.form-grid{grid-template-columns:1fr}
-  h1{font-size:24px}
-  .value{font-size:24px}
-  .login-card{padding:24px}
-  header{padding:16px}
-  .card{padding:18px}
-}
+.note{font-size:12px;color:#aab8ca}
+.progress{height:11px;background:#34465e;border-radius:10px;overflow:hidden}
+.progress div{height:100%;background:#38d9a9}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(max-width:650px){.grid,.formgrid{grid-template-columns:1fr}.card{padding:16px}main{padding:15px}}
 </style>
 </head>
-
 <body>
 <header>
-  <div class="logo">💸 PAPI <span>RIKI</span></div>
-  <button id="logoutBtn" class="logout" hidden>
-    Cerrar sesión
-  </button>
+<div class="logo">💸 PAPI <span>RIKI</span></div>
+<button id="logout" class="btn alt" hidden>Cerrar sesión</button>
 </header>
 
-<div id="loading">Verificando acceso...</div>
+<p id="loading" style="text-align:center;padding:40px">Verificando sesión...</p>
 
-<section id="loginSection" class="login-wrapper" hidden>
-  <div class="login-card">
-    <h2>🔐 Iniciar sesión</h2>
-    <p>Accede a tus finanzas personales.</p>
-
-    <form id="loginForm">
-      <label class="field-label" for="email">
-        Correo electrónico
-      </label>
-      <input class="field" id="email" type="email"
-        autocomplete="username" required>
-
-      <label class="field-label" for="password">
-        Contraseña
-      </label>
-      <input class="field" id="password"
-        type="password"
-        autocomplete="current-password" required>
-
-      <label class="remember" for="rememberMe">
-        <input id="rememberMe" type="checkbox" checked>
-        <span>Recordarme en este dispositivo</span>
-      </label>
-
-      <button id="loginBtn" class="btn" type="submit">
-        Entrar a mis finanzas
-      </button>
-    </form>
-
-    <p id="loginMessage" class="message"
-       role="status" aria-live="polite"></p>
-    <p class="note">
-      Acceso personal · Registro público desactivado
-    </p>
-  </div>
+<section id="auth" class="auth" hidden>
+<div class="card">
+<h2>🔐 Iniciar sesión</h2>
+<p>Tu centro financiero personal</p>
+<form id="loginForm">
+<label>Correo electrónico
+<input id="email" class="field" type="email" required autocomplete="username">
+</label>
+<label>Contraseña
+<input id="password" class="field" type="password" required autocomplete="current-password">
+</label>
+<label class="remember">
+<input id="remember" type="checkbox" checked>
+Recordarme en este dispositivo
+</label>
+<button id="loginBtn" class="btn" style="width:100%">Entrar a mis finanzas</button>
+</form>
+<p id="loginMsg" class="message"></p>
+</div>
 </section>
 
-<main id="dashboard" hidden>
+<main id="app" hidden>
+<nav id="nav"></nav>
 
-  <h1>Mi dashboard financiero</h1>
-  <p>Controla tu dinero, inversiones y futuro.</p>
-  <p class="note">
-    Versión inicial · Sin conexión bancaria automática
-  </p>
+<section id="dashboard" class="tab">
+<h1>Mi resumen financiero</h1>
+<p>Tu dinero, tus gastos y tus inversiones.</p>
+<div id="summary" class="grid"></div>
+<div class="card">
+<h3>🎯 Meta patrimonial</h3>
+<div id="goalSummary"></div>
+</div>
+<div class="card">
+<h3>💡 Capacidad de inversión</h3>
+<div id="spendable"></div>
+</div>
+</section>
 
-  <div class="grid">
-    <div class="card">
-      <h3>💰 Patrimonio neto</h3>
-      <div id="netWorth" class="value">
-        Por configurar
-      </div>
-      <p>Meta: S/ 10,000</p>
-    </div>
+<section id="accounts" class="tab" hidden>
+<div class="row"><h2>🏦 Cuentas</h2>
+<button class="btn" data-new="account">+ Añadir cuenta</button></div>
+<p class="note">Yape vinculado a BCP no es una cuenta adicional.</p>
+<div id="accountList" class="grid"></div>
+</section>
 
-    <div class="card">
-      <h3>🏦 BCP · Cuenta principal</h3>
-      <div id="bcpBalance" class="value">
-        Por configurar
-      </div>
-      <p>Saldo inicial registrado</p>
-    </div>
+<section id="movements" class="tab" hidden>
+<div class="row"><h2>🧾 Movimientos</h2>
+<button class="btn" data-new="transaction">+ Movimiento</button></div>
+<p class="note">Los pagos de tarjetas son transferencias, no nuevos gastos.</p>
+<div id="transactionList" class="list"></div>
+</section>
 
-    <div class="card">
-      <h3>🏦 BBVA · Cuenta secundaria</h3>
-      <div id="bbvaBalance" class="value">
-        Por configurar
-      </div>
-      <p>Saldo inicial registrado</p>
-    </div>
+<section id="budgets" class="tab" hidden>
+<div class="row"><h2>📊 Presupuestos</h2>
+<button class="btn" data-new="budget">+ Presupuesto</button></div>
+<p>Alertas al alcanzar el 80%.</p>
+<div id="budgetList" class="list"></div>
+</section>
 
-    <div class="card">
-      <h3>💵 Ingreso mensual</h3>
-      <div class="value green">S/ 1,350</div>
-      <p>Ingreso fijo programado</p>
-    </div>
+<section id="investments" class="tab" hidden>
+<div class="row"><h2>📈 Inversiones</h2>
+<button class="btn" data-new="holding">+ Inversión</button></div>
+<p class="note">Valoraciones manuales; no son cotizaciones en tiempo real.</p>
+<div id="holdingList" class="list"></div>
+</section>
 
-    <div class="card">
-      <h3>🛒 Presupuesto estimado</h3>
-      <div class="value">S/ 700</div>
-      <p>Gastos mensuales habituales</p>
-    </div>
+<section id="goals" class="tab" hidden>
+<div class="row"><h2>🎯 Metas</h2>
+<button class="btn" data-new="goal">+ Meta</button></div>
+<div id="goalList" class="list"></div>
+</section>
 
-    <div class="card">
-      <h3>📈 Objetivo de inversión</h3>
-      <div class="value purple">S/ 650</div>
-      <p>Meta flexible según disponibilidad</p>
-      <div class="progress">
-        <div class="bar" style="width:0%"></div>
-      </div>
-      <p class="note">Aportes pendientes de registrar</p>
-    </div>
-  </div>
+<section id="projections" class="tab" hidden>
+<h2>🔮 Proyecciones</h2>
+<div class="card">
+<div class="formgrid">
+<label>Capital inicial (S/)
+<input id="pInitial" class="field" type="number" min="0" value="1000"></label>
+<label>Aporte mensual (S/)
+<input id="pMonthly" class="field" type="number" min="0" value="650"></label>
+<label>Años
+<input id="pYears" class="field" type="number" min="1" max="50" value="10"></label>
+<label>Rentabilidad anual hipotética (%)
+<input id="pRate" class="field" type="number" min="-50" max="50" step=".1" value="7"></label>
+</div>
+<div id="projectionResult" class="card"></div>
+<p class="note">Simulación sin impuestos, comisiones ni inflación. No garantiza resultados.</p>
+</div>
+</section>
 
-  <section class="card">
-    <h3>🎯 Mi objetivo patrimonial</h3>
-    <div class="value green">S/ 10,000</div>
-    <p id="goalMessage">
-      Registra tus activos y deudas para calcular el avance.
-    </p>
-    <div class="progress">
-      <div id="goalBar" class="bar" style="width:0%"></div>
-    </div>
-  </section>
+<section id="reports" class="tab" hidden>
+<h2>📋 Reportes</h2>
+<div id="reportBody"></div>
+<button id="exportBtn" class="btn alt">Exportar CSV</button>
+</section>
 
-  <section class="card">
-    <div class="toolbar">
-      <div>
-        <h2>🏦 Mis cuentas</h2>
-        <p class="note">
-          Cuentas guardadas en Supabase.
-        </p>
-      </div>
-      <button id="addAccountBtn" class="btn">
-        + Añadir cuenta
-      </button>
-    </div>
+<section id="settings" class="tab" hidden>
+<h2>⚙️ Configuración</h2>
+<div class="card">
+<form id="settingsForm">
+<div class="formgrid">
+<label>Ingreso mensual
+<input id="sIncome" class="field" type="number" min="0" step=".01" required></label>
+<label>Gastos estimados
+<input id="sExpense" class="field" type="number" min="0" step=".01" required></label>
+<label>Objetivo de inversión
+<input id="sInvest" class="field" type="number" min="0" step=".01" required></label>
+<label>Meta patrimonial
+<input id="sNetworth" class="field" type="number" min=".01" step=".01" required></label>
+<label>Tipo de cambio PEN por USD
+<input id="sFx" class="field" type="number" min=".000001" step=".000001"></label>
+<label>Fecha del tipo de cambio
+<input id="sFxDate" class="field" type="date"></label>
+</div>
+<button class="btn">Guardar preferencias</button>
+<p id="settingsMsg" class="message"></p>
+</form>
+</div>
+</section>
 
-    <p id="accountsStatus" class="message"
-       role="status" aria-live="polite">
-      Consultando cuentas...
-    </p>
+<section id="editor" class="tab" hidden>
+<h2 id="editorTitle">Nuevo registro</h2>
+<div class="card">
+<form id="editorForm">
+<div id="editorFields" class="formgrid"></div>
+<div class="actions">
+<button id="saveBtn" class="btn">Guardar</button>
+<button id="cancelBtn" class="btn alt" type="button">Cancelar</button>
+</div>
+<p id="editorMsg" class="message"></p>
+</form>
+</div>
+</section>
 
-    <div id="accountsList" class="grid"></div>
-  </section>
-
-  <section id="accountFormSection" class="card" hidden>
-    <h2 id="formTitle">Añadir cuenta</h2>
-
-    <form id="accountForm">
-      <div class="form-grid">
-        <div>
-          <label class="field-label" for="accountName">
-            Nombre de la cuenta
-          </label>
-          <input id="accountName" class="field"
-            maxlength="80" required
-            placeholder="Ej. BCP Soles">
-        </div>
-
-        <div>
-          <label class="field-label" for="institution">
-            Entidad
-          </label>
-          <select id="institution" class="field">
-            <option value="BCP">BCP</option>
-            <option value="BBVA">BBVA</option>
-            <option value="Efectivo">Efectivo</option>
-            <option value="Otro">Otro</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="field-label" for="accountType">
-            Tipo de cuenta
-          </label>
-          <select id="accountType" class="field">
-            <option value="bank">Bancaria</option>
-            <option value="cash">Efectivo</option>
-            <option value="investment">Inversión</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="field-label" for="currency">
-            Moneda
-          </label>
-          <select id="currency" class="field">
-            <option value="PEN">Soles (PEN)</option>
-            <option value="USD">Dólares (USD)</option>
-          </select>
-        </div>
-
-        <div>
-          <label class="field-label" for="openingBalance">
-            Saldo inicial
-          </label>
-          <input id="openingBalance" class="field"
-            type="number" step="0.01"
-            min="0" max="999999999999.99"
-            value="0" required>
-        </div>
-      </div>
-
-      <p class="note">
-        El saldo inicial es una referencia contable.
-        Todavía no se actualiza mediante movimientos.
-      </p>
-
-      <div class="form-actions">
-        <button id="saveAccountBtn" class="btn"
-          type="submit">
-          Guardar cuenta
-        </button>
-        <button id="cancelAccountBtn"
-          class="btn btn-secondary" type="button">
-          Cancelar
-        </button>
-      </div>
-
-      <p id="accountFormMessage"
-         class="message"
-         role="status"
-         aria-live="polite"></p>
-    </form>
-  </section>
-
+<p class="note">Versión de desarrollo. No hay conexión automática con bancos ni Gmail.</p>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
 <script>
 "use strict";
 
-// =====================================
-// CONFIGURACION PUBLICABLE SUPABASE
-// =====================================
+const URL_BASE="https://kbwrxebdcpgsplfjpkxv.supabase.co";
+const PUBLIC_KEY="sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+const $=id=>document.getElementById(id);
 
-const SUPABASE_URL =
-  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
-
-const SUPABASE_KEY =
-  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
-
-const $ = id => document.getElementById(id);
-
-const REMEMBER_KEY = "papi_riki_remember";
-const AUTH_STORAGE_KEY =
-  "sb-kbwrxebdcpgsplfjpkxv-auth-token";
-
-let shouldRemember =
-  localStorage.getItem(REMEMBER_KEY) !== "false";
-
-$("rememberMe").checked = shouldRemember;
-
-let client = null;
-let currentUser = null;
-let accounts = [];
-let editingId = null;
-let accountBusy = false;
-
-// =====================================
-// ALMACENAMIENTO DE SESION
-// =====================================
-
-const authStorage = {
-  getItem(key) {
-    return (shouldRemember ? localStorage : sessionStorage)
-      .getItem(key);
-  },
-  setItem(key,value) {
-    (shouldRemember ? localStorage : sessionStorage)
-      .setItem(key,value);
-  },
-  removeItem(key) {
-    localStorage.removeItem(key);
-    sessionStorage.removeItem(key);
-  }
+const tableNames={
+ account:"accounts",
+ transaction:"finance_transactions",
+ budget:"finance_budgets",
+ holding:"finance_holdings",
+ goal:"finance_goals"
 };
 
-// =====================================
-// FUNCIONES GENERALES
-// =====================================
+const sections=[
+ ["dashboard","🏠 Resumen"],
+ ["accounts","🏦 Cuentas"],
+ ["movements","🧾 Movimientos"],
+ ["budgets","📊 Presupuestos"],
+ ["investments","📈 Inversiones"],
+ ["goals","🎯 Metas"],
+ ["projections","🔮 Proyecciones"],
+ ["reports","📋 Reportes"],
+ ["settings","⚙️ Ajustes"]
+];
 
-function money(amount,currency="PEN") {
-  return new Intl.NumberFormat("es-PE",{
-    style:"currency",
-    currency:currency
-  }).format(Number(amount));
+const defaults={
+ monthly_income:1350,
+ expense_plan:700,
+ investment_target:650,
+ networth_target:10000,
+ fx_pen_per_usd:null,
+ fx_date:null
+};
+
+let sb=null;
+let user=null;
+let active="dashboard";
+let editType=null;
+let editId=null;
+let busy=false;
+
+let data={
+ accounts:[],
+ transactions:[],
+ budgets:[],
+ holdings:[],
+ goals:[],
+ settings:{...defaults}
+};
+
+const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
+const rememberKey="papi_riki_remember";
+let remember=localStorage.getItem(rememberKey)!=="false";
+$("remember").checked=remember;
+
+const storage={
+ getItem(k){
+  return (remember?localStorage:sessionStorage).getItem(k);
+ },
+ setItem(k,v){
+  (remember?localStorage:sessionStorage).setItem(k,v);
+ },
+ removeItem(k){
+  localStorage.removeItem(k);
+  sessionStorage.removeItem(k);
+ }
+};
+
+function money(n,c="PEN"){
+ return new Intl.NumberFormat("es-PE",{
+  style:"currency",currency:c
+ }).format(Number(n)||0);
 }
 
-function showMessage(id,text,error=false) {
-  const element = $(id);
-  element.textContent = text;
-  element.className =
-    "message " + (error ? "error" : "success");
+function escapeHtml(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
+ })[c]);
 }
 
-function showLogin() {
-  currentUser = null;
-  accounts = [];
-  $("loading").hidden = true;
-  $("loginSection").hidden = false;
-  $("dashboard").hidden = true;
-  $("logoutBtn").hidden = true;
-  $("accountFormSection").hidden = true;
+function dateToday(){
+ return new Date().toLocaleDateString("en-CA");
 }
 
-function showDashboard(user) {
-  currentUser = user;
-  $("loading").hidden = true;
-  $("loginSection").hidden = true;
-  $("dashboard").hidden = false;
-  $("logoutBtn").hidden = false;
-  $("password").value = "";
-  $("loginMessage").textContent = "";
-  void loadAccounts();
+function showLogin(){
+ user=null;
+ $("loading").hidden=true;
+ $("auth").hidden=false;
+ $("app").hidden=true;
+ $("logout").hidden=true;
 }
 
-function explainError(error) {
-  if(error?.code==="invalid_credentials")
-    return "Correo o contraseña incorrectos.";
-
-  if(error?.code==="email_not_confirmed")
-    return "El correo no está confirmado.";
-
-  if(error?.name==="AuthRetryableFetchError")
-    return "No se pudo contactar con Supabase.";
-
-  return error?.message ||
-    "Ocurrió un error de autenticación.";
+async function showApp(u){
+ user=u;
+ $("loading").hidden=true;
+ $("auth").hidden=true;
+ $("app").hidden=false;
+ $("logout").hidden=false;
+ $("password").value="";
+ await loadAll();
+ navigate("dashboard");
 }
 
-// =====================================
-// AUTENTICACION
-// =====================================
-
-async function initialize() {
-  if(!window.supabase) {
-    $("loading").textContent =
-      "No se pudo cargar Supabase.";
-    return;
+async function init(){
+ if(!window.supabase){
+  $("loading").textContent="No se pudo cargar Supabase.";
+  return;
+ }
+ sb=window.supabase.createClient(URL_BASE,PUBLIC_KEY,{
+  auth:{
+   storageKey:authKey,
+   storage,
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
   }
-
-  try {
-    client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth:{
-          storageKey:AUTH_STORAGE_KEY,
-          storage:authStorage,
-          persistSession:true,
-          autoRefreshToken:true,
-          detectSessionInUrl:true
-        }
-      }
-    );
-
-    client.auth.onAuthStateChange(
-      (event,session)=>{
-        if(event==="SIGNED_OUT") {
-          showLogin();
-        }
-        if(event==="SIGNED_IN" && session?.user) {
-          showDashboard(session.user);
-        }
-      }
-    );
-
-    const {data,error} =
-      await client.auth.getUser();
-
-    if(error || !data?.user) {
-      showLogin();
-    } else {
-      showDashboard(data.user);
-    }
-
-  } catch(error) {
-    console.error(error);
-    $("loading").textContent =
-      "No se pudo iniciar la autenticación.";
-  }
+ });
+ sb.auth.onAuthStateChange((event,session)=>{
+  if(event==="SIGNED_OUT")showLogin();
+ });
+ const {data:session,error}=await sb.auth.getUser();
+ if(error||!session?.user)showLogin();
+ else await showApp(session.user);
 }
 
-$("loginForm").addEventListener("submit",async event=>{
-  event.preventDefault();
-
-  const button = $("loginBtn");
-  button.disabled = true;
-  button.textContent = "Conectando...";
-
-  try {
-    shouldRemember = $("rememberMe").checked;
-
-    localStorage.setItem(
-      REMEMBER_KEY,
-      shouldRemember ? "true" : "false"
-    );
-
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    sessionStorage.removeItem(AUTH_STORAGE_KEY);
-
-    const {data,error} =
-      await client.auth.signInWithPassword({
-        email:$("email").value.trim(),
-        password:$("password").value
-      });
-
-    if(error) throw error;
-
-    if(!data?.user || !data?.session)
-      throw new Error("No se recibió una sesión válida.");
-
-    showDashboard(data.user);
-
-  } catch(error) {
-    showMessage(
-      "loginMessage",
-      explainError(error),
-      true
-    );
-  } finally {
-    button.disabled = false;
-    button.textContent = "Entrar a mis finanzas";
-  }
-});
-
-$("logoutBtn").addEventListener("click",async()=>{
-  const button = $("logoutBtn");
-  button.disabled = true;
-
-  try {
-    const {error} = await client.auth.signOut();
-    if(error) throw error;
-
-    authStorage.removeItem(AUTH_STORAGE_KEY);
-    showLogin();
-
-  } catch(error) {
-    alert("No se pudo cerrar sesión.");
-  } finally {
-    button.disabled = false;
-  }
-});
-
-// =====================================
-// CARGAR CUENTAS
-// =====================================
-
-async function loadAccounts() {
-  if(!client || !currentUser) return;
-
-  const requestedUserId = currentUser.id;
-  $("accountsStatus").textContent =
-    "Cargando cuentas...";
-
-  try {
-    const {data,error} = await client
-      .from("accounts")
-      .select(
-        "id,user_id,name,institution,account_type," +
-        "currency,opening_balance,created_at"
-      )
-      .eq("user_id",requestedUserId)
-      .order("created_at",{ascending:true});
-
-    if(error) throw error;
-
-    if(!currentUser ||
-       currentUser.id!==requestedUserId) return;
-
-    accounts = data || [];
-    renderAccounts();
-    updateDashboard();
-
-    $("accountsStatus").textContent =
-      accounts.length
-        ? accounts.length + " cuenta(s) registrada(s)."
-        : "Todavía no tienes cuentas registradas.";
-
-  } catch(error) {
-    console.error("Error cargando cuentas:",error);
-    $("accountsStatus").textContent =
-      "Error al consultar las cuentas: " +
-      (error.code || error.message);
-  }
-}
-
-// =====================================
-// MOSTRAR CUENTAS
-// =====================================
-
-function renderAccounts() {
-  const container = $("accountsList");
-  container.replaceChildren();
-
-  for(const account of accounts) {
-    const card = document.createElement("div");
-    card.className = "account";
-
-    const title = document.createElement("h3");
-    title.textContent = account.name;
-
-    const info = document.createElement("p");
-    info.className = "note";
-    info.textContent =
-      (account.institution || "Sin entidad") +
-      " · " + account.currency +
-      " · " + (
-        account.account_type==="bank" ? "Bancaria" :
-        account.account_type==="cash" ? "Efectivo" :
-        "Inversión"
-      );
-
-    const balance = document.createElement("div");
-    balance.className = "account-balance green";
-    balance.textContent = money(
-      account.opening_balance,
-      account.currency
-    );
-
-    const note = document.createElement("p");
-    note.className = "note";
-    note.textContent = "Saldo inicial registrado";
-
-    const actions = document.createElement("div");
-    actions.className = "actions";
-
-    const editButton = document.createElement("button");
-    editButton.className = "btn btn-secondary";
-    editButton.textContent = "Editar";
-    editButton.onclick = () => openAccountForm(account.id);
-
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "btn btn-danger";
-    deleteButton.textContent = "Eliminar";
-    deleteButton.onclick = () => deleteAccount(account.id);
-
-    actions.append(editButton,deleteButton);
-    card.append(title,info,balance,note,actions);
-    container.appendChild(card);
-  }
-}
-
-// =====================================
-// ACTUALIZAR DASHBOARD
-// =====================================
-
-function updateDashboard() {
-  function balanceFor(bank) {
-    const matching = accounts.filter(a=>
-      a.institution===bank &&
-      a.account_type==="bank" &&
-      a.currency==="PEN"
-    );
-
-    if(!matching.length) return "Por configurar";
-
-    const total = matching.reduce(
-      (sum,a)=>sum+Number(a.opening_balance),0
-    );
-
-    return money(total);
-  }
-
-  $("bcpBalance").textContent = balanceFor("BCP");
-  $("bbvaBalance").textContent = balanceFor("BBVA");
-
-  // No sumar PEN y USD sin tipo de cambio.
-  // Tampoco presentar activos como patrimonio
-  // neto mientras no existan pasivos registrados.
-  $("netWorth").textContent = "Pendiente de calcular";
-  $("goalMessage").textContent =
-    "Falta registrar deudas y valoración de inversiones " +
-    "para calcular el patrimonio neto completo.";
-  $("goalBar").style.width = "0%";
-}
-
-// =====================================
-// FORMULARIO DE CUENTAS
-// =====================================
-
-function openAccountForm(id=null) {
-  if(accountBusy) return;
-
-  editingId = id;
-  $("accountForm").reset();
-  $("accountFormMessage").textContent = "";
-
-  if(id) {
-    const account = accounts.find(a=>a.id===id);
-    if(!account) return;
-
-    $("formTitle").textContent = "Editar cuenta";
-    $("accountName").value = account.name;
-    $("institution").value =
-      account.institution || "Otro";
-    $("accountType").value = account.account_type;
-    $("currency").value = account.currency;
-    $("openingBalance").value =
-      account.opening_balance;
-
-  } else {
-    $("formTitle").textContent = "Añadir cuenta";
-    $("openingBalance").value = "0";
-  }
-
-  $("accountFormSection").hidden = false;
-  $("accountFormSection").scrollIntoView({
-    behavior:"smooth",
-    block:"start"
+$("loginForm").onsubmit=async e=>{
+ e.preventDefault();
+ const btn=$("loginBtn");
+ btn.disabled=true;
+ $("loginMsg").textContent="";
+ try{
+  remember=$("remember").checked;
+  localStorage.setItem(rememberKey,String(remember));
+  localStorage.removeItem(authKey);
+  sessionStorage.removeItem(authKey);
+  const {data:result,error}=await sb.auth.signInWithPassword({
+   email:$("email").value.trim(),
+   password:$("password").value
   });
+  if(error)throw error;
+  if(!result?.user)throw Error("Sesión no válida");
+  await showApp(result.user);
+ }catch(err){
+  $("loginMsg").textContent=err.message;
+  $("loginMsg").className="message error";
+ }finally{btn.disabled=false}
+};
+
+$("logout").onclick=async()=>{
+ const {error}=await sb.auth.signOut();
+ if(error)alert(error.message);
+ else showLogin();
+};
+
+function navigate(id){
+ active=id;
+ document.querySelectorAll(".tab").forEach(el=>{
+  el.hidden=el.id!==id;
+ });
+ $("nav").querySelectorAll("button").forEach(b=>{
+  b.classList.toggle("active",b.dataset.tab===id);
+ });
+ if(id==="projections")project();
 }
 
-function closeAccountForm() {
-  $("accountFormSection").hidden = true;
-  editingId = null;
-  $("accountForm").reset();
+$("nav").innerHTML=sections.map(([id,label])=>
+ `<button data-tab="${id}">${label}</button>`
+).join("");
+
+$("nav").onclick=e=>{
+ const b=e.target.closest("[data-tab]");
+ if(b)navigate(b.dataset.tab);
+};
+
+async function loadAll(){
+ if(!user)return;
+ const uid=user.id;
+ const queries=[
+  sb.from("accounts").select("*").eq("user_id",uid),
+  sb.from("finance_transactions").select("*").eq("user_id",uid),
+  sb.from("finance_budgets").select("*").eq("user_id",uid),
+  sb.from("finance_holdings").select("*").eq("user_id",uid),
+  sb.from("finance_goals").select("*").eq("user_id",uid),
+  sb.from("finance_settings").select("*").eq("user_id",uid).maybeSingle()
+ ];
+ const results=await Promise.all(queries);
+ const failed=results.find(r=>r.error);
+ if(failed){
+  alert("Error de base de datos: "+failed.error.message);
+  return;
+ }
+ if(!user||user.id!==uid)return;
+ data.accounts=results[0].data||[];
+ data.transactions=results[1].data||[];
+ data.budgets=results[2].data||[];
+ data.holdings=results[3].data||[];
+ data.goals=results[4].data||[];
+ data.settings={...defaults,...(results[5].data||{})};
+ render();
 }
 
-$("addAccountBtn").addEventListener(
-  "click",()=>openAccountForm()
-);
+function account(id){
+ return data.accounts.find(a=>a.id===id);
+}
 
-$("cancelAccountBtn").addEventListener(
-  "click",closeAccountForm
-);
-
-// =====================================
-// GUARDAR CUENTA
-// =====================================
-
-$("accountForm").addEventListener(
-  "submit",async event=>{
-    event.preventDefault();
-
-    if(accountBusy || !currentUser) return;
-
-    const name = $("accountName").value.trim();
-    const balanceText = $("openingBalance").value;
-    const balance = Number(balanceText);
-
-    if(!name || !balanceText ||
-       !Number.isFinite(balance) ||
-       balance<0 ||
-       balance>999999999999.99 ||
-       !/^\d+(\.\d{1,2})?$/.test(balanceText)) {
-      showMessage(
-        "accountFormMessage",
-        "Revisa el nombre y el saldo. " +
-        "Utiliza como máximo dos decimales.",
-        true
-      );
-      return;
-    }
-
-    accountBusy = true;
-    $("saveAccountBtn").disabled = true;
-
-    const payload = {
-      name,
-      institution:$("institution").value,
-      account_type:$("accountType").value,
-      currency:$("currency").value,
-      opening_balance:balance
-    };
-
-    try {
-      let error;
-
-      if(editingId) {
-        const response = await client
-          .from("accounts")
-          .update(payload)
-          .eq("id",editingId)
-          .eq("user_id",currentUser.id)
-          .select("id")
-          .single();
-
-        error = response.error;
-
-      } else {
-        const response = await client
-          .from("accounts")
-          .insert({
-            ...payload,
-            user_id:currentUser.id
-          })
-          .select("id")
-          .single();
-
-        error = response.error;
-      }
-
-      if(error) throw error;
-
-      closeAccountForm();
-      await loadAccounts();
-
-    } catch(error) {
-      console.error("Error guardando cuenta:",error);
-      showMessage(
-        "accountFormMessage",
-        "No se pudo guardar: " +
-        (error.message || "Error desconocido"),
-        true
-      );
-    } finally {
-      accountBusy = false;
-      $("saveAccountBtn").disabled = false;
-    }
+function balance(a){
+ let n=Number(a.opening_balance);
+ for(const t of data.transactions){
+  if(t.account_id===a.id){
+   if(t.kind==="income")n+=Number(t.amount);
+   if(t.kind==="expense")n-=Number(t.amount);
+   if(t.kind==="transfer")n-=Number(t.amount);
   }
-);
-
-// =====================================
-// ELIMINAR CUENTA
-// =====================================
-
-async function deleteAccount(id) {
-  if(accountBusy || !currentUser) return;
-
-  const account = accounts.find(a=>a.id===id);
-  if(!account) return;
-
-  const confirmed = confirm(
-    "¿Eliminar la cuenta '" + account.name + "'?\n\n" +
-    "Esta acción no se puede deshacer."
-  );
-
-  if(!confirmed) return;
-
-  accountBusy = true;
-
-  try {
-    const {data,error} = await client
-      .from("accounts")
-      .delete()
-      .eq("id",id)
-      .eq("user_id",currentUser.id)
-      .select("id");
-
-    if(error) throw error;
-
-    if(data?.length!==1)
-      throw new Error(
-        "No se confirmó la eliminación."
-      );
-
-    await loadAccounts();
-
-  } catch(error) {
-    console.error("Error eliminando:",error);
-    alert(
-      "No se pudo eliminar la cuenta: " +
-      (error.message || "Error desconocido")
-    );
-  } finally {
-    accountBusy = false;
-  }
+  if(t.kind==="transfer"&&t.linked_account_id===a.id)
+   n+=Number(t.linked_amount);
+ }
+ return n;
 }
 
-// =====================================
-// INICIAR PAPI RIKI
-// =====================================
+function convert(n,c){
+ if(c==="PEN")return Number(n);
+ const fx=Number(data.settings.fx_pen_per_usd);
+ return fx>0?Number(n)*fx:null;
+}
 
-initialize();
+function actionButtons(type,id){
+ return `<div class="actions">
+ <button class="btn alt" data-edit="${type}:${id}">Editar</button>
+ <button class="btn danger" data-delete="${type}:${id}">Eliminar</button>
+ </div>`;
+}
+
+function render(){
+ renderDashboard();
+ renderAccounts();
+ renderTransactions();
+ renderBudgets();
+ renderHoldings();
+ renderGoals();
+ renderReports();
+ renderSettings();
+}
+
+function renderDashboard(){
+ const s=data.settings;
+ const liquid=data.accounts.filter(a=>
+  a.account_type==="bank"||a.account_type==="cash"
+ );
+ let total=0,complete=true;
+ for(const a of data.accounts){
+  const converted=convert(balance(a),a.currency);
+  if(converted===null)complete=false;
+  else total+=converted;
+ }
+ const cards=[
+  ["Patrimonio registrado",complete?money(total):"Falta tipo de cambio"],
+  ["Ingreso mensual previsto",money(s.monthly_income)],
+  ["Gasto estimado",money(s.expense_plan)],
+  ["Objetivo de inversión",money(s.investment_target)]
+ ];
+ $("summary").innerHTML=cards.map(([t,v])=>
+  `<div class="card"><h3>${t}</h3><div class="value">${v}</div></div>`
+ ).join("");
+ const pct=complete?Math.min(100,Math.max(0,total/Number(s.networth_target)*100)):0;
+ $("goalSummary").innerHTML=
+  `<div class="value">${money(s.networth_target)}</div>
+  <div class="progress"><div style="width:${pct}%"></div></div>
+  <p>${complete?pct.toFixed(1)+"% de la meta":"Conversión pendiente"}</p>`;
+ const available=Number(s.monthly_income)-Number(s.expense_plan);
+ const suggested=Math.max(0,Math.min(available,Number(s.investment_target)));
+ $("spendable").innerHTML=
+  `<p>Margen mensual teórico: <strong>${money(available)}</strong></p>
+  <p>Inversión sugerida antes de verificar liquidez: <strong>${money(suggested)}</strong></p>
+  <p class="note">No representa dinero disponible real ni descuenta obligaciones futuras.</p>`;
+}
+
+function renderAccounts(){
+ $("accountList").innerHTML=data.accounts.length?
+ data.accounts.map(a=>
+  `<div class="item"><strong>${escapeHtml(a.name)}</strong>
+  <p>${escapeHtml(a.institution)} · ${a.currency}</p>
+  <div class="value green">${money(balance(a),a.currency)}</div>
+  <small>Saldo calculado</small>
+  ${actionButtons("account",a.id)}</div>`
+ ).join(""):"<p>No hay cuentas registradas.</p>";
+}
+
+function renderTransactions(){
+ const sorted=[...data.transactions].sort((a,b)=>
+  b.occurred_on.localeCompare(a.occurred_on)
+ );
+ $("transactionList").innerHTML=sorted.length?
+ sorted.map(t=>
+  `<div class="item">
+  <div class="row"><strong>${escapeHtml(t.description||t.category)}</strong>
+  <strong>${money(t.amount,t.currency)}</strong></div>
+  <p>${t.occurred_on} · ${escapeHtml(t.kind)} · ${escapeHtml(account(t.account_id)?.name||"Cuenta")}</p>
+  ${actionButtons("transaction",t.id)}</div>`
+ ).join(""):"<p>No hay movimientos.</p>";
+}
+
+function renderBudgets(){
+ $("budgetList").innerHTML=data.budgets.length?
+ data.budgets.map(b=>{
+  const spent=data.transactions.filter(t=>
+   t.kind==="expense"&&t.category===b.category&&t.currency===b.currency
+  ).reduce((n,t)=>n+Number(t.amount),0);
+  const pct=b.amount>0?spent/Number(b.amount)*100:0;
+  return `<div class="item"><div class="row">
+  <strong>${escapeHtml(b.category)}</strong>
+  <span>${money(spent,b.currency)} / ${money(b.amount,b.currency)}</span></div>
+  <div class="progress"><div style="width:${Math.min(100,pct)}%"></div></div>
+  <p>${pct>=80?"⚠️ Alerta: 80% alcanzado":"Dentro del límite"} · ${pct.toFixed(0)}%</p>
+  ${actionButtons("budget",b.id)}</div>`;
+ }).join(""):"<p>No hay presupuestos.</p>";
+}
+
+function renderHoldings(){
+ $("holdingList").innerHTML=data.holdings.length?
+ data.holdings.map(h=>
+  `<div class="item"><div class="row">
+  <strong>${escapeHtml(h.symbol)}</strong>
+  <strong>${money(h.market_value,h.currency)}</strong></div>
+  <p>${escapeHtml(h.broker)} · ${escapeHtml(h.asset_type)}
+  · ${h.quantity} unidades · Valoración manual</p>
+  ${actionButtons("holding",h.id)}</div>`
+ ).join(""):"<p>No hay inversiones registradas.</p>";
+}
+
+function renderGoals(){
+ $("goalList").innerHTML=data.goals.length?
+ data.goals.map(g=>{
+  const pct=Math.min(100,Number(g.saved)/Number(g.target)*100);
+  return `<div class="item"><div class="row">
+  <strong>${escapeHtml(g.name)}</strong>
+  <span>${money(g.saved,g.currency)} / ${money(g.target,g.currency)}</span></div>
+  <div class="progress"><div style="width:${pct}%"></div></div>
+  ${actionButtons("goal",g.id)}</div>`;
+ }).join(""):"<p>No hay metas adicionales.</p>";
+}
+
+function renderReports(){
+ const inc=data.transactions.filter(t=>t.kind==="income");
+ const exp=data.transactions.filter(t=>t.kind==="expense");
+ $("reportBody").innerHTML=
+  `<div class="grid">
+  <div class="card"><h3>Ingresos PEN registrados</h3>
+  <div class="value">${money(inc.filter(t=>t.currency==="PEN").reduce((n,t)=>n+Number(t.amount),0))}</div></div>
+  <div class="card"><h3>Gastos PEN registrados</h3>
+  <div class="value">${money(exp.filter(t=>t.currency==="PEN").reduce((n,t)=>n+Number(t.amount),0))}</div></div>
+  </div><p>Operaciones registradas: ${data.transactions.length}</p>
+  <p class="note">Reporte acumulado; aún no es un cierre semanal auditado.</p>`;
+}
+
+function renderSettings(){
+ const s=data.settings;
+ for(const [id,key] of [
+  ["sIncome","monthly_income"],
+  ["sExpense","expense_plan"],
+  ["sInvest","investment_target"],
+  ["sNetworth","networth_target"],
+  ["sFx","fx_pen_per_usd"],
+  ["sFxDate","fx_date"]
+ ])$(id).value=s[key]??"";
+}
+
+function project(){
+ const p=Number($("pInitial").value);
+ const a=Number($("pMonthly").value);
+ const y=Number($("pYears").value);
+ const r=Number($("pRate").value);
+ if(![p,a,y,r].every(Number.isFinite)||p<0||a<0||y<1||y>50||r< -50||r>50){
+  $("projectionResult").textContent="Revisa los valores.";
+  return;
+ }
+ const m=Math.pow(1+r/100,1/12)-1;
+ const n=Math.round(y*12);
+ const factor=Math.pow(1+m,n);
+ const future=p*factor+(Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
+ $("projectionResult").innerHTML=
+  `<h3>Patrimonio proyectado</h3><div class="value green">${money(future)}</div>
+  <p>Aportes: ${money(p+a*n)} · Resultado hipotético: ${money(future-p-a*n)}</p>`;
+}
+
+["pInitial","pMonthly","pYears","pRate"].forEach(id=>
+ $(id).addEventListener("input",project)
+);
+
+const fields={
+ account:[
+  ["name","Nombre","text"],
+  ["institution","Entidad","select","BCP|BBVA|Efectivo|Otro"],
+  ["account_type","Tipo","select","bank:Bancaria|cash:Efectivo|investment:Inversión|credit:Crédito"],
+  ["currency","Moneda","select","PEN|USD"],
+  ["opening_balance","Saldo inicial","number"]
+ ],
+ transaction:[
+  ["kind","Tipo","select","expense:Gasto|income:Ingreso|transfer:Transferencia"],
+  ["account_id","Cuenta origen","account"],
+  ["linked_account_id","Cuenta destino","optional_account"],
+  ["amount","Importe","number"],
+  ["linked_amount","Importe destino","optional_number"],
+  ["category","Categoría","select","Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+  ["description","Descripción","text"],
+  ["occurred_on","Fecha","date"]
+ ],
+ budget:[
+  ["category","Categoría","select","Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+  ["amount","Límite PEN","number"]
+ ],
+ holding:[
+  ["broker","Bróker","text"],
+  ["symbol","Activo","text"],
+  ["asset_type","Tipo","select","stock:Acción|etf:ETF|fund:Fondo|deposit:Depósito|other:Otro"],
+  ["quantity","Cantidad","number"],
+  ["cost_basis","Costo total","number"],
+  ["market_value","Valor manual","number"],
+  ["currency","Moneda","select","PEN|USD"],
+  ["price_date","Fecha valoración","date"]
+ ],
+ goal:[
+  ["name","Nombre","text"],
+  ["target","Objetivo","number"],
+  ["saved","Acumulado","number"],
+  ["currency","Moneda","select","PEN|USD"],
+  ["due_on","Fecha objetivo","date"]
+ ]
+};
+
+function makeField(f,record){
+ const [key,label,type,opts]=f;
+ const value=record?.[key]??(key==="occurred_on"?dateToday():"");
+ let control="";
+ if(type==="select"){
+  control=`<select class="field" id="f_${key}">`+
+   opts.split("|").map(o=>{
+    const [v,t]=o.split(":");
+    return `<option value="${v}" ${String(value)===v?"selected":""}>${t||v}</option>`;
+   }).join("")+"</select>";
+ }else if(type==="account"||type==="optional_account"){
+  control=`<select class="field" id="f_${key}">`+
+   (type==="optional_account"?'<option value="">Ninguna</option>':"")+
+   data.accounts.map(a=>
+    `<option value="${a.id}" ${a.id===value?"selected":""}>${escapeHtml(a.name)} (${a.currency})</option>`
+   ).join("")+"</select>";
+ }else{
+  const inputType=type.includes("number")?"number":type;
+  control=`<input class="field" id="f_${key}" type="${inputType}"
+   ${inputType==="number"?'step="any" min="0"':""}
+   value="${escapeHtml(value)}"
+   ${type.startsWith("optional")?"":"required"}>`;
+ }
+ return `<label>${label}${control}</label>`;
+}
+
+function openEditor(type,id=null){
+ if(type==="transaction"&&!data.accounts.length){
+  alert("Primero crea una cuenta.");
+  return;
+ }
+ editType=type;
+ editId=id;
+ const records={
+  account:data.accounts,
+  transaction:data.transactions,
+  budget:data.budgets,
+  holding:data.holdings,
+  goal:data.goals
+ };
+ const record=id?records[type].find(x=>x.id===id):null;
+ $("editorTitle").textContent=(id?"Editar ":"Nuevo ")+type;
+ $("editorFields").innerHTML=fields[type].map(f=>makeField(f,record)).join("");
+ $("editorMsg").textContent="";
+ navigate("editor");
+}
+
+document.addEventListener("click",async e=>{
+ const create=e.target.closest("[data-new]");
+ if(create)openEditor(create.dataset.new);
+ const edit=e.target.closest("[data-edit]");
+ if(edit){
+  const [type,id]=edit.dataset.edit.split(":");
+  openEditor(type,id);
+ }
+ const del=e.target.closest("[data-delete]");
+ if(del){
+  const [type,id]=del.dataset.delete.split(":");
+  if(!confirm("¿Eliminar este registro?"))return;
+  try{
+   const {data:deleted,error}=await sb.from(tableNames[type])
+    .delete().eq("id",id).eq("user_id",user.id).select("id");
+   if(error)throw error;
+   if(deleted.length!==1)throw Error("No se confirmó la eliminación");
+   await loadAll();
+  }catch(err){alert(err.message)}
+ }
+});
+
+$("cancelBtn").onclick=()=>navigate("dashboard");
+
+$("editorForm").onsubmit=async e=>{
+ e.preventDefault();
+ if(busy)return;
+ busy=true;
+ $("saveBtn").disabled=true;
+ try{
+  const payload={};
+  for(const [key,,type] of fields[editType]){
+   const raw=$("f_"+key).value;
+   if(type==="number"||type==="optional_number"){
+    payload[key]=raw===""?null:Number(raw);
+    if(payload[key]!==null&&(!Number.isFinite(payload[key])||payload[key]<0))
+     throw Error("Importe inválido");
+   }else payload[key]=raw||null;
+  }
+  if(editType==="transaction"){
+   const src=account(payload.account_id);
+   const dst=account(payload.linked_account_id);
+   if(!src)throw Error("Selecciona una cuenta");
+   payload.currency=src.currency;
+   if(payload.kind==="transfer"){
+    if(!dst||dst.id===src.id)throw Error("Selecciona otra cuenta");
+    if(payload.linked_amount===null&&src.currency===dst.currency)
+     payload.linked_amount=payload.amount;
+    if(!(payload.linked_amount>0))throw Error("Indica importe de destino");
+   }else{
+    payload.linked_account_id=null;
+    payload.linked_amount=null;
+   }
+   if(!(payload.amount>0))throw Error("Importe inválido");
+  }
+  if(editType==="budget")payload.currency="PEN";
+  if(editType==="goal"&&!(payload.target>0))
+   throw Error("Objetivo inválido");
+  if(editType==="account"&&payload.account_type==="credit")
+   payload.opening_balance=-Math.abs(payload.opening_balance||0);
+
+  let query=editId?
+   sb.from(tableNames[editType]).update(payload).eq("id",editId).eq("user_id",user.id):
+   sb.from(tableNames[editType]).insert({...payload,user_id:user.id});
+  const {data:saved,error}=await query.select("id");
+  if(error)throw error;
+  if(!saved?.length)throw Error("No se confirmó el guardado");
+  await loadAll();
+  navigate({
+   account:"accounts",
+   transaction:"movements",
+   budget:"budgets",
+   holding:"investments",
+   goal:"goals"
+  }[editType]);
+ }catch(err){
+  $("editorMsg").textContent=err.message;
+  $("editorMsg").className="message error";
+ }finally{
+  busy=false;
+  $("saveBtn").disabled=false;
+ }
+};
+
+$("settingsForm").onsubmit=async e=>{
+ e.preventDefault();
+ const payload={
+  user_id:user.id,
+  monthly_income:Number($("sIncome").value),
+  expense_plan:Number($("sExpense").value),
+  investment_target:Number($("sInvest").value),
+  networth_target:Number($("sNetworth").value),
+  fx_pen_per_usd:$("sFx").value?Number($("sFx").value):null,
+  fx_date:$("sFxDate").value||null
+ };
+ const {error}=await sb.from("finance_settings")
+  .upsert(payload,{onConflict:"user_id"});
+ $("settingsMsg").textContent=error?error.message:"Preferencias guardadas";
+ if(!error)await loadAll();
+};
+
+$("exportBtn").onclick=()=>{
+ const rows=[
+  ["fecha","tipo","cuenta","categoria","descripcion","importe","moneda"],
+  ...data.transactions.map(t=>[
+   t.occurred_on,t.kind,account(t.account_id)?.name||"",
+   t.category,t.description,t.amount,t.currency
+  ])
+ ];
+ const csv=rows.map(row=>
+  row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")
+ ).join("\r\n");
+ const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download="papi-riki-movimientos.csv";
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+
+init();
 </script>
 </body>
 </html>
