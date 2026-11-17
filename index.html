@@ -525,7 +525,10 @@ function showDashboard() {
   logoutBtn.hidden = false;
 
   passwordInput.value = "";
-  loginMessage.textContent = "";
+  loginMessage.textContent = ""
+    
+loadAccounts();
+;
 }
 
 function showError(text) {
@@ -628,6 +631,63 @@ async function initialize() {
     console.error("Inicializacion:", error);
     loading.textContent =
       "No se pudo iniciar la autenticacion.";
+  }
+}
+
+// =====================================
+// CONSULTAR CUENTAS EN SUPABASE
+// =====================================
+
+async function loadAccounts() {
+  const status =
+    document.getElementById("accountsMessage");
+
+  if (!client || !status) return;
+
+  status.textContent = "Consultando cuentas...";
+
+  try {
+    const { data: authData, error: authError } =
+      await client.auth.getUser();
+
+    if (authError || !authData?.user) {
+      status.textContent =
+        "No hay una sesión autenticada válida.";
+      return;
+    }
+
+    const { data, error } = await client
+      .from("accounts")
+      .select("id, name, institution, account_type, currency")
+      .order("created_at", { ascending: true });
+
+    if (error) {
+      console.error("Error consultando accounts:", {
+        codigo: error.code,
+        mensaje: error.message
+      });
+
+      status.textContent =
+        "No se pudieron consultar las cuentas. " +
+        "Código: " + (error.code || "sin código");
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      status.textContent =
+        "Conexión correcta. " +
+        "Todavía no tienes cuentas registradas.";
+      return;
+    }
+
+    status.textContent =
+      "Conexión correcta. " +
+      "Cuentas registradas: " + data.length;
+
+  } catch (error) {
+    console.error("Error de conexión:", error);
+    status.textContent =
+      "No fue posible conectar con Supabase.";
   }
 }
 
