@@ -369,11 +369,20 @@ loginForm.addEventListener("submit", async (event) => {
       password
     });
 
-    if (error) {
-      showError(
-        "No se pudo iniciar sesión. Comprueba tus credenciales y que tu correo esté confirmado."
-      );
-    }
+
+if (error) {
+  console.error("Error de autenticación:", {
+    codigo: error.code,
+    estado: error.status,
+    mensaje: error.message
+  });
+
+  showError(
+    "Error de acceso: " +
+    (error.code || "desconocido")
+  );
+}
+
   } catch (error) {
     showError("Error de conexión. Intenta nuevamente.");
   } finally {
