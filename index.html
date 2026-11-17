@@ -10,7 +10,6 @@
 <meta name="apple-mobile-web-app-title" content="PAPI RIKI">
 <link rel="manifest" href="/manifest.webmanifest">
 <title>PAPI RIKI | Finanzas</title>
-
 <style>
 :root{
  --bg:#0b1220;
@@ -41,22 +40,14 @@ button:focus-visible,input:focus-visible,select:focus-visible{
  outline-offset:3px;
 }
 header{
- position:sticky;
- top:0;
- z-index:20;
+ position:sticky;top:0;z-index:20;
  background:rgba(11,18,32,.97);
  border-bottom:1px solid var(--line);
  padding:14px 18px;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
+ display:flex;align-items:center;
+ justify-content:space-between;gap:12px;
 }
-.logo{
- font-size:20px;
- font-weight:850;
- letter-spacing:-.7px;
-}
+.logo{font-size:20px;font-weight:850;letter-spacing:-.7px}
 .logo span{color:var(--mint)}
 main{
  width:min(1100px,100%);
@@ -72,8 +63,7 @@ small,.note{color:var(--muted);font-size:12px}
  background:var(--panel);
  border:1px solid var(--line);
  border-radius:19px;
- padding:19px;
- margin-bottom:14px;
+ padding:19px;margin-bottom:14px;
 }
 .card h3{color:var(--muted)}
 .grid{
@@ -84,85 +74,58 @@ small,.note{color:var(--muted);font-size:12px}
 .grid .card{margin-bottom:0}
 .value{
  font-size:clamp(19px,5vw,30px);
- font-weight:800;
- overflow-wrap:anywhere;
+ font-weight:800;overflow-wrap:anywhere;
 }
 .mint{color:var(--mint)}
 .purple{color:#baa5ff}
 .row{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- flex-wrap:wrap;
+ display:flex;justify-content:space-between;
+ align-items:center;gap:12px;flex-wrap:wrap;
 }
 .btn{
- border:0;
- border-radius:12px;
- background:var(--mint);
- color:#09251d;
- padding:13px 17px;
- font-weight:750;
+ border:0;border-radius:12px;
+ background:var(--mint);color:#09251d;
+ padding:13px 17px;font-weight:750;
  min-height:45px;
 }
 .btn.alt{
- background:#293d56;
- color:white;
+ background:#293d56;color:white;
  border:1px solid #405873;
 }
-.btn.danger{
- background:#5b303e;
- color:#ffe3e8;
-}
+.btn.danger{background:#5b303e;color:#ffe3e8}
 .btn.full{width:100%}
 .field{
- width:100%;
- min-height:48px;
+ width:100%;min-height:48px;
  border:1px solid #405570;
- background:#0b1220;
- color:white;
- padding:12px;
- border-radius:11px;
- margin:7px 0 14px;
- font-size:16px;
+ background:#0b1220;color:white;
+ padding:12px;border-radius:11px;
+ margin:7px 0 14px;font-size:16px;
 }
-label{
- display:block;
- color:#c9d5e6;
- font-size:14px;
-}
+label{display:block;color:#c9d5e6;font-size:14px}
 .formgrid{
  display:grid;
  grid-template-columns:repeat(2,minmax(0,1fr));
  gap:0 15px;
 }
-.actions{
- display:flex;
- flex-wrap:wrap;
- gap:9px;
- margin-top:14px;
-}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}
 .item{
  background:var(--panel2);
  border:1px solid #344960;
  border-radius:15px;
- padding:17px;
- margin-bottom:11px;
+ padding:17px;margin-bottom:11px;
 }
+.item strong{overflow-wrap:anywhere}
 .message{
  color:var(--muted);
  white-space:pre-wrap;
  overflow-wrap:anywhere;
- font-size:13px;
- line-height:1.6;
+ font-size:13px;line-height:1.6;
 }
 .error{color:var(--red)}
 .success{color:var(--mint)}
 .progress{
- height:9px;
- background:#33455e;
- border-radius:20px;
- overflow:hidden;
+ height:9px;background:#33455e;
+ border-radius:20px;overflow:hidden;
  margin:12px 0;
 }
 .progress>div{
@@ -171,53 +134,35 @@ label{
 }
 .auth{
  min-height:80dvh;
- display:grid;
- place-items:center;
- padding:22px;
+ display:grid;place-items:center;padding:22px;
 }
-.auth .card{
- width:100%;
- max-width:420px;
- padding:28px;
-}
+.auth .card{width:100%;max-width:420px;padding:28px}
 .remember{
- display:flex;
- align-items:center;
- gap:11px;
- margin:8px 0 19px;
+ display:flex;align-items:center;
+ gap:11px;margin:8px 0 19px;
 }
 .remember input{
- width:19px;
- height:19px;
- accent-color:var(--mint);
- margin:0;
+ width:19px;height:19px;
+ accent-color:var(--mint);margin:0;
 }
 #loading{text-align:center;padding:60px 20px}
 .desktop-nav{
- display:flex;
- flex-wrap:wrap;
- gap:8px;
- margin-bottom:22px;
+ display:flex;flex-wrap:wrap;
+ gap:8px;margin-bottom:22px;
 }
 .desktop-nav button{
- background:#20334c;
- color:white;
- border:0;
- border-radius:10px;
+ background:#20334c;color:white;
+ border:0;border-radius:10px;
  padding:12px 15px;
 }
 .desktop-nav button.active{
- background:var(--mint);
- color:#09251d;
+ background:var(--mint);color:#09251d;
 }
 .bottom-nav{display:none}
 .quick-sheet{
- position:fixed;
- inset:0;
- z-index:50;
+ position:fixed;inset:0;z-index:50;
  background:rgba(0,0,0,.72);
- display:flex;
- align-items:flex-end;
+ display:flex;align-items:flex-end;
  justify-content:center;
 }
 .sheet-panel{
@@ -226,20 +171,14 @@ label{
  border:1px solid #41536b;
  border-radius:26px 26px 0 0;
  padding:22px 20px calc(24px + env(safe-area-inset-bottom));
+ max-height:85dvh;overflow-y:auto;
 }
 .sheet-option{
- display:flex;
- align-items:center;
- gap:13px;
- width:100%;
- background:#223650;
- border:1px solid #3a506c;
- color:white;
- border-radius:15px;
- padding:17px;
- margin:9px 0;
- text-align:left;
- min-height:58px;
+ display:flex;align-items:center;gap:13px;
+ width:100%;background:#223650;
+ border:1px solid #3a506c;color:white;
+ border-radius:15px;padding:17px;
+ margin:9px 0;text-align:left;min-height:58px;
 }
 .sheet-option span:first-child{font-size:24px}
 .mobile-more{
@@ -248,11 +187,9 @@ label{
  gap:10px;
 }
 .mobile-more button{
- background:#223650;
- color:white;
+ background:#223650;color:white;
  border:1px solid #3a506c;
- padding:18px 8px;
- border-radius:15px;
+ padding:18px 8px;border-radius:15px;
  min-height:75px;
 }
 .notification-card{
@@ -260,11 +197,15 @@ label{
  background:linear-gradient(145deg,#173b36,#17243a);
 }
 .notification-status{
- padding:12px;
- border-radius:11px;
- background:#0d1b2b;
- margin:14px 0;
+ padding:12px;border-radius:11px;
+ background:#0d1b2b;margin:14px 0;
 }
+.status-dot{
+ display:inline-block;width:9px;height:9px;
+ border-radius:50%;background:#e5ad5b;
+ margin-right:7px;
+}
+.status-dot.ok{background:var(--mint)}
 @media(max-width:700px){
  main{
   padding:22px 15px calc(125px + env(safe-area-inset-bottom));
@@ -277,45 +218,28 @@ label{
  .bottom-nav{
   display:grid;
   grid-template-columns:repeat(5,minmax(0,1fr));
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
+  position:fixed;left:0;right:0;bottom:0;
   height:calc(76px + env(safe-area-inset-bottom));
   padding:7px 6px env(safe-area-inset-bottom);
   background:rgba(17,29,47,.98);
   border-top:1px solid #344860;
-  z-index:30;
-  box-shadow:0 -10px 35px #0005;
+  z-index:30;box-shadow:0 -10px 35px #0005;
  }
  .bottom-nav button{
-  border:0;
-  background:transparent;
-  color:#94a7be;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  font-size:10px;
-  font-weight:650;
-  min-width:0;
+  border:0;background:transparent;color:#94a7be;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:4px;font-size:10px;font-weight:650;min-width:0;
  }
  .bottom-nav button.active{color:var(--mint)}
  .nav-icon{font-size:23px;line-height:1}
  .bottom-nav .add-nav{
-  position:relative;
-  overflow:visible;
-  color:var(--mint);
+  position:relative;overflow:visible;color:var(--mint);
  }
  .add-circle{
-  width:64px;
-  height:64px;
-  display:grid;
-  place-items:center;
-  position:absolute;
-  top:-31px;
-  left:50%;
+  width:64px;height:64px;
+  display:grid;place-items:center;
+  position:absolute;top:-31px;left:50%;
   transform:translateX(-50%);
   background:linear-gradient(135deg,#68ffd0,#18bc91);
   color:#073b2d;
@@ -341,7 +265,9 @@ label{
 <body>
 <header>
  <div class="logo">💸 PAPI <span>RIKI</span></div>
- <button id="logout" class="btn alt" hidden>Cerrar sesión</button>
+ <button id="logout" class="btn alt" hidden>
+  Cerrar sesión
+ </button>
 </header>
 
 <p id="loading">Verificando acceso...</p>
@@ -405,7 +331,9 @@ label{
 <section id="movements" class="tab" hidden>
  <div class="row">
   <h2>🧾 Movimientos</h2>
-  <button class="btn" data-new="transaction">+ Movimiento</button>
+  <button class="btn" data-new="transaction">
+   + Movimiento
+  </button>
  </div>
  <p class="note">Ingresos, gastos y transferencias manuales.</p>
  <div id="transactionList"></div>
@@ -442,20 +370,21 @@ label{
  <div class="card">
   <div class="formgrid">
    <label>Capital inicial (S/)
-    <input id="pInitial" class="field" type="number"
-     min="0" value="1000">
+    <input id="pInitial" class="field"
+     type="number" min="0" value="1000">
    </label>
    <label>Aporte mensual (S/)
-    <input id="pMonthly" class="field" type="number"
-     min="0" value="650">
+    <input id="pMonthly" class="field"
+     type="number" min="0" value="650">
    </label>
    <label>Años
-    <input id="pYears" class="field" type="number"
-     min="1" max="50" value="10">
+    <input id="pYears" class="field"
+     type="number" min="1" max="50" value="10">
    </label>
    <label>Rentabilidad anual hipotética (%)
-    <input id="pRate" class="field" type="number"
-     min="-50" max="50" step=".1" value="7">
+    <input id="pRate" class="field"
+     type="number" min="-50" max="50"
+     step=".1" value="7">
    </label>
   </div>
   <div id="projectionResult" class="item"></div>
@@ -477,9 +406,10 @@ label{
  <div class="card notification-card">
   <h2>🔔 Notificaciones en mi iPhone</h2>
   <p>
-   Activa los permisos para preparar las alertas
-   de movimientos detectados.
+   Registra tu iPhone para recibir avisos
+   de movimientos pendientes.
   </p>
+
   <div class="notification-status">
    <p id="swStatus" class="message">
     Comprobando Service Worker...
@@ -487,16 +417,30 @@ label{
    <p id="notificationStatus" class="message">
     Comprobando permisos...
    </p>
+   <p id="subscriptionStatus" class="message">
+    Comprobando suscripción...
+   </p>
   </div>
-  <button id="enableNotifications" class="btn full"
+
+  <button id="registerPush" class="btn full"
    type="button">
-   🔔 Activar notificaciones
+   📱 Registrar mi iPhone
   </button>
-  <p id="notificationMessage" class="message"
+
+  <div style="height:10px"></div>
+
+  <button id="refreshPush" class="btn alt full"
+   type="button">
+   Comprobar registro
+  </button>
+
+  <p id="pushMessage" class="message"
    role="status" aria-live="polite"></p>
+
   <p class="note">
-   Esta etapa solo activa permisos.
-   El envío automático y Gmail todavía no están conectados.
+   Registrar el dispositivo no envía todavía
+   notificaciones. El servidor de envío
+   se configurará posteriormente.
   </p>
  </div>
 
@@ -505,24 +449,24 @@ label{
   <form id="settingsForm">
    <div class="formgrid">
     <label>Ingreso mensual
-     <input id="sIncome" class="field" type="number"
-      min="0" step=".01" required>
+     <input id="sIncome" class="field"
+      type="number" min="0" step=".01" required>
     </label>
     <label>Gastos estimados
-     <input id="sExpense" class="field" type="number"
-      min="0" step=".01" required>
+     <input id="sExpense" class="field"
+      type="number" min="0" step=".01" required>
     </label>
     <label>Objetivo de inversión
-     <input id="sInvest" class="field" type="number"
-      min="0" step=".01" required>
+     <input id="sInvest" class="field"
+      type="number" min="0" step=".01" required>
     </label>
     <label>Meta patrimonial
-     <input id="sNetworth" class="field" type="number"
-      min=".01" step=".01" required>
+     <input id="sNetworth" class="field"
+      type="number" min=".01" step=".01" required>
     </label>
     <label>Tipo de cambio PEN/USD
-     <input id="sFx" class="field" type="number"
-      min=".000001" step=".000001">
+     <input id="sFx" class="field"
+      type="number" min=".000001" step=".000001">
     </label>
     <label>Fecha del tipo de cambio
      <input id="sFxDate" class="field" type="date">
@@ -612,7 +556,7 @@ label{
 "use strict";
 
 // =====================================
-// SUPABASE - CLAVE PUBLICABLE
+// CONFIGURACION PUBLICA
 // =====================================
 
 const SUPABASE_URL =
@@ -621,9 +565,12 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-const $ = id => document.getElementById(id);
+const VAPID_PUBLIC_KEY =
+ "BD-pMOOx6oN_9Ok0npxKEh0HSjiK2A14tAoL0udhfCt_AsdS92qVq3PnI6DSZIaTDvgwkjcAvlsvcylx9Ksypj0";
 
-const tables = {
+const $=id=>document.getElementById(id);
+
+const tables={
  account:"accounts",
  transaction:"finance_transactions",
  budget:"finance_budgets",
@@ -631,7 +578,7 @@ const tables = {
  goal:"finance_goals"
 };
 
-const sections = [
+const sections=[
  ["dashboard","🏠 Inicio"],
  ["accounts","🏦 Cuentas"],
  ["movements","🧾 Movimientos"],
@@ -643,7 +590,7 @@ const sections = [
  ["settings","⚙️ Ajustes"]
 ];
 
-const defaults = {
+const defaults={
  monthly_income:1350,
  expense_plan:700,
  investment_target:650,
@@ -660,8 +607,9 @@ let editId=null;
 let busy=false;
 let quickKind=null;
 let swRegistration=null;
+let pushBusy=false;
 
-let data = {
+let data={
  accounts:[],
  transactions:[],
  budgets:[],
@@ -677,7 +625,7 @@ let data = {
 const rememberKey="papi_riki_remember";
 const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
 
-let remember =
+let remember=
  localStorage.getItem(rememberKey)!=="false";
 
 $("remember").checked=remember;
@@ -698,7 +646,7 @@ const storage={
 };
 
 // =====================================
-// FUNCIONES GENERALES
+// UTILIDADES
 // =====================================
 
 function money(n,c="PEN"){
@@ -728,34 +676,27 @@ function today(){
 }
 
 // =====================================
-// SERVICE WORKER Y NOTIFICACIONES
+// WEB PUSH
 // =====================================
 
-async function registerPWA(){
- const status=$("swStatus");
+// Convertir la clave publica VAPID
+// a formato Uint8Array para PushManager.
 
- if(!("serviceWorker" in navigator)){
-  status.textContent=
-   "Este navegador no admite Service Workers.";
-  return;
- }
+function urlBase64ToUint8Array(base64String){
+ const padding="=".repeat(
+  (4-base64String.length%4)%4
+ );
 
- try{
-  swRegistration=await navigator.serviceWorker.register(
-   "/sw.js",
-   {scope:"/"}
-  );
+ const base64=(base64String+padding)
+  .replace(/-/g,"+")
+  .replace(/_/g,"/");
 
-  await navigator.serviceWorker.ready;
+ const raw=atob(base64);
 
-  status.textContent=
-   "Service Worker registrado correctamente.";
-
- }catch(error){
-  console.error("Error registrando SW:",error);
-  status.textContent=
-   "No se pudo registrar el Service Worker.";
- }
+ return Uint8Array.from(
+  raw,
+  character=>character.charCodeAt(0)
+ );
 }
 
 function isStandalone(){
@@ -765,98 +706,279 @@ function isStandalone(){
  );
 }
 
-function refreshNotificationStatus(){
- const status=$("notificationStatus");
+function setPushMessage(text,error=false){
+ $("pushMessage").textContent=text;
+ $("pushMessage").className=
+  "message "+(error?"error":"success");
+}
 
- if(!("Notification" in window)){
-  status.textContent=
-   "Las notificaciones no están disponibles aquí.";
-  return;
+async function registerPWA(){
+ if(!("serviceWorker" in navigator)){
+  $("swStatus").textContent=
+   "Service Worker no disponible.";
+  return null;
  }
 
- if(Notification.permission==="granted"){
-  status.textContent="Permiso de notificaciones concedido.";
- }else if(Notification.permission==="denied"){
-  status.textContent="Notificaciones bloqueadas.";
- }else{
-  status.textContent="Permiso de notificaciones pendiente.";
+ try{
+  swRegistration=await navigator.serviceWorker.register(
+   "/sw.js",
+   {scope:"/"}
+  );
+
+  swRegistration=await navigator.serviceWorker.ready;
+
+  $("swStatus").textContent=
+   "Service Worker activo.";
+
+  return swRegistration;
+
+ }catch(error){
+  console.error("Service Worker:",error);
+
+  $("swStatus").textContent=
+   "Error al registrar Service Worker.";
+
+  return null;
  }
 }
 
-$("enableNotifications").addEventListener(
- "click",
- async()=>{
-  const button=$("enableNotifications");
-  const output=$("notificationMessage");
-
-  output.textContent="";
-  output.className="message";
-
-  if(!isStandalone()){
-   output.textContent=
-    "Abre PAPI RIKI desde el icono de la pantalla de inicio de tu iPhone.";
-   return;
-  }
-
-  if(!("Notification" in window)){
-   output.textContent=
-    "Tu dispositivo no admite estas notificaciones.";
-   return;
-  }
-
-  if(!("PushManager" in window)){
-   output.textContent=
-    "Web Push no está disponible en este navegador.";
-   return;
-  }
-
-  if(!swRegistration){
-   output.textContent=
-    "El Service Worker todavía no está listo.";
-   return;
-  }
-
-  if(Notification.permission==="denied"){
-   output.textContent=
-    "El permiso está bloqueado. Revísalo en los ajustes del iPhone.";
-   return;
-  }
-
-  if(Notification.permission==="granted"){
-   output.textContent=
-    "¡Permiso concedido! Falta configurar la suscripción y el servidor de envío.";
-   output.className="message success";
-   refreshNotificationStatus();
-   return;
-  }
-
-  button.disabled=true;
-
-  try{
-   const permission=await Notification.requestPermission();
-
-   refreshNotificationStatus();
-
-   if(permission==="granted"){
-    output.textContent=
-     "¡Permiso concedido! PAPI RIKI está preparada para el siguiente paso: registrar Web Push.";
-    output.className="message success";
-   }else if(permission==="denied"){
-    output.textContent=
-     "No autorizaste las notificaciones. Puedes revisar los permisos en Ajustes.";
-   }else{
-    output.textContent=
-     "El permiso quedó pendiente.";
-   }
-
-  }catch(error){
-   console.error("Error de permisos:",error);
-   output.textContent=
-    "No se pudo solicitar el permiso de notificaciones.";
-  }finally{
-   button.disabled=false;
-  }
+function refreshNotificationStatus(){
+ if(!("Notification" in window)){
+  $("notificationStatus").textContent=
+   "Notificaciones no disponibles.";
+  return;
  }
+
+ const permission=Notification.permission;
+
+ if(permission==="granted"){
+  $("notificationStatus").textContent=
+   "Permiso de notificaciones concedido.";
+ }else if(permission==="denied"){
+  $("notificationStatus").textContent=
+   "Permiso de notificaciones bloqueado.";
+ }else{
+  $("notificationStatus").textContent=
+   "Permiso pendiente.";
+ }
+}
+
+// =====================================
+// CONSULTAR SUSCRIPCION
+// =====================================
+
+async function checkPushSubscription(){
+ refreshNotificationStatus();
+
+ if(!user){
+  $("subscriptionStatus").textContent=
+   "Inicia sesion para consultar tu dispositivo.";
+  return;
+ }
+
+ if(!("serviceWorker" in navigator) ||
+    !("PushManager" in window)){
+  $("subscriptionStatus").textContent=
+   "Web Push no disponible.";
+  return;
+ }
+
+ try{
+  const registration=
+   swRegistration||await navigator.serviceWorker.ready;
+
+  const subscription=
+   await registration.pushManager.getSubscription();
+
+  if(!subscription){
+   $("subscriptionStatus").textContent=
+    "iPhone todavia no registrado.";
+   return;
+  }
+
+  const uid=user.id;
+
+  const {data:stored,error}=await sb
+   .from("push_subscriptions")
+   .select("id")
+   .eq("user_id",uid)
+   .eq("endpoint",subscription.endpoint)
+   .maybeSingle();
+
+  if(error)throw error;
+
+  if(!user||user.id!==uid)return;
+
+  if(stored){
+   $("subscriptionStatus").textContent=
+    "Dispositivo registrado en Supabase.";
+  }else{
+   $("subscriptionStatus").textContent=
+    "Suscripcion local encontrada, pendiente de guardar.";
+  }
+
+ }catch(error){
+  console.error("Consultar push:",error);
+
+  $("subscriptionStatus").textContent=
+   "No se pudo verificar: "+error.message;
+ }
+}
+
+// =====================================
+// REGISTRAR IPHONE
+// =====================================
+
+async function registerIphone(){
+ if(pushBusy)return;
+
+ if(!user){
+  setPushMessage("Primero inicia sesion.",true);
+  return;
+ }
+
+ if(!isStandalone()){
+  setPushMessage(
+   "Abre PAPI RIKI desde el icono de la pantalla de inicio de tu iPhone.",
+   true
+  );
+  return;
+ }
+
+ if(!("serviceWorker" in navigator) ||
+    !("PushManager" in window) ||
+    !("Notification" in window)){
+  setPushMessage(
+   "Web Push no esta disponible en este dispositivo.",
+   true
+  );
+  return;
+ }
+
+ if(Notification.permission==="denied"){
+  setPushMessage(
+   "Las notificaciones estan bloqueadas. Revisa los ajustes de iOS.",
+   true
+  );
+  return;
+ }
+
+ pushBusy=true;
+ $("registerPush").disabled=true;
+
+ try{
+  // El permiso debe solicitarse directamente
+  // desde la pulsacion del boton.
+  let permission=Notification.permission;
+
+  if(permission==="default"){
+   permission=await Notification.requestPermission();
+  }
+
+  refreshNotificationStatus();
+
+  if(permission!=="granted"){
+   throw new Error(
+    "Necesitas permitir las notificaciones."
+   );
+  }
+
+  setPushMessage("Preparando suscripcion...");
+
+  const registration=
+   swRegistration||await navigator.serviceWorker.ready;
+
+  let subscription=
+   await registration.pushManager.getSubscription();
+
+  if(!subscription){
+   subscription=await registration.pushManager.subscribe({
+    userVisibleOnly:true,
+    applicationServerKey:
+     urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+   });
+  }
+
+  if(!subscription){
+   throw new Error(
+    "El navegador no devolvio una suscripcion."
+   );
+  }
+
+  const subscriptionData=subscription.toJSON();
+
+  if(!subscriptionData.endpoint ||
+     !subscriptionData.keys?.p256dh ||
+     !subscriptionData.keys?.auth){
+   throw new Error(
+    "La suscripcion esta incompleta."
+   );
+  }
+
+  // Guardar exclusivamente para el usuario
+  // que inicio la operacion.
+
+  const uid=user.id;
+
+  const payload={
+   user_id:uid,
+   endpoint:subscriptionData.endpoint,
+   p256dh:subscriptionData.keys.p256dh,
+   auth_key:subscriptionData.keys.auth,
+   device_name:"iPhone",
+   updated_at:new Date().toISOString()
+  };
+
+  if(!user||user.id!==uid){
+   throw new Error(
+    "La sesion cambio durante el registro."
+   );
+  }
+
+  const {data:saved,error}=await sb
+   .from("push_subscriptions")
+   .upsert(payload,{
+    onConflict:"user_id,endpoint"
+   })
+   .select("id")
+   .single();
+
+  if(error)throw error;
+
+  if(!saved?.id){
+   throw new Error(
+    "Supabase no confirmo el registro."
+   );
+  }
+
+  $("subscriptionStatus").textContent=
+   "iPhone registrado correctamente.";
+
+  setPushMessage(
+   "¡Tu iPhone ya esta registrado en Supabase! " +
+   "El siguiente paso sera configurar el servidor de envio."
+  );
+
+ }catch(error){
+  console.error("Registrar iPhone:",error);
+
+  setPushMessage(
+   "No se pudo completar el registro: "+error.message,
+   true
+  );
+
+ }finally{
+  pushBusy=false;
+  $("registerPush").disabled=false;
+ }
+}
+
+$("registerPush").addEventListener(
+ "click",registerIphone
+);
+
+$("refreshPush").addEventListener(
+ "click",checkPushSubscription
 );
 
 // =====================================
@@ -885,12 +1007,16 @@ async function showApp(u){
  $("logout").hidden=false;
  $("bottomNav").hidden=false;
  $("password").value="";
+
  await loadAll();
  navigate("dashboard");
+
  refreshNotificationStatus();
 }
 
 async function init(){
+ // Registrar el Service Worker
+ // independientemente del login.
  void registerPWA();
 
  if(!window.supabase){
@@ -914,8 +1040,10 @@ async function init(){
    }
   );
 
-  sb.auth.onAuthStateChange((event)=>{
-   if(event==="SIGNED_OUT")showLogin();
+  sb.auth.onAuthStateChange(event=>{
+   if(event==="SIGNED_OUT"){
+    showLogin();
+   }
   });
 
   const {data:auth,error}=await sb.auth.getUser();
@@ -928,8 +1056,7 @@ async function init(){
 
  }catch(error){
   console.error(error);
-  $("loading").textContent=
-   "Error de conexión.";
+  $("loading").textContent="Error de conexion.";
  }
 }
 
@@ -958,7 +1085,7 @@ $("loginForm").onsubmit=async e=>{
    });
 
   if(error)throw error;
-  if(!result?.user)throw Error("Sesión inválida");
+  if(!result?.user)throw Error("Sesion invalida");
 
   await showApp(result.user);
 
@@ -1002,6 +1129,7 @@ function navigate(id){
 
  if(id==="settings"){
   refreshNotificationStatus();
+  void checkPushSubscription();
  }
 
  window.scrollTo({top:0,behavior:"instant"});
@@ -1149,8 +1277,8 @@ function renderDashboard(){
  const cards=[
   ["Ingreso mensual",money(s.monthly_income),"mint"],
   ["Presupuesto",money(s.expense_plan),""],
-  ["Objetivo inversión",money(s.investment_target),"purple"],
-  ["Margen teórico",
+  ["Objetivo inversion",money(s.investment_target),"purple"],
+  ["Margen teorico",
    money(Number(s.monthly_income)-Number(s.expense_plan)),""]
  ];
 
@@ -1188,7 +1316,7 @@ function renderDashboard(){
    :"Por configurar";
 
  $("netWorthNote").textContent=
-  "Estimación parcial: faltan deudas y conciliación completa.";
+  "Estimacion parcial: faltan deudas y conciliacion completa.";
 
  const pct=canEstimate&&Number(s.networth_target)>0
   ?Math.max(0,Math.min(
@@ -1211,9 +1339,9 @@ function renderDashboard(){
  );
 
  $("spendable").innerHTML=
-  `<p>Inversión objetivo:
+  `<p>Inversion objetivo:
    <strong>${money(s.investment_target)}</strong></p>
-   <p>Máximo teórico:
+   <p>Maximo teorico:
    <strong>${money(suggested)}</strong></p>
    <p class="note">
     No representa dinero disponible real.
@@ -1278,7 +1406,7 @@ function renderBudgets(){
     <div class="progress">
      <div style="width:${Math.min(100,pct)}%"></div>
     </div>
-    <p>${pct>=80?"⚠️ Límite al 80% o más":"Dentro del límite"}
+    <p>${pct>=80?"⚠️ Limite al 80% o mas":"Dentro del limite"}
      · ${pct.toFixed(0)}%</p>
     ${actions("budget",b.id)}
    </div>`;
@@ -1296,7 +1424,7 @@ function renderHoldings(){
     </div>
     <p>${esc(h.broker)} · ${esc(h.asset_type)}
      · ${h.quantity} unidades</p>
-    <small>Valoración manual</small>
+    <small>Valoracion manual</small>
     ${actions("holding",h.id)}
    </div>`
   ).join("")
@@ -1385,7 +1513,7 @@ function project(){
    <div class="value mint">${money(future)}</div>
    <p>Aportes: ${money(p+a*n)}</p>
    <p class="note">
-    Escenario hipotético, sin impuestos ni inflación.
+    Escenario hipotetico, sin impuestos ni inflacion.
    </p>`;
 }
 
@@ -1402,7 +1530,7 @@ const fields={
   ["name","Nombre","text"],
   ["institution","Entidad","select","BCP|BBVA|Efectivo|Otro"],
   ["account_type","Tipo","select",
-   "bank:Bancaria|cash:Efectivo|investment:Inversión|credit:Crédito"],
+   "bank:Bancaria|cash:Efectivo|investment:Inversion|credit:Credito"],
   ["currency","Moneda","select","PEN|USD"],
   ["opening_balance","Saldo inicial","number"]
  ],
@@ -1413,26 +1541,26 @@ const fields={
   ["linked_account_id","Cuenta destino","optional_account"],
   ["amount","Importe","number"],
   ["linked_amount","Importe recibido","optional_number"],
-  ["category","Categoría","select",
+  ["category","Categoria","select",
    "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
-  ["description","Descripción","text"],
+  ["description","Descripcion","text"],
   ["occurred_on","Fecha","date"]
  ],
  budget:[
-  ["category","Categoría","select",
+  ["category","Categoria","select",
    "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
-  ["amount","Límite PEN","number"]
+  ["amount","Limite PEN","number"]
  ],
  holding:[
-  ["broker","Bróker","text"],
+  ["broker","Broker","text"],
   ["symbol","Activo","text"],
   ["asset_type","Tipo","select",
-   "stock:Acción|etf:ETF|fund:Fondo|deposit:Depósito|other:Otro"],
+   "stock:Accion|etf:ETF|fund:Fondo|deposit:Deposito|other:Otro"],
   ["quantity","Cantidad","number"],
   ["cost_basis","Costo total","number"],
   ["market_value","Valor manual","number"],
   ["currency","Moneda","select","PEN|USD"],
-  ["price_date","Fecha valoración","date"]
+  ["price_date","Fecha valoracion","date"]
  ],
  goal:[
   ["name","Nombre","text"],
@@ -1553,7 +1681,7 @@ document.addEventListener("click",async e=>{
    if(error)throw error;
 
    if(deleted?.length!==1){
-    throw Error("No se confirmó la eliminación.");
+    throw Error("No se confirmo la eliminacion.");
    }
 
    await loadAll();
@@ -1586,7 +1714,7 @@ $("editorForm").onsubmit=async e=>{
      !Number.isFinite(payload[key])||
      payload[key]<0
     )){
-     throw Error("Importe inválido.");
+     throw Error("Importe invalido.");
     }
 
    }else{
@@ -1624,7 +1752,7 @@ $("editorForm").onsubmit=async e=>{
    }
 
    if(!(payload.amount>0)){
-    throw Error("Importe inválido.");
+    throw Error("Importe invalido.");
    }
   }
 
@@ -1633,7 +1761,7 @@ $("editorForm").onsubmit=async e=>{
   }
 
   if(editType==="goal"&&!(payload.target>0)){
-   throw Error("Objetivo inválido.");
+   throw Error("Objetivo invalido.");
   }
 
   if(
@@ -1641,7 +1769,7 @@ $("editorForm").onsubmit=async e=>{
    payload.account_type==="credit"
   ){
    throw Error(
-    "El módulo de deuda de tarjetas todavía no está habilitado."
+    "El modulo de deuda de tarjetas todavia no esta habilitado."
    );
   }
 
@@ -1659,7 +1787,7 @@ $("editorForm").onsubmit=async e=>{
   if(error)throw error;
 
   if(!saved?.length){
-   throw Error("No se confirmó el guardado.");
+   throw Error("No se confirmo el guardado.");
   }
 
   await loadAll();
@@ -1752,7 +1880,7 @@ $("exportBtn").onclick=()=>{
 };
 
 // =====================================
-// INICIAR PAPI RIKI
+// INICIAR APLICACION
 // =====================================
 
 init();
