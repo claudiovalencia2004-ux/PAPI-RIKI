@@ -1,0 +1,11 @@
+
+{
+  "name": "papi-riki",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PAPI RIKI - Finanzas y notificaciones",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "web-push": "^3.6.7"
+  }
+}
