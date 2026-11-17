@@ -7,7 +7,10 @@
 <meta name="theme-color" content="#0b1220">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PAPI RIKI">
+<link rel="manifest" href="/manifest.webmanifest">
 <title>PAPI RIKI | Finanzas</title>
+
 <style>
 :root{
  --bg:#0b1220;
@@ -18,7 +21,6 @@
  --muted:#9caec5;
  --mint:#38d9a9;
  --red:#ff8996;
- --radius:19px;
  color-scheme:dark;
  font-family:system-ui,-apple-system,Arial,sans-serif;
 }
@@ -32,23 +34,22 @@ body{
 }
 [hidden]{display:none!important}
 button,input,select{font:inherit}
-button{cursor:pointer}
+button{cursor:pointer;touch-action:manipulation}
 button:disabled{opacity:.55;cursor:wait}
 button:focus-visible,input:focus-visible,select:focus-visible{
  outline:2px solid var(--mint);
  outline-offset:3px;
 }
-button{touch-action:manipulation}
 header{
  position:sticky;
  top:0;
  z-index:20;
  background:rgba(11,18,32,.97);
  border-bottom:1px solid var(--line);
- padding:14px max(18px,env(safe-area-inset-right));
+ padding:14px 18px;
  display:flex;
- align-items:center;
  justify-content:space-between;
+ align-items:center;
  gap:12px;
 }
 .logo{
@@ -62,7 +63,7 @@ main{
  margin:auto;
  padding:23px 17px calc(120px + env(safe-area-inset-bottom));
 }
-h1{font-size:27px;letter-spacing:-.8px;margin:0 0 8px}
+h1{font-size:27px;margin:0 0 8px}
 h2{font-size:21px;margin:0 0 14px}
 h3{font-size:15px;margin:0 0 12px}
 p{color:var(--muted);line-height:1.55}
@@ -70,7 +71,7 @@ small,.note{color:var(--muted);font-size:12px}
 .card{
  background:var(--panel);
  border:1px solid var(--line);
- border-radius:var(--radius);
+ border-radius:19px;
  padding:19px;
  margin-bottom:14px;
 }
@@ -84,7 +85,6 @@ small,.note{color:var(--muted);font-size:12px}
 .value{
  font-size:clamp(19px,5vw,30px);
  font-weight:800;
- letter-spacing:-.7px;
  overflow-wrap:anywhere;
 }
 .mint{color:var(--mint)}
@@ -149,7 +149,6 @@ label{
  padding:17px;
  margin-bottom:11px;
 }
-.item strong{overflow-wrap:anywhere}
 .message{
  color:var(--muted);
  white-space:pre-wrap;
@@ -158,6 +157,7 @@ label{
  line-height:1.6;
 }
 .error{color:var(--red)}
+.success{color:var(--mint)}
 .progress{
  height:9px;
  background:#33455e;
@@ -168,7 +168,6 @@ label{
 .progress>div{
  height:100%;
  background:linear-gradient(90deg,#159d80,#55edb8);
- border-radius:20px;
 }
 .auth{
  min-height:80dvh;
@@ -227,7 +226,6 @@ label{
  border:1px solid #41536b;
  border-radius:26px 26px 0 0;
  padding:22px 20px calc(24px + env(safe-area-inset-bottom));
- box-shadow:0 -15px 60px #0008;
 }
 .sheet-option{
  display:flex;
@@ -257,9 +255,20 @@ label{
  border-radius:15px;
  min-height:75px;
 }
+.notification-card{
+ border:1px solid #286c5a;
+ background:linear-gradient(145deg,#173b36,#17243a);
+}
+.notification-status{
+ padding:12px;
+ border-radius:11px;
+ background:#0d1b2b;
+ margin:14px 0;
+}
 @media(max-width:700px){
- header{padding:15px 18px}
- main{padding:22px 15px calc(125px + env(safe-area-inset-bottom))}
+ main{
+  padding:22px 15px calc(125px + env(safe-area-inset-bottom));
+ }
  .desktop-nav{display:none}
  .formgrid{grid-template-columns:1fr}
  .card{padding:17px}
@@ -313,26 +322,23 @@ label{
   border:5px solid #111d2f;
   border-radius:50%;
   font-size:39px;
-  font-weight:350;
-  box-shadow:0 7px 25px #17dca05c,0 0 0 2px #30e3af33;
-  transition:transform .15s;
- }
- .add-nav:active .add-circle{
-  transform:translateX(-50%) scale(.92);
+  box-shadow:0 7px 25px #17dca05c;
  }
  .add-label{margin-top:37px}
 }
 @media(max-width:350px){
  .grid{grid-template-columns:1fr}
- .add-circle{width:57px;height:57px}
 }
 @media(prefers-reduced-motion:reduce){
- *,*:before,*:after{scroll-behavior:auto!important;transition:none!important}
+ *,*:before,*:after{
+  scroll-behavior:auto!important;
+  transition:none!important;
+ }
 }
 </style>
 </head>
-<body>
 
+<body>
 <header>
  <div class="logo">💸 PAPI <span>RIKI</span></div>
  <button id="logout" class="btn alt" hidden>Cerrar sesión</button>
@@ -346,23 +352,26 @@ label{
   <p>Bienvenido a tus finanzas personales.</p>
   <form id="loginForm">
    <label>Correo electrónico
-    <input id="email" class="field" type="email" required autocomplete="username">
+    <input id="email" class="field" type="email"
+     required autocomplete="username">
    </label>
    <label>Contraseña
-    <input id="password" class="field" type="password" required autocomplete="current-password">
+    <input id="password" class="field" type="password"
+     required autocomplete="current-password">
    </label>
    <label class="remember">
     <input id="remember" type="checkbox" checked>
     Recordarme en este dispositivo
    </label>
-   <button id="loginBtn" class="btn full">Entrar a mis finanzas</button>
+   <button id="loginBtn" class="btn full">
+    Entrar a mis finanzas
+   </button>
   </form>
   <p id="loginMsg" class="message" role="status"></p>
  </div>
 </section>
 
 <main id="app" hidden>
-
 <nav id="desktopNav" class="desktop-nav"></nav>
 
 <section id="dashboard" class="tab">
@@ -389,7 +398,7 @@ label{
   <h2>🏦 Mis cuentas</h2>
   <button class="btn" data-new="account">+ Cuenta</button>
  </div>
- <p class="note">BCP, BBVA, efectivo y cuentas de inversión.</p>
+ <p class="note">BCP, BBVA, efectivo e inversiones.</p>
  <div id="accountList" class="grid"></div>
 </section>
 
@@ -407,7 +416,7 @@ label{
   <h2>📊 Presupuestos</h2>
   <button class="btn" data-new="budget">+ Límite</button>
  </div>
- <p class="note">Alertas al 80%. Gasto acumulado registrado.</p>
+ <p class="note">Alertas visuales al 80%.</p>
  <div id="budgetList"></div>
 </section>
 
@@ -416,7 +425,7 @@ label{
   <h2>📈 Inversiones</h2>
   <button class="btn" data-new="holding">+ Activo</button>
  </div>
- <p class="note">Valoraciones manuales, no cotizaciones en tiempo real.</p>
+ <p class="note">Valoraciones manuales.</p>
  <div id="holdingList"></div>
 </section>
 
@@ -433,48 +442,87 @@ label{
  <div class="card">
   <div class="formgrid">
    <label>Capital inicial (S/)
-    <input id="pInitial" class="field" type="number" min="0" value="1000">
+    <input id="pInitial" class="field" type="number"
+     min="0" value="1000">
    </label>
    <label>Aporte mensual (S/)
-    <input id="pMonthly" class="field" type="number" min="0" value="650">
+    <input id="pMonthly" class="field" type="number"
+     min="0" value="650">
    </label>
    <label>Años
-    <input id="pYears" class="field" type="number" min="1" max="50" value="10">
+    <input id="pYears" class="field" type="number"
+     min="1" max="50" value="10">
    </label>
    <label>Rentabilidad anual hipotética (%)
-    <input id="pRate" class="field" type="number" min="-50" max="50" step=".1" value="7">
+    <input id="pRate" class="field" type="number"
+     min="-50" max="50" step=".1" value="7">
    </label>
   </div>
   <div id="projectionResult" class="item"></div>
-  <p class="note">Simulación, no rentabilidad garantizada.</p>
+  <p class="note">Simulación sin rentabilidad garantizada.</p>
  </div>
 </section>
 
 <section id="reports" class="tab" hidden>
  <h2>📋 Reportes</h2>
  <div id="reportBody"></div>
- <button id="exportBtn" class="btn alt">Exportar movimientos CSV</button>
+ <button id="exportBtn" class="btn alt">
+  Exportar movimientos CSV
+ </button>
 </section>
 
 <section id="settings" class="tab" hidden>
  <h2>⚙️ Configuración</h2>
+
+ <div class="card notification-card">
+  <h2>🔔 Notificaciones en mi iPhone</h2>
+  <p>
+   Activa los permisos para preparar las alertas
+   de movimientos detectados.
+  </p>
+  <div class="notification-status">
+   <p id="swStatus" class="message">
+    Comprobando Service Worker...
+   </p>
+   <p id="notificationStatus" class="message">
+    Comprobando permisos...
+   </p>
+  </div>
+  <button id="enableNotifications" class="btn full"
+   type="button">
+   🔔 Activar notificaciones
+  </button>
+  <p id="notificationMessage" class="message"
+   role="status" aria-live="polite"></p>
+  <p class="note">
+   Esta etapa solo activa permisos.
+   El envío automático y Gmail todavía no están conectados.
+  </p>
+ </div>
+
  <div class="card">
+  <h2>Mis preferencias</h2>
   <form id="settingsForm">
    <div class="formgrid">
     <label>Ingreso mensual
-     <input id="sIncome" class="field" type="number" min="0" step=".01" required>
+     <input id="sIncome" class="field" type="number"
+      min="0" step=".01" required>
     </label>
     <label>Gastos estimados
-     <input id="sExpense" class="field" type="number" min="0" step=".01" required>
+     <input id="sExpense" class="field" type="number"
+      min="0" step=".01" required>
     </label>
     <label>Objetivo de inversión
-     <input id="sInvest" class="field" type="number" min="0" step=".01" required>
+     <input id="sInvest" class="field" type="number"
+      min="0" step=".01" required>
     </label>
     <label>Meta patrimonial
-     <input id="sNetworth" class="field" type="number" min=".01" step=".01" required>
+     <input id="sNetworth" class="field" type="number"
+      min=".01" step=".01" required>
     </label>
     <label>Tipo de cambio PEN/USD
-     <input id="sFx" class="field" type="number" min=".000001" step=".000001">
+     <input id="sFx" class="field" type="number"
+      min=".000001" step=".000001">
     </label>
     <label>Fecha del tipo de cambio
      <input id="sFxDate" class="field" type="date">
@@ -498,24 +546,30 @@ label{
    <div id="editorFields" class="formgrid"></div>
    <div class="actions">
     <button id="saveBtn" class="btn">Guardar</button>
-    <button id="cancelBtn" class="btn alt" type="button">Cancelar</button>
+    <button id="cancelBtn" class="btn alt"
+     type="button">Cancelar</button>
    </div>
-   <p id="editorMsg" class="message" role="status"></p>
+   <p id="editorMsg" class="message"></p>
   </form>
  </div>
 </section>
 
-<p class="note">PAPI RIKI · Versión de desarrollo. Sin sincronización bancaria automática.</p>
+<p class="note">
+ PAPI RIKI · Versión de desarrollo.
+ Sin sincronización bancaria automática.
+</p>
 </main>
 
-<nav id="bottomNav" class="bottom-nav" aria-label="Navegación principal" hidden>
+<nav id="bottomNav" class="bottom-nav"
+ aria-label="Navegación principal" hidden>
  <button data-tab="dashboard" class="active">
   <span class="nav-icon">⌂</span>Inicio
  </button>
  <button data-tab="accounts">
   <span class="nav-icon">▣</span>Cuentas
  </button>
- <button id="quickAddBtn" class="add-nav" aria-label="Añadir movimiento">
+ <button id="quickAddBtn" class="add-nav"
+  aria-label="Añadir movimiento">
   <span class="add-circle">+</span>
   <span class="add-label">Añadir</span>
  </button>
@@ -528,10 +582,12 @@ label{
 </nav>
 
 <div id="quickSheet" class="quick-sheet" hidden>
- <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="Añadir registro">
+ <div class="sheet-panel" role="dialog"
+  aria-modal="true" aria-label="Añadir registro">
   <div class="row">
    <h2>¿Qué quieres registrar?</h2>
-   <button id="closeSheet" class="btn alt" aria-label="Cerrar">✕</button>
+   <button id="closeSheet" class="btn alt"
+    aria-label="Cerrar">✕</button>
   </div>
   <button class="sheet-option" data-quick="expense">
    <span>🛒</span><span>Registrar gasto</span>
@@ -555,15 +611,19 @@ label{
 <script>
 "use strict";
 
-// CONFIGURACION PUBLICABLE
+// =====================================
+// SUPABASE - CLAVE PUBLICABLE
+// =====================================
+
 const SUPABASE_URL =
  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
+
 const SUPABASE_KEY =
  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-const tables={
+const tables = {
  account:"accounts",
  transaction:"finance_transactions",
  budget:"finance_budgets",
@@ -571,7 +631,7 @@ const tables={
  goal:"finance_goals"
 };
 
-const sections=[
+const sections = [
  ["dashboard","🏠 Inicio"],
  ["accounts","🏦 Cuentas"],
  ["movements","🧾 Movimientos"],
@@ -583,7 +643,7 @@ const sections=[
  ["settings","⚙️ Ajustes"]
 ];
 
-const defaults={
+const defaults = {
  monthly_income:1350,
  expense_plan:700,
  investment_target:650,
@@ -592,27 +652,44 @@ const defaults={
  fx_date:null
 };
 
-let sb=null,user=null,active="dashboard";
-let editType=null,editId=null,busy=false;
+let sb=null;
+let user=null;
+let active="dashboard";
+let editType=null;
+let editId=null;
+let busy=false;
 let quickKind=null;
+let swRegistration=null;
 
-let data={
- accounts:[],transactions:[],
- budgets:[],holdings:[],goals:[],
+let data = {
+ accounts:[],
+ transactions:[],
+ budgets:[],
+ holdings:[],
+ goals:[],
  settings:{...defaults}
 };
 
+// =====================================
+// RECORDAR SESION
+// =====================================
+
 const rememberKey="papi_riki_remember";
 const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
-let remember=localStorage.getItem(rememberKey)!=="false";
+
+let remember =
+ localStorage.getItem(rememberKey)!=="false";
+
 $("remember").checked=remember;
 
 const storage={
  getItem(k){
-  return (remember?localStorage:sessionStorage).getItem(k);
+  return (remember?localStorage:sessionStorage)
+   .getItem(k);
  },
  setItem(k,v){
-  (remember?localStorage:sessionStorage).setItem(k,v);
+  (remember?localStorage:sessionStorage)
+   .setItem(k,v);
  },
  removeItem(k){
   localStorage.removeItem(k);
@@ -620,16 +697,24 @@ const storage={
  }
 };
 
+// =====================================
+// FUNCIONES GENERALES
+// =====================================
+
 function money(n,c="PEN"){
  return new Intl.NumberFormat("es-PE",{
-  style:"currency",currency:c
+  style:"currency",
+  currency:c
  }).format(Number(n)||0);
 }
 
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
  })[c]);
 }
 
@@ -640,6 +725,146 @@ function today(){
   String(d.getMonth()+1).padStart(2,"0"),
   String(d.getDate()).padStart(2,"0")
  ].join("-");
+}
+
+// =====================================
+// SERVICE WORKER Y NOTIFICACIONES
+// =====================================
+
+async function registerPWA(){
+ const status=$("swStatus");
+
+ if(!("serviceWorker" in navigator)){
+  status.textContent=
+   "Este navegador no admite Service Workers.";
+  return;
+ }
+
+ try{
+  swRegistration=await navigator.serviceWorker.register(
+   "/sw.js",
+   {scope:"/"}
+  );
+
+  await navigator.serviceWorker.ready;
+
+  status.textContent=
+   "Service Worker registrado correctamente.";
+
+ }catch(error){
+  console.error("Error registrando SW:",error);
+  status.textContent=
+   "No se pudo registrar el Service Worker.";
+ }
+}
+
+function isStandalone(){
+ return (
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.navigator.standalone===true
+ );
+}
+
+function refreshNotificationStatus(){
+ const status=$("notificationStatus");
+
+ if(!("Notification" in window)){
+  status.textContent=
+   "Las notificaciones no están disponibles aquí.";
+  return;
+ }
+
+ if(Notification.permission==="granted"){
+  status.textContent="Permiso de notificaciones concedido.";
+ }else if(Notification.permission==="denied"){
+  status.textContent="Notificaciones bloqueadas.";
+ }else{
+  status.textContent="Permiso de notificaciones pendiente.";
+ }
+}
+
+$("enableNotifications").addEventListener(
+ "click",
+ async()=>{
+  const button=$("enableNotifications");
+  const output=$("notificationMessage");
+
+  output.textContent="";
+  output.className="message";
+
+  if(!isStandalone()){
+   output.textContent=
+    "Abre PAPI RIKI desde el icono de la pantalla de inicio de tu iPhone.";
+   return;
+  }
+
+  if(!("Notification" in window)){
+   output.textContent=
+    "Tu dispositivo no admite estas notificaciones.";
+   return;
+  }
+
+  if(!("PushManager" in window)){
+   output.textContent=
+    "Web Push no está disponible en este navegador.";
+   return;
+  }
+
+  if(!swRegistration){
+   output.textContent=
+    "El Service Worker todavía no está listo.";
+   return;
+  }
+
+  if(Notification.permission==="denied"){
+   output.textContent=
+    "El permiso está bloqueado. Revísalo en los ajustes del iPhone.";
+   return;
+  }
+
+  if(Notification.permission==="granted"){
+   output.textContent=
+    "¡Permiso concedido! Falta configurar la suscripción y el servidor de envío.";
+   output.className="message success";
+   refreshNotificationStatus();
+   return;
+  }
+
+  button.disabled=true;
+
+  try{
+   const permission=await Notification.requestPermission();
+
+   refreshNotificationStatus();
+
+   if(permission==="granted"){
+    output.textContent=
+     "¡Permiso concedido! PAPI RIKI está preparada para el siguiente paso: registrar Web Push.";
+    output.className="message success";
+   }else if(permission==="denied"){
+    output.textContent=
+     "No autorizaste las notificaciones. Puedes revisar los permisos en Ajustes.";
+   }else{
+    output.textContent=
+     "El permiso quedó pendiente.";
+   }
+
+  }catch(error){
+   console.error("Error de permisos:",error);
+   output.textContent=
+    "No se pudo solicitar el permiso de notificaciones.";
+  }finally{
+   button.disabled=false;
+  }
+ }
+);
+
+// =====================================
+// AUTENTICACION
+// =====================================
+
+function closeSheet(){
+ $("quickSheet").hidden=true;
 }
 
 function showLogin(){
@@ -662,16 +887,23 @@ async function showApp(u){
  $("password").value="";
  await loadAll();
  navigate("dashboard");
+ refreshNotificationStatus();
 }
 
 async function init(){
+ void registerPWA();
+
  if(!window.supabase){
-  $("loading").textContent="No se pudo cargar Supabase.";
+  $("loading").textContent=
+   "No se pudo cargar Supabase.";
   return;
  }
+
  try{
   sb=window.supabase.createClient(
-   SUPABASE_URL,SUPABASE_KEY,{
+   SUPABASE_URL,
+   SUPABASE_KEY,
+   {
     auth:{
      storageKey:authKey,
      storage,
@@ -681,37 +913,57 @@ async function init(){
     }
    }
   );
+
   sb.auth.onAuthStateChange((event)=>{
    if(event==="SIGNED_OUT")showLogin();
   });
+
   const {data:auth,error}=await sb.auth.getUser();
-  if(error||!auth?.user)showLogin();
-  else await showApp(auth.user);
- }catch(err){
-  console.error(err);
-  $("loading").textContent="Error de conexión.";
+
+  if(error||!auth?.user){
+   showLogin();
+  }else{
+   await showApp(auth.user);
+  }
+
+ }catch(error){
+  console.error(error);
+  $("loading").textContent=
+   "Error de conexión.";
  }
 }
 
 $("loginForm").onsubmit=async e=>{
  e.preventDefault();
+
  const btn=$("loginBtn");
  btn.disabled=true;
  $("loginMsg").textContent="";
+
  try{
   remember=$("remember").checked;
-  localStorage.setItem(rememberKey,String(remember));
+
+  localStorage.setItem(
+   rememberKey,
+   String(remember)
+  );
+
   localStorage.removeItem(authKey);
   sessionStorage.removeItem(authKey);
-  const {data:result,error}=await sb.auth.signInWithPassword({
-   email:$("email").value.trim(),
-   password:$("password").value
-  });
+
+  const {data:result,error}=
+   await sb.auth.signInWithPassword({
+    email:$("email").value.trim(),
+    password:$("password").value
+   });
+
   if(error)throw error;
   if(!result?.user)throw Error("Sesión inválida");
+
   await showApp(result.user);
- }catch(err){
-  $("loginMsg").textContent=err.message;
+
+ }catch(error){
+  $("loginMsg").textContent=error.message;
   $("loginMsg").className="message error";
  }finally{
   btn.disabled=false;
@@ -720,27 +972,48 @@ $("loginForm").onsubmit=async e=>{
 
 $("logout").onclick=async()=>{
  const {error}=await sb.auth.signOut();
- if(error)alert(error.message);
- else showLogin();
+
+ if(error){
+  alert(error.message);
+ }else{
+  showLogin();
+ }
 };
+
+// =====================================
+// NAVEGACION
+// =====================================
 
 function navigate(id){
  active=id;
+
  document.querySelectorAll(".tab").forEach(el=>{
   el.hidden=el.id!==id;
  });
+
  document.querySelectorAll("[data-tab]").forEach(el=>{
-  el.classList.toggle("active",el.dataset.tab===id);
+  el.classList.toggle(
+   "active",
+   el.dataset.tab===id
+  );
  });
+
  if(id==="projections")project();
+
+ if(id==="settings"){
+  refreshNotificationStatus();
+ }
+
  window.scrollTo({top:0,behavior:"instant"});
 }
 
-$("desktopNav").innerHTML=sections.map(([id,label])=>
+$("desktopNav").innerHTML=sections.map(
+ ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
 
-$("moreMenu").innerHTML=sections.slice(2).map(([id,label])=>
+$("moreMenu").innerHTML=sections.slice(2).map(
+ ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
 
@@ -749,18 +1022,16 @@ document.addEventListener("click",e=>{
  if(b)navigate(b.dataset.tab);
 });
 
-function openSheet(){
+$("quickAddBtn").onclick=()=>{
  $("quickSheet").hidden=false;
-}
-function closeSheet(){
- $("quickSheet").hidden=true;
-}
+};
 
-$("quickAddBtn").onclick=openSheet;
 $("closeSheet").onclick=closeSheet;
+
 $("quickSheet").addEventListener("click",e=>{
  if(e.target===$("quickSheet"))closeSheet();
 });
+
 document.addEventListener("keydown",e=>{
  if(e.key==="Escape")closeSheet();
 });
@@ -769,6 +1040,7 @@ document.querySelectorAll("[data-quick]").forEach(b=>{
  b.onclick=()=>{
   const kind=b.dataset.quick;
   closeSheet();
+
   if(["expense","income","transfer"].includes(kind)){
    quickKind=kind;
    openEditor("transaction");
@@ -779,9 +1051,15 @@ document.querySelectorAll("[data-quick]").forEach(b=>{
  };
 });
 
+// =====================================
+// DATOS FINANCIEROS
+// =====================================
+
 async function loadAll(){
  if(!user)return;
+
  const uid=user.id;
+
  const results=await Promise.all([
   sb.from("accounts").select("*").eq("user_id",uid),
   sb.from("finance_transactions").select("*").eq("user_id",uid),
@@ -791,18 +1069,26 @@ async function loadAll(){
   sb.from("finance_settings").select("*")
    .eq("user_id",uid).maybeSingle()
  ]);
+
  const failed=results.find(r=>r.error);
+
  if(failed){
   alert("Error de base de datos: "+failed.error.message);
   return;
  }
+
  if(!user||user.id!==uid)return;
+
  data.accounts=results[0].data||[];
  data.transactions=results[1].data||[];
  data.budgets=results[2].data||[];
  data.holdings=results[3].data||[];
  data.goals=results[4].data||[];
- data.settings={...defaults,...(results[5].data||{})};
+ data.settings={
+  ...defaults,
+  ...(results[5].data||{})
+ };
+
  render();
 }
 
@@ -812,28 +1098,37 @@ function account(id){
 
 function balance(a){
  let n=Number(a.opening_balance);
+
  for(const t of data.transactions){
   if(t.account_id===a.id){
    if(t.kind==="income")n+=Number(t.amount);
    if(t.kind==="expense")n-=Number(t.amount);
    if(t.kind==="transfer")n-=Number(t.amount);
   }
-  if(t.kind==="transfer"&&t.linked_account_id===a.id)
+
+  if(t.kind==="transfer"&&t.linked_account_id===a.id){
    n+=Number(t.linked_amount);
+  }
  }
+
  return n;
 }
 
 function converted(n,c){
  if(c==="PEN")return Number(n);
+
  const fx=Number(data.settings.fx_pen_per_usd);
  return fx>0?Number(n)*fx:null;
 }
 
 function actions(type,id){
  return `<div class="actions">
-  <button class="btn alt" data-edit="${type}:${id}">Editar</button>
-  <button class="btn danger" data-delete="${type}:${id}">Eliminar</button>
+  <button class="btn alt" data-edit="${type}:${id}">
+   Editar
+  </button>
+  <button class="btn danger" data-delete="${type}:${id}">
+   Eliminar
+  </button>
  </div>`;
 }
 
@@ -850,137 +1145,210 @@ function render(){
 
 function renderDashboard(){
  const s=data.settings;
+
  const cards=[
   ["Ingreso mensual",money(s.monthly_income),"mint"],
   ["Presupuesto",money(s.expense_plan),""],
   ["Objetivo inversión",money(s.investment_target),"purple"],
-  ["Margen teórico",money(Number(s.monthly_income)-Number(s.expense_plan)),""]
+  ["Margen teórico",
+   money(Number(s.monthly_income)-Number(s.expense_plan)),""]
  ];
+
  $("summary").innerHTML=cards.map(([t,v,c])=>
-  `<div class="card"><h3>${t}</h3>
-   <div class="value ${c}">${v}</div></div>`
+  `<div class="card">
+   <h3>${t}</h3>
+   <div class="value ${c}">${v}</div>
+   </div>`
  ).join("");
 
- let total=0,complete=true;
+ let total=0;
+ let complete=true;
+
  for(const a of data.accounts){
   const n=converted(balance(a),a.currency);
   if(n===null)complete=false;
   else total+=n;
  }
+
  for(const h of data.holdings){
   const n=converted(h.market_value,h.currency);
   if(n===null)complete=false;
   else total+=n;
  }
- const creditDebt=data.accounts.some(a=>a.account_type==="credit");
+
+ const creditDebt=data.accounts.some(
+  a=>a.account_type==="credit"
+ );
+
  const canEstimate=complete&&!creditDebt;
- $("netWorth").textContent=canEstimate&&
-  (data.accounts.length||data.holdings.length)
-  ?money(total):"Por configurar";
+
+ $("netWorth").textContent=
+  canEstimate&&(data.accounts.length||data.holdings.length)
+   ?money(total)
+   :"Por configurar";
+
  $("netWorthNote").textContent=
-  "Estimación parcial: faltan deudas, conciliación y valoración completa.";
+  "Estimación parcial: faltan deudas y conciliación completa.";
 
  const pct=canEstimate&&Number(s.networth_target)>0
-  ?Math.max(0,Math.min(100,total/Number(s.networth_target)*100)):0;
+  ?Math.max(0,Math.min(
+    100,total/Number(s.networth_target)*100
+   ))
+  :0;
+
  $("goalSummary").innerHTML=
   `<div class="value">${money(s.networth_target)}</div>
-   <div class="progress"><div style="width:${pct}%"></div></div>
+   <div class="progress">
+    <div style="width:${pct}%"></div>
+   </div>
    <p class="note">Avance indicativo: ${pct.toFixed(1)}%</p>`;
 
- const margin=Number(s.monthly_income)-Number(s.expense_plan);
- const suggested=Math.max(0,Math.min(margin,Number(s.investment_target)));
+ const margin=
+  Number(s.monthly_income)-Number(s.expense_plan);
+
+ const suggested=Math.max(
+  0,Math.min(margin,Number(s.investment_target))
+ );
+
  $("spendable").innerHTML=
-  `<p>Inversión objetivo: <strong>${money(s.investment_target)}</strong></p>
-   <p>Máximo teórico antes de reservas: <strong>${money(suggested)}</strong></p>
-   <p class="note">No es efectivo disponible real. Verifica saldos y obligaciones.</p>`;
+  `<p>Inversión objetivo:
+   <strong>${money(s.investment_target)}</strong></p>
+   <p>Máximo teórico:
+   <strong>${money(suggested)}</strong></p>
+   <p class="note">
+    No representa dinero disponible real.
+   </p>`;
 }
 
 function renderAccounts(){
- $("accountList").innerHTML=data.accounts.length?
- data.accounts.map(a=>
-  `<div class="item">
-   <strong>${esc(a.name)}</strong>
-   <p>${esc(a.institution)} · ${a.currency}</p>
-   <div class="value mint">${money(balance(a),a.currency)}</div>
-   <small>Saldo calculado a partir de registros manuales</small>
-   ${actions("account",a.id)}
+ $("accountList").innerHTML=data.accounts.length
+  ?data.accounts.map(a=>
+   `<div class="item">
+    <strong>${esc(a.name)}</strong>
+    <p>${esc(a.institution)} · ${a.currency}</p>
+    <div class="value mint">
+     ${money(balance(a),a.currency)}
+    </div>
+    <small>Saldo calculado de registros manuales</small>
+    ${actions("account",a.id)}
    </div>`
- ).join(""):"<p>No hay cuentas registradas.</p>";
+  ).join("")
+  :"<p>No hay cuentas registradas.</p>";
 }
 
 function renderTransactions(){
- const rows=[...data.transactions].sort((a,b)=>
-  b.occurred_on.localeCompare(a.occurred_on)
+ const rows=[...data.transactions].sort(
+  (a,b)=>b.occurred_on.localeCompare(a.occurred_on)
  );
- $("transactionList").innerHTML=rows.length?
- rows.map(t=>
-  `<div class="item">
-   <div class="row"><strong>${esc(t.description||t.category)}</strong>
-   <strong>${money(t.amount,t.currency)}</strong></div>
-   <p>${t.occurred_on} · ${esc(t.kind)} · ${esc(account(t.account_id)?.name||"Cuenta")}</p>
-   ${actions("transaction",t.id)}
+
+ $("transactionList").innerHTML=rows.length
+  ?rows.map(t=>
+   `<div class="item">
+    <div class="row">
+     <strong>${esc(t.description||t.category)}</strong>
+     <strong>${money(t.amount,t.currency)}</strong>
+    </div>
+    <p>${t.occurred_on} · ${esc(t.kind)} ·
+     ${esc(account(t.account_id)?.name||"Cuenta")}</p>
+    ${actions("transaction",t.id)}
    </div>`
- ).join(""):"<p>No hay movimientos registrados.</p>";
+  ).join("")
+  :"<p>No hay movimientos registrados.</p>";
 }
 
 function renderBudgets(){
- $("budgetList").innerHTML=data.budgets.length?
- data.budgets.map(b=>{
-  const spent=data.transactions.filter(t=>
-   t.kind==="expense"&&t.category===b.category&&t.currency===b.currency
-  ).reduce((n,t)=>n+Number(t.amount),0);
-  const pct=Number(b.amount)>0?spent/Number(b.amount)*100:0;
-  return `<div class="item">
-   <div class="row"><strong>${esc(b.category)}</strong>
-   <span>${money(spent,b.currency)} / ${money(b.amount,b.currency)}</span></div>
-   <div class="progress"><div style="width:${Math.min(100,pct)}%"></div></div>
-   <p>${pct>=80?"⚠️ Límite al 80% o más":"Dentro del límite"} · ${pct.toFixed(0)}%</p>
-   ${actions("budget",b.id)}</div>`;
- }).join(""):"<p>No hay presupuestos configurados.</p>";
+ $("budgetList").innerHTML=data.budgets.length
+  ?data.budgets.map(b=>{
+   const spent=data.transactions.filter(t=>
+    t.kind==="expense"&&
+    t.category===b.category&&
+    t.currency===b.currency
+   ).reduce((n,t)=>n+Number(t.amount),0);
+
+   const pct=Number(b.amount)>0
+    ?spent/Number(b.amount)*100
+    :0;
+
+   return `<div class="item">
+    <div class="row">
+     <strong>${esc(b.category)}</strong>
+     <span>${money(spent,b.currency)} /
+      ${money(b.amount,b.currency)}</span>
+    </div>
+    <div class="progress">
+     <div style="width:${Math.min(100,pct)}%"></div>
+    </div>
+    <p>${pct>=80?"⚠️ Límite al 80% o más":"Dentro del límite"}
+     · ${pct.toFixed(0)}%</p>
+    ${actions("budget",b.id)}
+   </div>`;
+  }).join("")
+  :"<p>No hay presupuestos configurados.</p>";
 }
 
 function renderHoldings(){
- $("holdingList").innerHTML=data.holdings.length?
- data.holdings.map(h=>
-  `<div class="item">
-   <div class="row"><strong>${esc(h.symbol)}</strong>
-   <strong>${money(h.market_value,h.currency)}</strong></div>
-   <p>${esc(h.broker)} · ${esc(h.asset_type)}
-   · ${h.quantity} unidades</p>
-   <small>Valoración manual</small>
-   ${actions("holding",h.id)}</div>`
- ).join(""):"<p>No hay inversiones registradas.</p>";
+ $("holdingList").innerHTML=data.holdings.length
+  ?data.holdings.map(h=>
+   `<div class="item">
+    <div class="row">
+     <strong>${esc(h.symbol)}</strong>
+     <strong>${money(h.market_value,h.currency)}</strong>
+    </div>
+    <p>${esc(h.broker)} · ${esc(h.asset_type)}
+     · ${h.quantity} unidades</p>
+    <small>Valoración manual</small>
+    ${actions("holding",h.id)}
+   </div>`
+  ).join("")
+  :"<p>No hay inversiones registradas.</p>";
 }
 
 function renderGoals(){
- $("goalList").innerHTML=data.goals.length?
- data.goals.map(g=>{
-  const pct=Math.min(100,Number(g.saved)/Number(g.target)*100);
-  return `<div class="item">
-   <strong>${esc(g.name)}</strong>
-   <p>${money(g.saved,g.currency)} / ${money(g.target,g.currency)}</p>
-   <div class="progress"><div style="width:${pct}%"></div></div>
-   ${actions("goal",g.id)}</div>`;
- }).join(""):"<p>No hay metas adicionales.</p>";
+ $("goalList").innerHTML=data.goals.length
+  ?data.goals.map(g=>{
+   const pct=Math.min(
+    100,Number(g.saved)/Number(g.target)*100
+   );
+
+   return `<div class="item">
+    <strong>${esc(g.name)}</strong>
+    <p>${money(g.saved,g.currency)} /
+     ${money(g.target,g.currency)}</p>
+    <div class="progress">
+     <div style="width:${pct}%"></div>
+    </div>
+    ${actions("goal",g.id)}
+   </div>`;
+  }).join("")
+  :"<p>No hay metas adicionales.</p>";
 }
 
 function renderReports(){
  const sum=kind=>data.transactions
   .filter(t=>t.kind===kind&&t.currency==="PEN")
   .reduce((n,t)=>n+Number(t.amount),0);
+
  $("reportBody").innerHTML=
   `<div class="grid">
-   <div class="card"><h3>Ingresos PEN registrados</h3>
-   <div class="value mint">${money(sum("income"))}</div></div>
-   <div class="card"><h3>Gastos PEN registrados</h3>
-   <div class="value">${money(sum("expense"))}</div></div>
+   <div class="card">
+    <h3>Ingresos PEN registrados</h3>
+    <div class="value mint">${money(sum("income"))}</div>
    </div>
-   <p>Movimientos registrados: ${data.transactions.length}</p>
-   <p class="note">Reporte acumulado, todavía no es un cierre semanal.</p>`;
+   <div class="card">
+    <h3>Gastos PEN registrados</h3>
+    <div class="value">${money(sum("expense"))}</div>
+   </div>
+   </div>
+   <p>Movimientos registrados:
+    ${data.transactions.length}</p>
+   <p class="note">
+    Reporte acumulado, no cierre semanal.
+   </p>`;
 }
 
 function renderSettings(){
  const s=data.settings;
+
  for(const [id,key] of [
   ["sIncome","monthly_income"],
   ["sExpense","expense_plan"],
@@ -988,7 +1356,9 @@ function renderSettings(){
   ["sNetworth","networth_target"],
   ["sFx","fx_pen_per_usd"],
   ["sFxDate","fx_date"]
- ])$(id).value=s[key]??"";
+ ]){
+  $(id).value=s[key]??"";
+ }
 }
 
 function project(){
@@ -996,52 +1366,68 @@ function project(){
  const a=Number($("pMonthly").value);
  const y=Number($("pYears").value);
  const r=Number($("pRate").value);
+
  if(![p,a,y,r].every(Number.isFinite)||
   p<0||a<0||y<1||y>50||r< -50||r>50){
   $("projectionResult").textContent="Revisa los valores.";
   return;
  }
+
  const m=Math.pow(1+r/100,1/12)-1;
  const n=Math.round(y*12);
  const factor=Math.pow(1+m,n);
+
  const future=p*factor+
   (Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
+
  $("projectionResult").innerHTML=
   `<h3>Patrimonio proyectado</h3>
    <div class="value mint">${money(future)}</div>
    <p>Aportes: ${money(p+a*n)}</p>
-   <p class="note">Escenario hipotético, sin impuestos ni inflación.</p>`;
+   <p class="note">
+    Escenario hipotético, sin impuestos ni inflación.
+   </p>`;
 }
-["pInitial","pMonthly","pYears","pRate"].forEach(id=>
- $(id).addEventListener("input",project)
+
+["pInitial","pMonthly","pYears","pRate"].forEach(
+ id=>$(id).addEventListener("input",project)
 );
+
+// =====================================
+// FORMULARIOS FINANCIEROS
+// =====================================
 
 const fields={
  account:[
   ["name","Nombre","text"],
   ["institution","Entidad","select","BCP|BBVA|Efectivo|Otro"],
-  ["account_type","Tipo","select","bank:Bancaria|cash:Efectivo|investment:Inversión|credit:Crédito"],
+  ["account_type","Tipo","select",
+   "bank:Bancaria|cash:Efectivo|investment:Inversión|credit:Crédito"],
   ["currency","Moneda","select","PEN|USD"],
   ["opening_balance","Saldo inicial","number"]
  ],
  transaction:[
-  ["kind","Tipo","select","expense:Gasto|income:Ingreso|transfer:Transferencia"],
+  ["kind","Tipo","select",
+   "expense:Gasto|income:Ingreso|transfer:Transferencia"],
   ["account_id","Cuenta origen","account"],
   ["linked_account_id","Cuenta destino","optional_account"],
   ["amount","Importe","number"],
   ["linked_amount","Importe recibido","optional_number"],
-  ["category","Categoría","select","Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+  ["category","Categoría","select",
+   "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
   ["description","Descripción","text"],
   ["occurred_on","Fecha","date"]
  ],
  budget:[
-  ["category","Categoría","select","Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+  ["category","Categoría","select",
+   "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
   ["amount","Límite PEN","number"]
  ],
  holding:[
   ["broker","Bróker","text"],
   ["symbol","Activo","text"],
-  ["asset_type","Tipo","select","stock:Acción|etf:ETF|fund:Fondo|deposit:Depósito|other:Otro"],
+  ["asset_type","Tipo","select",
+   "stock:Acción|etf:ETF|fund:Fondo|deposit:Depósito|other:Otro"],
   ["quantity","Cantidad","number"],
   ["cost_basis","Costo total","number"],
   ["market_value","Valor manual","number"],
@@ -1059,28 +1445,47 @@ const fields={
 
 function fieldHtml(f,record){
  const [key,label,type,opts]=f;
- const value=record?.[key]??(key==="occurred_on"?today():"");
+ const value=record?.[key]??(
+  key==="occurred_on"?today():""
+ );
+
  let control="";
+
  if(type==="select"){
   control=`<select class="field" id="f_${key}">`+
    opts.split("|").map(o=>{
     const [v,t]=o.split(":");
-    return `<option value="${v}" ${String(value)===v?"selected":""}>${t||v}</option>`;
+    return `<option value="${v}"
+     ${String(value)===v?"selected":""}>
+     ${t||v}</option>`;
    }).join("")+"</select>";
- }else if(type==="account"||type==="optional_account"){
+
+ }else if(
+  type==="account"||type==="optional_account"
+ ){
   control=`<select class="field" id="f_${key}">`+
-   (type==="optional_account"?'<option value="">Ninguna</option>':"")+
+   (type==="optional_account"
+    ?'<option value="">Ninguna</option>'
+    :"")+
    data.accounts.map(a=>
-    `<option value="${a.id}" ${a.id===value?"selected":""}>${esc(a.name)} (${a.currency})</option>`
+    `<option value="${a.id}"
+     ${a.id===value?"selected":""}>
+     ${esc(a.name)} (${a.currency})
+     </option>`
    ).join("")+"</select>";
+
  }else{
-  const number=type==="number"||type==="optional_number";
-  control=`<input class="field" id="f_${key}"
+  const number=
+   type==="number"||type==="optional_number";
+
+  control=`<input class="field"
+   id="f_${key}"
    type="${number?"number":type}"
    ${number?'step="any" min="0"':""}
    value="${esc(value)}"
    ${type.startsWith("optional")?"":"required"}>`;
  }
+
  return `<label>${label}${control}</label>`;
 }
 
@@ -1090,8 +1495,10 @@ function openEditor(type,id=null){
   navigate("accounts");
   return;
  }
+
  editType=type;
  editId=id;
+
  const sets={
   account:data.accounts,
   transaction:data.transactions,
@@ -1099,13 +1506,21 @@ function openEditor(type,id=null){
   holding:data.holdings,
   goal:data.goals
  };
- const record=id?sets[type].find(x=>x.id===id):null;
- $("editorTitle").textContent=(id?"Editar ":"Nuevo ")+type;
+
+ const record=id
+  ?sets[type].find(x=>x.id===id)
+  :null;
+
+ $("editorTitle").textContent=
+  (id?"Editar ":"Nuevo ")+type;
+
  $("editorFields").innerHTML=
   fields[type].map(f=>fieldHtml(f,record)).join("");
+
  if(type==="transaction"&&!id&&quickKind){
   $("f_kind").value=quickKind;
  }
+
  $("editorMsg").textContent="";
  navigate("editor");
 }
@@ -1121,16 +1536,31 @@ document.addEventListener("click",async e=>{
  }
 
  const del=e.target.closest("[data-delete]");
+
  if(del){
   const [type,id]=del.dataset.delete.split(":");
+
   if(!confirm("¿Eliminar este registro?"))return;
+
   try{
-   const {data:deleted,error}=await sb.from(tables[type])
-    .delete().eq("id",id).eq("user_id",user.id).select("id");
+   const {data:deleted,error}=
+    await sb.from(tables[type])
+     .delete()
+     .eq("id",id)
+     .eq("user_id",user.id)
+     .select("id");
+
    if(error)throw error;
-   if(deleted?.length!==1)throw Error("No se confirmó la eliminación.");
+
+   if(deleted?.length!==1){
+    throw Error("No se confirmó la eliminación.");
+   }
+
    await loadAll();
-  }catch(err){alert(err.message)}
+
+  }catch(error){
+   alert(error.message);
+  }
  }
 });
 
@@ -1139,56 +1569,101 @@ $("cancelBtn").onclick=()=>navigate("dashboard");
 $("editorForm").onsubmit=async e=>{
  e.preventDefault();
  if(busy)return;
+
  busy=true;
  $("saveBtn").disabled=true;
+
  try{
   const payload={};
+
   for(const [key,,type] of fields[editType]){
    const raw=$("f_"+key).value;
+
    if(type==="number"||type==="optional_number"){
     payload[key]=raw===""?null:Number(raw);
-    if(payload[key]!==null&&
-     (!Number.isFinite(payload[key])||payload[key]<0))
+
+    if(payload[key]!==null&&(
+     !Number.isFinite(payload[key])||
+     payload[key]<0
+    )){
      throw Error("Importe inválido.");
-   }else payload[key]=raw||null;
+    }
+
+   }else{
+    payload[key]=raw||null;
+   }
   }
 
   if(editType==="transaction"){
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
+
    if(!src)throw Error("Selecciona una cuenta.");
+
    payload.currency=src.currency;
+
    if(payload.kind==="transfer"){
-    if(!dst||dst.id===src.id)
-     throw Error("Selecciona una cuenta de destino diferente.");
-    if(payload.linked_amount===null&&src.currency===dst.currency)
+    if(!dst||dst.id===src.id){
+     throw Error("Selecciona otra cuenta de destino.");
+    }
+
+    if(
+     payload.linked_amount===null&&
+     src.currency===dst.currency
+    ){
      payload.linked_amount=payload.amount;
-    if(!(payload.linked_amount>0))
+    }
+
+    if(!(payload.linked_amount>0)){
      throw Error("Indica el importe recibido.");
+    }
+
    }else{
     payload.linked_account_id=null;
     payload.linked_amount=null;
    }
-   if(!(payload.amount>0))throw Error("Importe inválido.");
+
+   if(!(payload.amount>0)){
+    throw Error("Importe inválido.");
+   }
   }
 
-  if(editType==="budget")payload.currency="PEN";
-  if(editType==="goal"&&!(payload.target>0))
+  if(editType==="budget"){
+   payload.currency="PEN";
+  }
+
+  if(editType==="goal"&&!(payload.target>0)){
    throw Error("Objetivo inválido.");
+  }
 
-  if(editType==="account"&&payload.account_type==="credit")
-   throw Error("El módulo de deuda de tarjetas todavía no está habilitado.");
+  if(
+   editType==="account"&&
+   payload.account_type==="credit"
+  ){
+   throw Error(
+    "El módulo de deuda de tarjetas todavía no está habilitado."
+   );
+  }
 
-  const query=editId?
-   sb.from(tables[editType]).update(payload)
-    .eq("id",editId).eq("user_id",user.id):
-   sb.from(tables[editType]).insert({...payload,user_id:user.id});
+  const query=editId
+   ?sb.from(tables[editType])
+     .update(payload)
+     .eq("id",editId)
+     .eq("user_id",user.id)
+   :sb.from(tables[editType])
+     .insert({...payload,user_id:user.id});
 
-  const {data:saved,error}=await query.select("id");
+  const {data:saved,error}=
+   await query.select("id");
+
   if(error)throw error;
-  if(!saved?.length)throw Error("No se confirmó el guardado.");
+
+  if(!saved?.length){
+   throw Error("No se confirmó el guardado.");
+  }
 
   await loadAll();
+
   navigate({
    account:"accounts",
    transaction:"movements",
@@ -1196,54 +1671,89 @@ $("editorForm").onsubmit=async e=>{
    holding:"investments",
    goal:"goals"
   }[editType]);
- }catch(err){
-  $("editorMsg").textContent=err.message;
+
+ }catch(error){
+  $("editorMsg").textContent=error.message;
   $("editorMsg").className="message error";
+
  }finally{
   busy=false;
   $("saveBtn").disabled=false;
  }
 };
 
+// =====================================
+// CONFIGURACION
+// =====================================
+
 $("settingsForm").onsubmit=async e=>{
  e.preventDefault();
+
  const payload={
   user_id:user.id,
   monthly_income:Number($("sIncome").value),
   expense_plan:Number($("sExpense").value),
   investment_target:Number($("sInvest").value),
   networth_target:Number($("sNetworth").value),
-  fx_pen_per_usd:$("sFx").value?Number($("sFx").value):null,
+  fx_pen_per_usd:$("sFx").value
+   ?Number($("sFx").value)
+   :null,
   fx_date:$("sFxDate").value||null
  };
+
  const {error}=await sb.from("finance_settings")
   .upsert(payload,{onConflict:"user_id"});
- $("settingsMsg").textContent=
-  error?error.message:"Preferencias guardadas.";
+
+ $("settingsMsg").textContent=error
+  ?error.message
+  :"Preferencias guardadas.";
+
  if(!error)await loadAll();
 };
 
+// =====================================
+// EXPORTAR REPORTES
+// =====================================
+
 $("exportBtn").onclick=()=>{
  const rows=[
-  ["fecha","tipo","cuenta","categoria","descripcion","importe","moneda"],
+  ["fecha","tipo","cuenta","categoria",
+   "descripcion","importe","moneda"],
   ...data.transactions.map(t=>[
-   t.occurred_on,t.kind,account(t.account_id)?.name||"",
-   t.category,t.description,t.amount,t.currency
+   t.occurred_on,
+   t.kind,
+   account(t.account_id)?.name||"",
+   t.category,
+   t.description,
+   t.amount,
+   t.currency
   ])
  ];
+
  const csv=rows.map(row=>
-  row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")
+  row.map(v=>
+   '"'+String(v??"").replace(/"/g,'""')+'"'
+  ).join(",")
  ).join("\r\n");
- const blob=new Blob(["\ufeff"+csv],{
-  type:"text/csv;charset=utf-8"
- });
+
+ const blob=new Blob(
+  ["\ufeff"+csv],
+  {type:"text/csv;charset=utf-8"}
+ );
+
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
+
  a.href=url;
  a.download="papi-riki-movimientos.csv";
  a.click();
+
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
+
+// =====================================
+// INICIAR PAPI RIKI
+// =====================================
 
 init();
 </script>
