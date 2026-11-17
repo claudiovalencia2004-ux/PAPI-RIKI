@@ -3,204 +3,567 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>PAPI RIKI | Finanzas</title>
 <style>
-:root{font-family:Arial,sans-serif;background:#0b1220;color:#edf2fa;color-scheme:dark}
+:root{
+ --bg:#0b1220;
+ --panel:#17243a;
+ --panel2:#101d30;
+ --line:#2c4059;
+ --text:#edf2fa;
+ --muted:#9caec5;
+ --mint:#38d9a9;
+ --red:#ff8996;
+ --radius:19px;
+ color-scheme:dark;
+ font-family:system-ui,-apple-system,Arial,sans-serif;
+}
 *{box-sizing:border-box}
-body{margin:0}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--text);
+ min-height:100vh;
+}
 [hidden]{display:none!important}
 button,input,select{font:inherit}
 button{cursor:pointer}
-header{background:#142137;padding:18px 5%;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:23px;font-weight:bold}
-.logo span,.green{color:#38d9a9}
-main{max-width:1150px;margin:auto;padding:25px 18px}
-h1{font-size:27px}
-p,small{color:#aab8ca}
-.card{background:#17243a;border:1px solid #30435b;border-radius:15px;padding:20px;margin-bottom:15px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.value{font-size:26px;font-weight:bold}
-.btn{background:#38d9a9;color:#09241d;border:0;border-radius:9px;padding:12px 17px;font-weight:bold}
-.btn:disabled{opacity:.5}
-.alt{background:#31435b;color:white}
-.danger{background:#753849;color:white}
-.field{width:100%;padding:12px;background:#0b1220;color:white;border:1px solid #435772;border-radius:8px;margin:6px 0 14px}
-label{display:block;color:#cbd5e1;font-size:14px}
-.auth{min-height:75vh;display:grid;place-items:center;padding:20px}
-.auth .card{width:100%;max-width:420px;padding:30px}
-.remember{display:flex;align-items:center;gap:10px;margin:10px 0 20px}
-.remember input{width:18px;height:18px;accent-color:#38d9a9}
-nav{display:flex;gap:7px;overflow-x:auto;margin-bottom:20px}
-nav button{background:#20324b;color:white;border:0;padding:12px;border-radius:8px;white-space:nowrap}
-nav button.active{background:#38d9a9;color:#09241d}
-.row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.list{display:grid;gap:10px}
-.item{padding:15px;background:#101d30;border:1px solid #34465e;border-radius:10px}
-.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.message{color:#aab8ca;white-space:pre-wrap;overflow-wrap:anywhere}
-.error{color:#ff9d9d}
-.note{font-size:12px;color:#aab8ca}
-.progress{height:11px;background:#34465e;border-radius:10px;overflow:hidden}
-.progress div{height:100%;background:#38d9a9}
-.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-@media(max-width:650px){.grid,.formgrid{grid-template-columns:1fr}.card{padding:16px}main{padding:15px}}
+button:disabled{opacity:.55;cursor:wait}
+button:focus-visible,input:focus-visible,select:focus-visible{
+ outline:2px solid var(--mint);
+ outline-offset:3px;
+}
+button{touch-action:manipulation}
+header{
+ position:sticky;
+ top:0;
+ z-index:20;
+ background:rgba(11,18,32,.97);
+ border-bottom:1px solid var(--line);
+ padding:14px max(18px,env(safe-area-inset-right));
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+}
+.logo{
+ font-size:20px;
+ font-weight:850;
+ letter-spacing:-.7px;
+}
+.logo span{color:var(--mint)}
+main{
+ width:min(1100px,100%);
+ margin:auto;
+ padding:23px 17px calc(120px + env(safe-area-inset-bottom));
+}
+h1{font-size:27px;letter-spacing:-.8px;margin:0 0 8px}
+h2{font-size:21px;margin:0 0 14px}
+h3{font-size:15px;margin:0 0 12px}
+p{color:var(--muted);line-height:1.55}
+small,.note{color:var(--muted);font-size:12px}
+.card{
+ background:var(--panel);
+ border:1px solid var(--line);
+ border-radius:var(--radius);
+ padding:19px;
+ margin-bottom:14px;
+}
+.card h3{color:var(--muted)}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.grid .card{margin-bottom:0}
+.value{
+ font-size:clamp(19px,5vw,30px);
+ font-weight:800;
+ letter-spacing:-.7px;
+ overflow-wrap:anywhere;
+}
+.mint{color:var(--mint)}
+.purple{color:#baa5ff}
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ flex-wrap:wrap;
+}
+.btn{
+ border:0;
+ border-radius:12px;
+ background:var(--mint);
+ color:#09251d;
+ padding:13px 17px;
+ font-weight:750;
+ min-height:45px;
+}
+.btn.alt{
+ background:#293d56;
+ color:white;
+ border:1px solid #405873;
+}
+.btn.danger{
+ background:#5b303e;
+ color:#ffe3e8;
+}
+.btn.full{width:100%}
+.field{
+ width:100%;
+ min-height:48px;
+ border:1px solid #405570;
+ background:#0b1220;
+ color:white;
+ padding:12px;
+ border-radius:11px;
+ margin:7px 0 14px;
+ font-size:16px;
+}
+label{
+ display:block;
+ color:#c9d5e6;
+ font-size:14px;
+}
+.formgrid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:0 15px;
+}
+.actions{
+ display:flex;
+ flex-wrap:wrap;
+ gap:9px;
+ margin-top:14px;
+}
+.item{
+ background:var(--panel2);
+ border:1px solid #344960;
+ border-radius:15px;
+ padding:17px;
+ margin-bottom:11px;
+}
+.item strong{overflow-wrap:anywhere}
+.message{
+ color:var(--muted);
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ font-size:13px;
+ line-height:1.6;
+}
+.error{color:var(--red)}
+.progress{
+ height:9px;
+ background:#33455e;
+ border-radius:20px;
+ overflow:hidden;
+ margin:12px 0;
+}
+.progress>div{
+ height:100%;
+ background:linear-gradient(90deg,#159d80,#55edb8);
+ border-radius:20px;
+}
+.auth{
+ min-height:80dvh;
+ display:grid;
+ place-items:center;
+ padding:22px;
+}
+.auth .card{
+ width:100%;
+ max-width:420px;
+ padding:28px;
+}
+.remember{
+ display:flex;
+ align-items:center;
+ gap:11px;
+ margin:8px 0 19px;
+}
+.remember input{
+ width:19px;
+ height:19px;
+ accent-color:var(--mint);
+ margin:0;
+}
+#loading{text-align:center;padding:60px 20px}
+.desktop-nav{
+ display:flex;
+ flex-wrap:wrap;
+ gap:8px;
+ margin-bottom:22px;
+}
+.desktop-nav button{
+ background:#20334c;
+ color:white;
+ border:0;
+ border-radius:10px;
+ padding:12px 15px;
+}
+.desktop-nav button.active{
+ background:var(--mint);
+ color:#09251d;
+}
+.bottom-nav{display:none}
+.quick-sheet{
+ position:fixed;
+ inset:0;
+ z-index:50;
+ background:rgba(0,0,0,.72);
+ display:flex;
+ align-items:flex-end;
+ justify-content:center;
+}
+.sheet-panel{
+ width:min(520px,100%);
+ background:#17243a;
+ border:1px solid #41536b;
+ border-radius:26px 26px 0 0;
+ padding:22px 20px calc(24px + env(safe-area-inset-bottom));
+ box-shadow:0 -15px 60px #0008;
+}
+.sheet-option{
+ display:flex;
+ align-items:center;
+ gap:13px;
+ width:100%;
+ background:#223650;
+ border:1px solid #3a506c;
+ color:white;
+ border-radius:15px;
+ padding:17px;
+ margin:9px 0;
+ text-align:left;
+ min-height:58px;
+}
+.sheet-option span:first-child{font-size:24px}
+.mobile-more{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:10px;
+}
+.mobile-more button{
+ background:#223650;
+ color:white;
+ border:1px solid #3a506c;
+ padding:18px 8px;
+ border-radius:15px;
+ min-height:75px;
+}
+@media(max-width:700px){
+ header{padding:15px 18px}
+ main{padding:22px 15px calc(125px + env(safe-area-inset-bottom))}
+ .desktop-nav{display:none}
+ .formgrid{grid-template-columns:1fr}
+ .card{padding:17px}
+ .grid{gap:10px}
+ .grid .card{padding:15px}
+ .bottom-nav{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:calc(76px + env(safe-area-inset-bottom));
+  padding:7px 6px env(safe-area-inset-bottom);
+  background:rgba(17,29,47,.98);
+  border-top:1px solid #344860;
+  z-index:30;
+  box-shadow:0 -10px 35px #0005;
+ }
+ .bottom-nav button{
+  border:0;
+  background:transparent;
+  color:#94a7be;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  font-size:10px;
+  font-weight:650;
+  min-width:0;
+ }
+ .bottom-nav button.active{color:var(--mint)}
+ .nav-icon{font-size:23px;line-height:1}
+ .bottom-nav .add-nav{
+  position:relative;
+  overflow:visible;
+  color:var(--mint);
+ }
+ .add-circle{
+  width:64px;
+  height:64px;
+  display:grid;
+  place-items:center;
+  position:absolute;
+  top:-31px;
+  left:50%;
+  transform:translateX(-50%);
+  background:linear-gradient(135deg,#68ffd0,#18bc91);
+  color:#073b2d;
+  border:5px solid #111d2f;
+  border-radius:50%;
+  font-size:39px;
+  font-weight:350;
+  box-shadow:0 7px 25px #17dca05c,0 0 0 2px #30e3af33;
+  transition:transform .15s;
+ }
+ .add-nav:active .add-circle{
+  transform:translateX(-50%) scale(.92);
+ }
+ .add-label{margin-top:37px}
+}
+@media(max-width:350px){
+ .grid{grid-template-columns:1fr}
+ .add-circle{width:57px;height:57px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*:before,*:after{scroll-behavior:auto!important;transition:none!important}
+}
 </style>
 </head>
 <body>
+
 <header>
-<div class="logo">💸 PAPI <span>RIKI</span></div>
-<button id="logout" class="btn alt" hidden>Cerrar sesión</button>
+ <div class="logo">💸 PAPI <span>RIKI</span></div>
+ <button id="logout" class="btn alt" hidden>Cerrar sesión</button>
 </header>
 
-<p id="loading" style="text-align:center;padding:40px">Verificando sesión...</p>
+<p id="loading">Verificando acceso...</p>
 
 <section id="auth" class="auth" hidden>
-<div class="card">
-<h2>🔐 Iniciar sesión</h2>
-<p>Tu centro financiero personal</p>
-<form id="loginForm">
-<label>Correo electrónico
-<input id="email" class="field" type="email" required autocomplete="username">
-</label>
-<label>Contraseña
-<input id="password" class="field" type="password" required autocomplete="current-password">
-</label>
-<label class="remember">
-<input id="remember" type="checkbox" checked>
-Recordarme en este dispositivo
-</label>
-<button id="loginBtn" class="btn" style="width:100%">Entrar a mis finanzas</button>
-</form>
-<p id="loginMsg" class="message"></p>
-</div>
+ <div class="card">
+  <h2>🔐 Iniciar sesión</h2>
+  <p>Bienvenido a tus finanzas personales.</p>
+  <form id="loginForm">
+   <label>Correo electrónico
+    <input id="email" class="field" type="email" required autocomplete="username">
+   </label>
+   <label>Contraseña
+    <input id="password" class="field" type="password" required autocomplete="current-password">
+   </label>
+   <label class="remember">
+    <input id="remember" type="checkbox" checked>
+    Recordarme en este dispositivo
+   </label>
+   <button id="loginBtn" class="btn full">Entrar a mis finanzas</button>
+  </form>
+  <p id="loginMsg" class="message" role="status"></p>
+ </div>
 </section>
 
 <main id="app" hidden>
-<nav id="nav"></nav>
+
+<nav id="desktopNav" class="desktop-nav"></nav>
 
 <section id="dashboard" class="tab">
-<h1>Mi resumen financiero</h1>
-<p>Tu dinero, tus gastos y tus inversiones.</p>
-<div id="summary" class="grid"></div>
-<div class="card">
-<h3>🎯 Meta patrimonial</h3>
-<div id="goalSummary"></div>
-</div>
-<div class="card">
-<h3>💡 Capacidad de inversión</h3>
-<div id="spendable"></div>
-</div>
+ <h1>Hola, bienvenido 👋</h1>
+ <p>Tu centro de control financiero.</p>
+ <div class="card">
+  <h3>💰 Patrimonio registrado</h3>
+  <div id="netWorth" class="value">Por configurar</div>
+  <p id="netWorthNote" class="note"></p>
+ </div>
+ <div id="summary" class="grid"></div>
+ <div class="card" style="margin-top:15px">
+  <h3>🎯 Meta patrimonial</h3>
+  <div id="goalSummary"></div>
+ </div>
+ <div class="card">
+  <h3>💡 Plan mensual</h3>
+  <div id="spendable"></div>
+ </div>
 </section>
 
 <section id="accounts" class="tab" hidden>
-<div class="row"><h2>🏦 Cuentas</h2>
-<button class="btn" data-new="account">+ Añadir cuenta</button></div>
-<p class="note">Yape vinculado a BCP no es una cuenta adicional.</p>
-<div id="accountList" class="grid"></div>
+ <div class="row">
+  <h2>🏦 Mis cuentas</h2>
+  <button class="btn" data-new="account">+ Cuenta</button>
+ </div>
+ <p class="note">BCP, BBVA, efectivo y cuentas de inversión.</p>
+ <div id="accountList" class="grid"></div>
 </section>
 
 <section id="movements" class="tab" hidden>
-<div class="row"><h2>🧾 Movimientos</h2>
-<button class="btn" data-new="transaction">+ Movimiento</button></div>
-<p class="note">Los pagos de tarjetas son transferencias, no nuevos gastos.</p>
-<div id="transactionList" class="list"></div>
+ <div class="row">
+  <h2>🧾 Movimientos</h2>
+  <button class="btn" data-new="transaction">+ Movimiento</button>
+ </div>
+ <p class="note">Ingresos, gastos y transferencias manuales.</p>
+ <div id="transactionList"></div>
 </section>
 
 <section id="budgets" class="tab" hidden>
-<div class="row"><h2>📊 Presupuestos</h2>
-<button class="btn" data-new="budget">+ Presupuesto</button></div>
-<p>Alertas al alcanzar el 80%.</p>
-<div id="budgetList" class="list"></div>
+ <div class="row">
+  <h2>📊 Presupuestos</h2>
+  <button class="btn" data-new="budget">+ Límite</button>
+ </div>
+ <p class="note">Alertas al 80%. Gasto acumulado registrado.</p>
+ <div id="budgetList"></div>
 </section>
 
 <section id="investments" class="tab" hidden>
-<div class="row"><h2>📈 Inversiones</h2>
-<button class="btn" data-new="holding">+ Inversión</button></div>
-<p class="note">Valoraciones manuales; no son cotizaciones en tiempo real.</p>
-<div id="holdingList" class="list"></div>
+ <div class="row">
+  <h2>📈 Inversiones</h2>
+  <button class="btn" data-new="holding">+ Activo</button>
+ </div>
+ <p class="note">Valoraciones manuales, no cotizaciones en tiempo real.</p>
+ <div id="holdingList"></div>
 </section>
 
 <section id="goals" class="tab" hidden>
-<div class="row"><h2>🎯 Metas</h2>
-<button class="btn" data-new="goal">+ Meta</button></div>
-<div id="goalList" class="list"></div>
+ <div class="row">
+  <h2>🎯 Mis metas</h2>
+  <button class="btn" data-new="goal">+ Meta</button>
+ </div>
+ <div id="goalList"></div>
 </section>
 
 <section id="projections" class="tab" hidden>
-<h2>🔮 Proyecciones</h2>
-<div class="card">
-<div class="formgrid">
-<label>Capital inicial (S/)
-<input id="pInitial" class="field" type="number" min="0" value="1000"></label>
-<label>Aporte mensual (S/)
-<input id="pMonthly" class="field" type="number" min="0" value="650"></label>
-<label>Años
-<input id="pYears" class="field" type="number" min="1" max="50" value="10"></label>
-<label>Rentabilidad anual hipotética (%)
-<input id="pRate" class="field" type="number" min="-50" max="50" step=".1" value="7"></label>
-</div>
-<div id="projectionResult" class="card"></div>
-<p class="note">Simulación sin impuestos, comisiones ni inflación. No garantiza resultados.</p>
-</div>
+ <h2>🔮 Proyecciones</h2>
+ <div class="card">
+  <div class="formgrid">
+   <label>Capital inicial (S/)
+    <input id="pInitial" class="field" type="number" min="0" value="1000">
+   </label>
+   <label>Aporte mensual (S/)
+    <input id="pMonthly" class="field" type="number" min="0" value="650">
+   </label>
+   <label>Años
+    <input id="pYears" class="field" type="number" min="1" max="50" value="10">
+   </label>
+   <label>Rentabilidad anual hipotética (%)
+    <input id="pRate" class="field" type="number" min="-50" max="50" step=".1" value="7">
+   </label>
+  </div>
+  <div id="projectionResult" class="item"></div>
+  <p class="note">Simulación, no rentabilidad garantizada.</p>
+ </div>
 </section>
 
 <section id="reports" class="tab" hidden>
-<h2>📋 Reportes</h2>
-<div id="reportBody"></div>
-<button id="exportBtn" class="btn alt">Exportar CSV</button>
+ <h2>📋 Reportes</h2>
+ <div id="reportBody"></div>
+ <button id="exportBtn" class="btn alt">Exportar movimientos CSV</button>
 </section>
 
 <section id="settings" class="tab" hidden>
-<h2>⚙️ Configuración</h2>
-<div class="card">
-<form id="settingsForm">
-<div class="formgrid">
-<label>Ingreso mensual
-<input id="sIncome" class="field" type="number" min="0" step=".01" required></label>
-<label>Gastos estimados
-<input id="sExpense" class="field" type="number" min="0" step=".01" required></label>
-<label>Objetivo de inversión
-<input id="sInvest" class="field" type="number" min="0" step=".01" required></label>
-<label>Meta patrimonial
-<input id="sNetworth" class="field" type="number" min=".01" step=".01" required></label>
-<label>Tipo de cambio PEN por USD
-<input id="sFx" class="field" type="number" min=".000001" step=".000001"></label>
-<label>Fecha del tipo de cambio
-<input id="sFxDate" class="field" type="date"></label>
-</div>
-<button class="btn">Guardar preferencias</button>
-<p id="settingsMsg" class="message"></p>
-</form>
-</div>
+ <h2>⚙️ Configuración</h2>
+ <div class="card">
+  <form id="settingsForm">
+   <div class="formgrid">
+    <label>Ingreso mensual
+     <input id="sIncome" class="field" type="number" min="0" step=".01" required>
+    </label>
+    <label>Gastos estimados
+     <input id="sExpense" class="field" type="number" min="0" step=".01" required>
+    </label>
+    <label>Objetivo de inversión
+     <input id="sInvest" class="field" type="number" min="0" step=".01" required>
+    </label>
+    <label>Meta patrimonial
+     <input id="sNetworth" class="field" type="number" min=".01" step=".01" required>
+    </label>
+    <label>Tipo de cambio PEN/USD
+     <input id="sFx" class="field" type="number" min=".000001" step=".000001">
+    </label>
+    <label>Fecha del tipo de cambio
+     <input id="sFxDate" class="field" type="date">
+    </label>
+   </div>
+   <button class="btn full">Guardar preferencias</button>
+   <p id="settingsMsg" class="message"></p>
+  </form>
+ </div>
+</section>
+
+<section id="more" class="tab" hidden>
+ <h2>Más opciones</h2>
+ <div id="moreMenu" class="mobile-more"></div>
 </section>
 
 <section id="editor" class="tab" hidden>
-<h2 id="editorTitle">Nuevo registro</h2>
-<div class="card">
-<form id="editorForm">
-<div id="editorFields" class="formgrid"></div>
-<div class="actions">
-<button id="saveBtn" class="btn">Guardar</button>
-<button id="cancelBtn" class="btn alt" type="button">Cancelar</button>
-</div>
-<p id="editorMsg" class="message"></p>
-</form>
-</div>
+ <h2 id="editorTitle">Nuevo registro</h2>
+ <div class="card">
+  <form id="editorForm">
+   <div id="editorFields" class="formgrid"></div>
+   <div class="actions">
+    <button id="saveBtn" class="btn">Guardar</button>
+    <button id="cancelBtn" class="btn alt" type="button">Cancelar</button>
+   </div>
+   <p id="editorMsg" class="message" role="status"></p>
+  </form>
+ </div>
 </section>
 
-<p class="note">Versión de desarrollo. No hay conexión automática con bancos ni Gmail.</p>
+<p class="note">PAPI RIKI · Versión de desarrollo. Sin sincronización bancaria automática.</p>
 </main>
+
+<nav id="bottomNav" class="bottom-nav" aria-label="Navegación principal" hidden>
+ <button data-tab="dashboard" class="active">
+  <span class="nav-icon">⌂</span>Inicio
+ </button>
+ <button data-tab="accounts">
+  <span class="nav-icon">▣</span>Cuentas
+ </button>
+ <button id="quickAddBtn" class="add-nav" aria-label="Añadir movimiento">
+  <span class="add-circle">+</span>
+  <span class="add-label">Añadir</span>
+ </button>
+ <button data-tab="investments">
+  <span class="nav-icon">↗</span>Invertir
+ </button>
+ <button data-tab="more">
+  <span class="nav-icon">☰</span>Más
+ </button>
+</nav>
+
+<div id="quickSheet" class="quick-sheet" hidden>
+ <div class="sheet-panel" role="dialog" aria-modal="true" aria-label="Añadir registro">
+  <div class="row">
+   <h2>¿Qué quieres registrar?</h2>
+   <button id="closeSheet" class="btn alt" aria-label="Cerrar">✕</button>
+  </div>
+  <button class="sheet-option" data-quick="expense">
+   <span>🛒</span><span>Registrar gasto</span>
+  </button>
+  <button class="sheet-option" data-quick="income">
+   <span>💰</span><span>Registrar ingreso</span>
+  </button>
+  <button class="sheet-option" data-quick="transfer">
+   <span>🔄</span><span>Transferir entre cuentas</span>
+  </button>
+  <button class="sheet-option" data-quick="account">
+   <span>🏦</span><span>Añadir cuenta</span>
+  </button>
+  <button class="sheet-option" data-quick="holding">
+   <span>📈</span><span>Registrar inversión</span>
+  </button>
+ </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 "use strict";
 
-const URL_BASE="https://kbwrxebdcpgsplfjpkxv.supabase.co";
-const PUBLIC_KEY="sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+// CONFIGURACION PUBLICABLE
+const SUPABASE_URL =
+ "https://kbwrxebdcpgsplfjpkxv.supabase.co";
+const SUPABASE_KEY =
+ "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+
 const $=id=>document.getElementById(id);
 
-const tableNames={
+const tables={
  account:"accounts",
  transaction:"finance_transactions",
  budget:"finance_budgets",
@@ -209,7 +572,7 @@ const tableNames={
 };
 
 const sections=[
- ["dashboard","🏠 Resumen"],
+ ["dashboard","🏠 Inicio"],
  ["accounts","🏦 Cuentas"],
  ["movements","🧾 Movimientos"],
  ["budgets","📊 Presupuestos"],
@@ -229,24 +592,18 @@ const defaults={
  fx_date:null
 };
 
-let sb=null;
-let user=null;
-let active="dashboard";
-let editType=null;
-let editId=null;
-let busy=false;
+let sb=null,user=null,active="dashboard";
+let editType=null,editId=null,busy=false;
+let quickKind=null;
 
 let data={
- accounts:[],
- transactions:[],
- budgets:[],
- holdings:[],
- goals:[],
+ accounts:[],transactions:[],
+ budgets:[],holdings:[],goals:[],
  settings:{...defaults}
 };
 
-const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
 const rememberKey="papi_riki_remember";
+const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
 let remember=localStorage.getItem(rememberKey)!=="false";
 $("remember").checked=remember;
 
@@ -269,15 +626,20 @@ function money(n,c="PEN"){
  }).format(Number(n)||0);
 }
 
-function escapeHtml(v){
+function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",
   '"':"&quot;","'":"&#39;"
  })[c]);
 }
 
-function dateToday(){
- return new Date().toLocaleDateString("en-CA");
+function today(){
+ const d=new Date();
+ return [
+  d.getFullYear(),
+  String(d.getMonth()+1).padStart(2,"0"),
+  String(d.getDate()).padStart(2,"0")
+ ].join("-");
 }
 
 function showLogin(){
@@ -286,6 +648,8 @@ function showLogin(){
  $("auth").hidden=false;
  $("app").hidden=true;
  $("logout").hidden=true;
+ $("bottomNav").hidden=true;
+ closeSheet();
 }
 
 async function showApp(u){
@@ -294,6 +658,7 @@ async function showApp(u){
  $("auth").hidden=true;
  $("app").hidden=false;
  $("logout").hidden=false;
+ $("bottomNav").hidden=false;
  $("password").value="";
  await loadAll();
  navigate("dashboard");
@@ -304,21 +669,28 @@ async function init(){
   $("loading").textContent="No se pudo cargar Supabase.";
   return;
  }
- sb=window.supabase.createClient(URL_BASE,PUBLIC_KEY,{
-  auth:{
-   storageKey:authKey,
-   storage,
-   persistSession:true,
-   autoRefreshToken:true,
-   detectSessionInUrl:true
-  }
- });
- sb.auth.onAuthStateChange((event,session)=>{
-  if(event==="SIGNED_OUT")showLogin();
- });
- const {data:session,error}=await sb.auth.getUser();
- if(error||!session?.user)showLogin();
- else await showApp(session.user);
+ try{
+  sb=window.supabase.createClient(
+   SUPABASE_URL,SUPABASE_KEY,{
+    auth:{
+     storageKey:authKey,
+     storage,
+     persistSession:true,
+     autoRefreshToken:true,
+     detectSessionInUrl:true
+    }
+   }
+  );
+  sb.auth.onAuthStateChange((event)=>{
+   if(event==="SIGNED_OUT")showLogin();
+  });
+  const {data:auth,error}=await sb.auth.getUser();
+  if(error||!auth?.user)showLogin();
+  else await showApp(auth.user);
+ }catch(err){
+  console.error(err);
+  $("loading").textContent="Error de conexión.";
+ }
 }
 
 $("loginForm").onsubmit=async e=>{
@@ -336,12 +708,14 @@ $("loginForm").onsubmit=async e=>{
    password:$("password").value
   });
   if(error)throw error;
-  if(!result?.user)throw Error("Sesión no válida");
+  if(!result?.user)throw Error("Sesión inválida");
   await showApp(result.user);
  }catch(err){
   $("loginMsg").textContent=err.message;
   $("loginMsg").className="message error";
- }finally{btn.disabled=false}
+ }finally{
+  btn.disabled=false;
+ }
 };
 
 $("logout").onclick=async()=>{
@@ -355,33 +729,68 @@ function navigate(id){
  document.querySelectorAll(".tab").forEach(el=>{
   el.hidden=el.id!==id;
  });
- $("nav").querySelectorAll("button").forEach(b=>{
-  b.classList.toggle("active",b.dataset.tab===id);
+ document.querySelectorAll("[data-tab]").forEach(el=>{
+  el.classList.toggle("active",el.dataset.tab===id);
  });
  if(id==="projections")project();
+ window.scrollTo({top:0,behavior:"instant"});
 }
 
-$("nav").innerHTML=sections.map(([id,label])=>
+$("desktopNav").innerHTML=sections.map(([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
 
-$("nav").onclick=e=>{
+$("moreMenu").innerHTML=sections.slice(2).map(([id,label])=>
+ `<button data-tab="${id}">${label}</button>`
+).join("");
+
+document.addEventListener("click",e=>{
  const b=e.target.closest("[data-tab]");
  if(b)navigate(b.dataset.tab);
-};
+});
+
+function openSheet(){
+ $("quickSheet").hidden=false;
+}
+function closeSheet(){
+ $("quickSheet").hidden=true;
+}
+
+$("quickAddBtn").onclick=openSheet;
+$("closeSheet").onclick=closeSheet;
+$("quickSheet").addEventListener("click",e=>{
+ if(e.target===$("quickSheet"))closeSheet();
+});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closeSheet();
+});
+
+document.querySelectorAll("[data-quick]").forEach(b=>{
+ b.onclick=()=>{
+  const kind=b.dataset.quick;
+  closeSheet();
+  if(["expense","income","transfer"].includes(kind)){
+   quickKind=kind;
+   openEditor("transaction");
+  }else{
+   quickKind=null;
+   openEditor(kind);
+  }
+ };
+});
 
 async function loadAll(){
  if(!user)return;
  const uid=user.id;
- const queries=[
+ const results=await Promise.all([
   sb.from("accounts").select("*").eq("user_id",uid),
   sb.from("finance_transactions").select("*").eq("user_id",uid),
   sb.from("finance_budgets").select("*").eq("user_id",uid),
   sb.from("finance_holdings").select("*").eq("user_id",uid),
   sb.from("finance_goals").select("*").eq("user_id",uid),
-  sb.from("finance_settings").select("*").eq("user_id",uid).maybeSingle()
- ];
- const results=await Promise.all(queries);
+  sb.from("finance_settings").select("*")
+   .eq("user_id",uid).maybeSingle()
+ ]);
  const failed=results.find(r=>r.error);
  if(failed){
   alert("Error de base de datos: "+failed.error.message);
@@ -415,16 +824,16 @@ function balance(a){
  return n;
 }
 
-function convert(n,c){
+function converted(n,c){
  if(c==="PEN")return Number(n);
  const fx=Number(data.settings.fx_pen_per_usd);
  return fx>0?Number(n)*fx:null;
 }
 
-function actionButtons(type,id){
+function actions(type,id){
  return `<div class="actions">
- <button class="btn alt" data-edit="${type}:${id}">Editar</button>
- <button class="btn danger" data-delete="${type}:${id}">Eliminar</button>
+  <button class="btn alt" data-edit="${type}:${id}">Editar</button>
+  <button class="btn danger" data-delete="${type}:${id}">Eliminar</button>
  </div>`;
 }
 
@@ -441,60 +850,77 @@ function render(){
 
 function renderDashboard(){
  const s=data.settings;
- const liquid=data.accounts.filter(a=>
-  a.account_type==="bank"||a.account_type==="cash"
- );
+ const cards=[
+  ["Ingreso mensual",money(s.monthly_income),"mint"],
+  ["Presupuesto",money(s.expense_plan),""],
+  ["Objetivo inversión",money(s.investment_target),"purple"],
+  ["Margen teórico",money(Number(s.monthly_income)-Number(s.expense_plan)),""]
+ ];
+ $("summary").innerHTML=cards.map(([t,v,c])=>
+  `<div class="card"><h3>${t}</h3>
+   <div class="value ${c}">${v}</div></div>`
+ ).join("");
+
  let total=0,complete=true;
  for(const a of data.accounts){
-  const converted=convert(balance(a),a.currency);
-  if(converted===null)complete=false;
-  else total+=converted;
+  const n=converted(balance(a),a.currency);
+  if(n===null)complete=false;
+  else total+=n;
  }
- const cards=[
-  ["Patrimonio registrado",complete?money(total):"Falta tipo de cambio"],
-  ["Ingreso mensual previsto",money(s.monthly_income)],
-  ["Gasto estimado",money(s.expense_plan)],
-  ["Objetivo de inversión",money(s.investment_target)]
- ];
- $("summary").innerHTML=cards.map(([t,v])=>
-  `<div class="card"><h3>${t}</h3><div class="value">${v}</div></div>`
- ).join("");
- const pct=complete?Math.min(100,Math.max(0,total/Number(s.networth_target)*100)):0;
+ for(const h of data.holdings){
+  const n=converted(h.market_value,h.currency);
+  if(n===null)complete=false;
+  else total+=n;
+ }
+ const creditDebt=data.accounts.some(a=>a.account_type==="credit");
+ const canEstimate=complete&&!creditDebt;
+ $("netWorth").textContent=canEstimate&&
+  (data.accounts.length||data.holdings.length)
+  ?money(total):"Por configurar";
+ $("netWorthNote").textContent=
+  "Estimación parcial: faltan deudas, conciliación y valoración completa.";
+
+ const pct=canEstimate&&Number(s.networth_target)>0
+  ?Math.max(0,Math.min(100,total/Number(s.networth_target)*100)):0;
  $("goalSummary").innerHTML=
   `<div class="value">${money(s.networth_target)}</div>
-  <div class="progress"><div style="width:${pct}%"></div></div>
-  <p>${complete?pct.toFixed(1)+"% de la meta":"Conversión pendiente"}</p>`;
- const available=Number(s.monthly_income)-Number(s.expense_plan);
- const suggested=Math.max(0,Math.min(available,Number(s.investment_target)));
+   <div class="progress"><div style="width:${pct}%"></div></div>
+   <p class="note">Avance indicativo: ${pct.toFixed(1)}%</p>`;
+
+ const margin=Number(s.monthly_income)-Number(s.expense_plan);
+ const suggested=Math.max(0,Math.min(margin,Number(s.investment_target)));
  $("spendable").innerHTML=
-  `<p>Margen mensual teórico: <strong>${money(available)}</strong></p>
-  <p>Inversión sugerida antes de verificar liquidez: <strong>${money(suggested)}</strong></p>
-  <p class="note">No representa dinero disponible real ni descuenta obligaciones futuras.</p>`;
+  `<p>Inversión objetivo: <strong>${money(s.investment_target)}</strong></p>
+   <p>Máximo teórico antes de reservas: <strong>${money(suggested)}</strong></p>
+   <p class="note">No es efectivo disponible real. Verifica saldos y obligaciones.</p>`;
 }
 
 function renderAccounts(){
  $("accountList").innerHTML=data.accounts.length?
  data.accounts.map(a=>
-  `<div class="item"><strong>${escapeHtml(a.name)}</strong>
-  <p>${escapeHtml(a.institution)} · ${a.currency}</p>
-  <div class="value green">${money(balance(a),a.currency)}</div>
-  <small>Saldo calculado</small>
-  ${actionButtons("account",a.id)}</div>`
+  `<div class="item">
+   <strong>${esc(a.name)}</strong>
+   <p>${esc(a.institution)} · ${a.currency}</p>
+   <div class="value mint">${money(balance(a),a.currency)}</div>
+   <small>Saldo calculado a partir de registros manuales</small>
+   ${actions("account",a.id)}
+   </div>`
  ).join(""):"<p>No hay cuentas registradas.</p>";
 }
 
 function renderTransactions(){
- const sorted=[...data.transactions].sort((a,b)=>
+ const rows=[...data.transactions].sort((a,b)=>
   b.occurred_on.localeCompare(a.occurred_on)
  );
- $("transactionList").innerHTML=sorted.length?
- sorted.map(t=>
+ $("transactionList").innerHTML=rows.length?
+ rows.map(t=>
   `<div class="item">
-  <div class="row"><strong>${escapeHtml(t.description||t.category)}</strong>
-  <strong>${money(t.amount,t.currency)}</strong></div>
-  <p>${t.occurred_on} · ${escapeHtml(t.kind)} · ${escapeHtml(account(t.account_id)?.name||"Cuenta")}</p>
-  ${actionButtons("transaction",t.id)}</div>`
- ).join(""):"<p>No hay movimientos.</p>";
+   <div class="row"><strong>${esc(t.description||t.category)}</strong>
+   <strong>${money(t.amount,t.currency)}</strong></div>
+   <p>${t.occurred_on} · ${esc(t.kind)} · ${esc(account(t.account_id)?.name||"Cuenta")}</p>
+   ${actions("transaction",t.id)}
+   </div>`
+ ).join(""):"<p>No hay movimientos registrados.</p>";
 }
 
 function renderBudgets(){
@@ -503,25 +929,26 @@ function renderBudgets(){
   const spent=data.transactions.filter(t=>
    t.kind==="expense"&&t.category===b.category&&t.currency===b.currency
   ).reduce((n,t)=>n+Number(t.amount),0);
-  const pct=b.amount>0?spent/Number(b.amount)*100:0;
-  return `<div class="item"><div class="row">
-  <strong>${escapeHtml(b.category)}</strong>
-  <span>${money(spent,b.currency)} / ${money(b.amount,b.currency)}</span></div>
-  <div class="progress"><div style="width:${Math.min(100,pct)}%"></div></div>
-  <p>${pct>=80?"⚠️ Alerta: 80% alcanzado":"Dentro del límite"} · ${pct.toFixed(0)}%</p>
-  ${actionButtons("budget",b.id)}</div>`;
- }).join(""):"<p>No hay presupuestos.</p>";
+  const pct=Number(b.amount)>0?spent/Number(b.amount)*100:0;
+  return `<div class="item">
+   <div class="row"><strong>${esc(b.category)}</strong>
+   <span>${money(spent,b.currency)} / ${money(b.amount,b.currency)}</span></div>
+   <div class="progress"><div style="width:${Math.min(100,pct)}%"></div></div>
+   <p>${pct>=80?"⚠️ Límite al 80% o más":"Dentro del límite"} · ${pct.toFixed(0)}%</p>
+   ${actions("budget",b.id)}</div>`;
+ }).join(""):"<p>No hay presupuestos configurados.</p>";
 }
 
 function renderHoldings(){
  $("holdingList").innerHTML=data.holdings.length?
  data.holdings.map(h=>
-  `<div class="item"><div class="row">
-  <strong>${escapeHtml(h.symbol)}</strong>
-  <strong>${money(h.market_value,h.currency)}</strong></div>
-  <p>${escapeHtml(h.broker)} · ${escapeHtml(h.asset_type)}
-  · ${h.quantity} unidades · Valoración manual</p>
-  ${actionButtons("holding",h.id)}</div>`
+  `<div class="item">
+   <div class="row"><strong>${esc(h.symbol)}</strong>
+   <strong>${money(h.market_value,h.currency)}</strong></div>
+   <p>${esc(h.broker)} · ${esc(h.asset_type)}
+   · ${h.quantity} unidades</p>
+   <small>Valoración manual</small>
+   ${actions("holding",h.id)}</div>`
  ).join(""):"<p>No hay inversiones registradas.</p>";
 }
 
@@ -529,25 +956,27 @@ function renderGoals(){
  $("goalList").innerHTML=data.goals.length?
  data.goals.map(g=>{
   const pct=Math.min(100,Number(g.saved)/Number(g.target)*100);
-  return `<div class="item"><div class="row">
-  <strong>${escapeHtml(g.name)}</strong>
-  <span>${money(g.saved,g.currency)} / ${money(g.target,g.currency)}</span></div>
-  <div class="progress"><div style="width:${pct}%"></div></div>
-  ${actionButtons("goal",g.id)}</div>`;
+  return `<div class="item">
+   <strong>${esc(g.name)}</strong>
+   <p>${money(g.saved,g.currency)} / ${money(g.target,g.currency)}</p>
+   <div class="progress"><div style="width:${pct}%"></div></div>
+   ${actions("goal",g.id)}</div>`;
  }).join(""):"<p>No hay metas adicionales.</p>";
 }
 
 function renderReports(){
- const inc=data.transactions.filter(t=>t.kind==="income");
- const exp=data.transactions.filter(t=>t.kind==="expense");
+ const sum=kind=>data.transactions
+  .filter(t=>t.kind===kind&&t.currency==="PEN")
+  .reduce((n,t)=>n+Number(t.amount),0);
  $("reportBody").innerHTML=
   `<div class="grid">
-  <div class="card"><h3>Ingresos PEN registrados</h3>
-  <div class="value">${money(inc.filter(t=>t.currency==="PEN").reduce((n,t)=>n+Number(t.amount),0))}</div></div>
-  <div class="card"><h3>Gastos PEN registrados</h3>
-  <div class="value">${money(exp.filter(t=>t.currency==="PEN").reduce((n,t)=>n+Number(t.amount),0))}</div></div>
-  </div><p>Operaciones registradas: ${data.transactions.length}</p>
-  <p class="note">Reporte acumulado; aún no es un cierre semanal auditado.</p>`;
+   <div class="card"><h3>Ingresos PEN registrados</h3>
+   <div class="value mint">${money(sum("income"))}</div></div>
+   <div class="card"><h3>Gastos PEN registrados</h3>
+   <div class="value">${money(sum("expense"))}</div></div>
+   </div>
+   <p>Movimientos registrados: ${data.transactions.length}</p>
+   <p class="note">Reporte acumulado, todavía no es un cierre semanal.</p>`;
 }
 
 function renderSettings(){
@@ -567,19 +996,22 @@ function project(){
  const a=Number($("pMonthly").value);
  const y=Number($("pYears").value);
  const r=Number($("pRate").value);
- if(![p,a,y,r].every(Number.isFinite)||p<0||a<0||y<1||y>50||r< -50||r>50){
+ if(![p,a,y,r].every(Number.isFinite)||
+  p<0||a<0||y<1||y>50||r< -50||r>50){
   $("projectionResult").textContent="Revisa los valores.";
   return;
  }
  const m=Math.pow(1+r/100,1/12)-1;
  const n=Math.round(y*12);
  const factor=Math.pow(1+m,n);
- const future=p*factor+(Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
+ const future=p*factor+
+  (Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
  $("projectionResult").innerHTML=
-  `<h3>Patrimonio proyectado</h3><div class="value green">${money(future)}</div>
-  <p>Aportes: ${money(p+a*n)} · Resultado hipotético: ${money(future-p-a*n)}</p>`;
+  `<h3>Patrimonio proyectado</h3>
+   <div class="value mint">${money(future)}</div>
+   <p>Aportes: ${money(p+a*n)}</p>
+   <p class="note">Escenario hipotético, sin impuestos ni inflación.</p>`;
 }
-
 ["pInitial","pMonthly","pYears","pRate"].forEach(id=>
  $(id).addEventListener("input",project)
 );
@@ -597,7 +1029,7 @@ const fields={
   ["account_id","Cuenta origen","account"],
   ["linked_account_id","Cuenta destino","optional_account"],
   ["amount","Importe","number"],
-  ["linked_amount","Importe destino","optional_number"],
+  ["linked_amount","Importe recibido","optional_number"],
   ["category","Categoría","select","Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
   ["description","Descripción","text"],
   ["occurred_on","Fecha","date"]
@@ -625,9 +1057,9 @@ const fields={
  ]
 };
 
-function makeField(f,record){
+function fieldHtml(f,record){
  const [key,label,type,opts]=f;
- const value=record?.[key]??(key==="occurred_on"?dateToday():"");
+ const value=record?.[key]??(key==="occurred_on"?today():"");
  let control="";
  if(type==="select"){
   control=`<select class="field" id="f_${key}">`+
@@ -639,13 +1071,14 @@ function makeField(f,record){
   control=`<select class="field" id="f_${key}">`+
    (type==="optional_account"?'<option value="">Ninguna</option>':"")+
    data.accounts.map(a=>
-    `<option value="${a.id}" ${a.id===value?"selected":""}>${escapeHtml(a.name)} (${a.currency})</option>`
+    `<option value="${a.id}" ${a.id===value?"selected":""}>${esc(a.name)} (${a.currency})</option>`
    ).join("")+"</select>";
  }else{
-  const inputType=type.includes("number")?"number":type;
-  control=`<input class="field" id="f_${key}" type="${inputType}"
-   ${inputType==="number"?'step="any" min="0"':""}
-   value="${escapeHtml(value)}"
+  const number=type==="number"||type==="optional_number";
+  control=`<input class="field" id="f_${key}"
+   type="${number?"number":type}"
+   ${number?'step="any" min="0"':""}
+   value="${esc(value)}"
    ${type.startsWith("optional")?"":"required"}>`;
  }
  return `<label>${label}${control}</label>`;
@@ -653,21 +1086,26 @@ function makeField(f,record){
 
 function openEditor(type,id=null){
  if(type==="transaction"&&!data.accounts.length){
-  alert("Primero crea una cuenta.");
+  alert("Primero registra una cuenta.");
+  navigate("accounts");
   return;
  }
  editType=type;
  editId=id;
- const records={
+ const sets={
   account:data.accounts,
   transaction:data.transactions,
   budget:data.budgets,
   holding:data.holdings,
   goal:data.goals
  };
- const record=id?records[type].find(x=>x.id===id):null;
+ const record=id?sets[type].find(x=>x.id===id):null;
  $("editorTitle").textContent=(id?"Editar ":"Nuevo ")+type;
- $("editorFields").innerHTML=fields[type].map(f=>makeField(f,record)).join("");
+ $("editorFields").innerHTML=
+  fields[type].map(f=>fieldHtml(f,record)).join("");
+ if(type==="transaction"&&!id&&quickKind){
+  $("f_kind").value=quickKind;
+ }
  $("editorMsg").textContent="";
  navigate("editor");
 }
@@ -675,20 +1113,22 @@ function openEditor(type,id=null){
 document.addEventListener("click",async e=>{
  const create=e.target.closest("[data-new]");
  if(create)openEditor(create.dataset.new);
+
  const edit=e.target.closest("[data-edit]");
  if(edit){
   const [type,id]=edit.dataset.edit.split(":");
   openEditor(type,id);
  }
+
  const del=e.target.closest("[data-delete]");
  if(del){
   const [type,id]=del.dataset.delete.split(":");
   if(!confirm("¿Eliminar este registro?"))return;
   try{
-   const {data:deleted,error}=await sb.from(tableNames[type])
+   const {data:deleted,error}=await sb.from(tables[type])
     .delete().eq("id",id).eq("user_id",user.id).select("id");
    if(error)throw error;
-   if(deleted.length!==1)throw Error("No se confirmó la eliminación");
+   if(deleted?.length!==1)throw Error("No se confirmó la eliminación.");
    await loadAll();
   }catch(err){alert(err.message)}
  }
@@ -707,38 +1147,47 @@ $("editorForm").onsubmit=async e=>{
    const raw=$("f_"+key).value;
    if(type==="number"||type==="optional_number"){
     payload[key]=raw===""?null:Number(raw);
-    if(payload[key]!==null&&(!Number.isFinite(payload[key])||payload[key]<0))
-     throw Error("Importe inválido");
+    if(payload[key]!==null&&
+     (!Number.isFinite(payload[key])||payload[key]<0))
+     throw Error("Importe inválido.");
    }else payload[key]=raw||null;
   }
+
   if(editType==="transaction"){
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
-   if(!src)throw Error("Selecciona una cuenta");
+   if(!src)throw Error("Selecciona una cuenta.");
    payload.currency=src.currency;
    if(payload.kind==="transfer"){
-    if(!dst||dst.id===src.id)throw Error("Selecciona otra cuenta");
+    if(!dst||dst.id===src.id)
+     throw Error("Selecciona una cuenta de destino diferente.");
     if(payload.linked_amount===null&&src.currency===dst.currency)
      payload.linked_amount=payload.amount;
-    if(!(payload.linked_amount>0))throw Error("Indica importe de destino");
+    if(!(payload.linked_amount>0))
+     throw Error("Indica el importe recibido.");
    }else{
     payload.linked_account_id=null;
     payload.linked_amount=null;
    }
-   if(!(payload.amount>0))throw Error("Importe inválido");
+   if(!(payload.amount>0))throw Error("Importe inválido.");
   }
+
   if(editType==="budget")payload.currency="PEN";
   if(editType==="goal"&&!(payload.target>0))
-   throw Error("Objetivo inválido");
-  if(editType==="account"&&payload.account_type==="credit")
-   payload.opening_balance=-Math.abs(payload.opening_balance||0);
+   throw Error("Objetivo inválido.");
 
-  let query=editId?
-   sb.from(tableNames[editType]).update(payload).eq("id",editId).eq("user_id",user.id):
-   sb.from(tableNames[editType]).insert({...payload,user_id:user.id});
+  if(editType==="account"&&payload.account_type==="credit")
+   throw Error("El módulo de deuda de tarjetas todavía no está habilitado.");
+
+  const query=editId?
+   sb.from(tables[editType]).update(payload)
+    .eq("id",editId).eq("user_id",user.id):
+   sb.from(tables[editType]).insert({...payload,user_id:user.id});
+
   const {data:saved,error}=await query.select("id");
   if(error)throw error;
-  if(!saved?.length)throw Error("No se confirmó el guardado");
+  if(!saved?.length)throw Error("No se confirmó el guardado.");
+
   await loadAll();
   navigate({
    account:"accounts",
@@ -769,7 +1218,8 @@ $("settingsForm").onsubmit=async e=>{
  };
  const {error}=await sb.from("finance_settings")
   .upsert(payload,{onConflict:"user_id"});
- $("settingsMsg").textContent=error?error.message:"Preferencias guardadas";
+ $("settingsMsg").textContent=
+  error?error.message:"Preferencias guardadas.";
  if(!error)await loadAll();
 };
 
@@ -784,7 +1234,9 @@ $("exportBtn").onclick=()=>{
  const csv=rows.map(row=>
   row.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")
  ).join("\r\n");
- const blob=new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"});
+ const blob=new Blob(["\ufeff"+csv],{
+  type:"text/csv;charset=utf-8"
+ });
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
  a.href=url;
