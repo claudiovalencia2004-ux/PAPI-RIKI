@@ -2,13 +2,124 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PAPI RIKI</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PAPI RIKI | Finanzas personales</title>
+<style>
+:root {
+  font-family: Arial, sans-serif;
+  color: #e8edf7;
+  background: #0b1220;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header {
+  padding: 22px 6%;
+  background: #121e32;
+  border-bottom: 1px solid #29374c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-size: 23px; font-weight: bold; }
+.logo span { color: #38d9a9; }
+main { max-width: 1150px; margin: auto; padding: 30px 20px; }
+h1 { font-size: 30px; margin-bottom: 6px; }
+p { color: #9daec4; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+}
+.card {
+  background: #17243a;
+  padding: 23px;
+  border-radius: 15px;
+  border: 1px solid #2b3b53;
+}
+.card h3 { color: #aab8ca; font-size: 14px; margin: 0 0 12px; }
+.value { font-size: 29px; font-weight: bold; }
+.green { color: #38d9a9; }
+.purple { color: #ad9aff; }
+.tag {
+  color: #38d9a9;
+  border: 1px solid #38d9a9;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+.progress {
+  background: #33445e;
+  border-radius: 12px;
+  height: 12px;
+  overflow: hidden;
+  margin-top: 15px;
+}
+.bar { height: 100%; background: #38d9a9; }
+.note { font-size: 12px; color: #9daec4; }
+@media(max-width:650px) {
+  .grid { grid-template-columns: 1fr; }
+  h1 { font-size: 24px; }
+  .value { font-size: 25px; }
+}
+</style>
 </head>
 <body>
-  <h1>🚀 PAPI RIKI</h1>
-  <h2>Mi aplicación de finanzas personales</h2>
-  <p>¡Nuestra fintech está comenzando!</p>
+<header>
+  <div class="logo">💸 PAPI <span>RIKI</span></div>
+  <div class="tag">FINANCE V1</div>
+</header>
+<main>
+  <h1>Mi dashboard financiero</h1>
+  <p>Controla tu dinero, tus inversiones y tu futuro.</p>
+  <p class="note">Configuración inicial · Sin conexión bancaria</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>💰 Patrimonio neto</h3>
+      <div class="value">Por configurar</div>
+      <p>Meta: S/ 10,000</p>
+    </div>
+    <div class="card">
+      <h3>🏦 Saldo BCP</h3>
+      <div class="value">Por configurar</div>
+      <p>Cuenta principal</p>
+    </div>
+    <div class="card">
+      <h3>🏦 Saldo BBVA</h3>
+      <div class="value">Por configurar</div>
+      <p>Cuenta secundaria</p>
+    </div>
+    <div class="card">
+      <h3>💵 Ingreso mensual</h3>
+      <div class="value green">S/ 1,350</div>
+      <p>Ingreso fijo programado</p>
+    </div>
+    <div class="card">
+      <h3>🛒 Presupuesto mensual estimado</h3>
+      <div class="value">S/ 700</div>
+      <p>Incluye gastos habituales</p>
+    </div>
+    <div class="card">
+      <h3>📈 Objetivo de inversión</h3>
+      <div class="value purple">S/ 650</div>
+      <p>Meta flexible según disponibilidad</p>
+      <div class="progress">
+        <div class="bar" style="width:0%"></div>
+      </div>
+      <p class="note">Aportes pendientes de registrar</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Mi objetivo patrimonial</h3>
+    <div class="value green">S/ 10,000</div>
+    <p>El progreso aparecerá cuando registres tus saldos.</p>
+    <div class="progress">
+      <div class="bar" style="width:0%"></div>
+    </div>
+  </div>
+</main>
 </body>
 </html>
