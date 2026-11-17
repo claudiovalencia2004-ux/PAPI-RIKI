@@ -6,6 +6,7 @@
   "description": "PAPI RIKI - Finanzas y notificaciones",
   "dependencies": {
     "@supabase/supabase-js": "^2.57.0",
-    "web-push": "^3.6.7"
+    "web-push": "^3.6.7",
+    "google-auth-library": "^9.15.1"
   }
 }
