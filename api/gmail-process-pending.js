@@ -1,33 +1,19 @@
 
 "use strict";
 
-// =============================================
-// PAPI RIKI - PASO 9.16.7
-// PROCESAMIENTO CONTROLADO DE GMAIL
-// =============================================
+// PAPI RIKI - PASO 9.16.9
+// Procesador persistente de Gmail.
+// Ejecucion manual autenticada.
+// NO activa Gmail Watch.
+// NO confirma gastos.
+// NO envia notificaciones.
 //
-// - Autenticacion mediante Supabase.
-// - Consulta Gmail History.
-// - Detecta consumos BCP.
-// - Guarda candidatos pendientes.
-// - Evita duplicados por Gmail message ID.
-// - No confirma gastos.
-// - No modifica movimientos financieros.
-// - No envia notificaciones.
-// - No avanza el cursor.
-// - No activa Gmail Watch.
-//
-// IMPORTANTE:
-// La ejecucion permanece bloqueada hasta
-// inicializar un cursor real de Gmail.
-// =============================================
+// Si un correo BCP no puede interpretarse,
+// el evento NO se finaliza.
+// El cursor NO avanza.
 
-const { createClient } =
-  require("@supabase/supabase-js");
-
-const {
-  inspectNewMessages
-} = require("../lib/gmail-processor");
+const crypto = require("node:crypto");
+const { createClient } = require("@supabase/supabase-js");
 
 const SUPABASE_URL =
   "https://kbwrxebdcpgsplfjpkxv.supabase.co";
@@ -35,103 +21,243 @@ const SUPABASE_URL =
 const PUBLIC_KEY =
   "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-function response(res, status, message, extra = {}) {
-  return res.status(status).json({
-    ok: status === 200,
-    message,
-    ...extra
-  });
-}
+const GMAIL_API =
+  "https://gmail.googleapis.com/gmail/v1/users/me";
 
-function validCursor(value) {
-  return (
-    typeof value === "string" &&
-    /^[0-9]{1,30}$/.test(value)
-  );
+const BCP_SENDER =
+  "notificaciones@notificacionesbcp.com.pe";
+
+const BCP_SUBJECT =
+  "realizaste un consumo con tu tarjeta de debito bcp";
+
+const MONTHS = {
+  enero:1, febrero:2, marzo:3, abril:4,
+  mayo:5, junio:6, julio:7, agosto:8,
+  septiembre:9, octubre:10,
+  noviembre:11, diciembre:12
+};
+
+function reply(res, status, data) {
+  return res.status(status).json(data);
 }
 
 function normalize(value) {
-  return String(value ?? "")
+  return String(value || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-// =============================================
-// EXTRAER IMPORTE
-// =============================================
+function validId(value) {
+  return typeof value === "string" &&
+    /^[0-9]{1,30}$/.test(value);
+}
 
-function parseAmount(raw) {
-  let value = String(raw).trim();
+function decrypt(value, keyHex) {
+  if (!/^[a-f0-9]{64}$/i.test(keyHex || "")) {
+    throw Error("Invalid encryption key");
+  }
 
-  if (!/^\d[\d.,]*$/.test(value)) {
+  const parts = String(value || "").split(".");
+
+  if (parts.length !== 4 || parts[0] !== "v1") {
+    throw Error("Invalid encrypted token");
+  }
+
+  const iv = Buffer.from(parts[1], "base64url");
+  const tag = Buffer.from(parts[2], "base64url");
+
+  if (iv.length !== 12 || tag.length !== 16) {
+    throw Error("Invalid encryption format");
+  }
+
+  const decipher = crypto.createDecipheriv(
+    "aes-256-gcm",
+    Buffer.from(keyHex, "hex"),
+    iv
+  );
+
+  decipher.setAuthTag(tag);
+
+  return Buffer.concat([
+    decipher.update(
+      Buffer.from(parts[3], "base64url")
+    ),
+    decipher.final()
+  ]).toString("utf8");
+}
+
+async function accessToken(encrypted) {
+  const env = process.env;
+
+  const refreshToken = decrypt(
+    encrypted,
+    env.GMAIL_ENCRYPTION_KEY
+  );
+
+  const params = new URLSearchParams({
+    client_id: env.GOOGLE_CLIENT_ID,
+    client_secret: env.GOOGLE_CLIENT_SECRET,
+    refresh_token: refreshToken,
+    grant_type: "refresh_token"
+  });
+
+  const response = await fetch(
+    "https://oauth2.googleapis.com/token",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type":
+          "application/x-www-form-urlencoded"
+      },
+      body: params.toString(),
+      signal: AbortSignal.timeout(12000)
+    }
+  );
+
+  if (!response.ok) {
+    throw Error("OAuth refresh failed");
+  }
+
+  const data = await response.json();
+
+  if (!data.access_token) {
+    throw Error("Missing access token");
+  }
+
+  return data.access_token;
+}
+
+async function gmailGet(path, token, params = {}) {
+  const url = new URL(GMAIL_API + path);
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value !== undefined && value !== null) {
+      url.searchParams.set(key, String(value));
+    }
+  }
+
+  const response = await fetch(url, {
+    headers: {
+      Authorization: "Bearer " + token
+    },
+    signal: AbortSignal.timeout(12000)
+  });
+
+  // No ignorar mensajes eliminados o historiales
+  // caducados: requieren recuperacion explicita.
+  if (!response.ok) {
+    const error = new Error("Gmail API failure");
+    error.status = response.status;
+    throw error;
+  }
+
+  return response.json();
+}
+
+function header(message, name) {
+  const headers = message.payload?.headers || [];
+
+  return headers.find(
+    h => String(h.name).toLowerCase() ===
+      name.toLowerCase()
+  )?.value || "";
+}
+
+function decode(value) {
+  return Buffer.from(
+    value,
+    "base64url"
+  ).toString("utf8");
+}
+
+function plainText(part, depth = 0) {
+  if (!part || depth > 12) {
+    return "";
+  }
+
+  if (
+    part.mimeType === "text/plain" &&
+    part.body?.data
+  ) {
+    return decode(part.body.data);
+  }
+
+  for (const child of part.parts || []) {
+    const text = plainText(child, depth + 1);
+
+    if (text) return text;
+  }
+
+  return "";
+}
+
+function isBCP(message) {
+  const from = normalize(
+    header(message, "From")
+  ).toLowerCase();
+
+  const address = from.includes("<")
+    ? from.match(/<([^<>]+)>/)?.[1]
+    : from;
+
+  const subject = normalize(
+    header(message, "Subject")
+  ).toLowerCase();
+
+  return (
+    address === BCP_SENDER &&
+    subject.includes(BCP_SUBJECT)
+  );
+}
+
+function parseAmount(value) {
+  let raw = String(value).trim();
+
+  if (!/^\d[\d.,]*$/.test(raw)) {
     throw Error("Invalid amount");
   }
 
-  if (value.includes(",") && value.includes(".")) {
-    if (value.lastIndexOf(",") >
-        value.lastIndexOf(".")) {
-      value = value.replace(/\./g, "")
-        .replace(",", ".");
-    } else {
-      value = value.replace(/,/g, "");
-    }
-  } else if (value.includes(",")) {
-    const parts = value.split(",");
+  if (raw.includes(",") && raw.includes(".")) {
+    raw = raw.lastIndexOf(",") >
+      raw.lastIndexOf(".")
+      ? raw.replace(/\./g, "").replace(",", ".")
+      : raw.replace(/,/g, "");
+  } else if (raw.includes(",")) {
+    const parts = raw.split(",");
 
-    value = (
-      parts.length === 2 &&
+    raw = parts.length === 2 &&
       parts[1].length === 2
-    )
-      ? value.replace(",", ".")
-      : value.replace(/,/g, "");
+      ? raw.replace(",", ".")
+      : raw.replace(/,/g, "");
   }
 
-  const amount = Number(value);
+  const amount = Number(raw);
 
   if (
     !Number.isFinite(amount) ||
     amount <= 0 ||
     amount > 999999999 ||
-    !Number.isSafeInteger(Math.round(amount * 100))
+    amount !== Math.round(amount * 100) / 100
   ) {
     throw Error("Invalid amount");
   }
 
-  return Math.round(amount * 100) / 100;
+  return amount;
 }
 
-// =============================================
-// EXTRAER FECHA PERU
-// =============================================
-
 function parseDate(body) {
-  const months = {
-    enero: 1,
-    febrero: 2,
-    marzo: 3,
-    abril: 4,
-    mayo: 5,
-    junio: 6,
-    julio: 7,
-    agosto: 8,
-    septiembre: 9,
-    octubre: 10,
-    noviembre: 11,
-    diciembre: 12
-  };
-
   const match = body.match(
     /Fecha y hora\s+(\d{1,2}) de ([a-z]+) de (\d{4})\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i
   );
 
   if (!match) {
-    throw Error("Transaction date not found");
+    throw Error("Missing transaction date");
   }
 
   const day = Number(match[1]);
-  const month = months[match[2].toLowerCase()];
+  const month = MONTHS[match[2].toLowerCase()];
   const year = Number(match[3]);
   const hour12 = Number(match[4]);
   const minute = Number(match[5]);
@@ -142,127 +268,174 @@ function parseDate(body) {
     year > 2100 ||
     hour12 < 1 ||
     hour12 > 12 ||
-    minute < 0 ||
     minute > 59
   ) {
-    throw Error("Invalid date");
+    throw Error("Invalid transaction date");
   }
 
-  const valid = new Date(
+  const check = new Date(
     Date.UTC(year, month - 1, day)
   );
 
   if (
-    valid.getUTCFullYear() !== year ||
-    valid.getUTCMonth() !== month - 1 ||
-    valid.getUTCDate() !== day
+    check.getUTCFullYear() !== year ||
+    check.getUTCMonth() !== month - 1 ||
+    check.getUTCDate() !== day
   ) {
-    throw Error("Invalid date");
+    throw Error("Invalid calendar date");
   }
 
-  let hour = hour12 % 12;
+  const hour = hour12 % 12 +
+    (match[6].toUpperCase() === "PM" ? 12 : 0);
 
-  if (match[6].toUpperCase() === "PM") {
-    hour += 12;
-  }
-
-  const date =
-    `${year}-` +
-    `${String(month).padStart(2, "0")}-` +
+  return new Date(
+    `${year}-${String(month).padStart(2, "0")}-` +
     `${String(day).padStart(2, "0")}T` +
     `${String(hour).padStart(2, "0")}:` +
-    `${String(minute).padStart(2, "0")}:00-05:00`;
-
-  return new Date(date).toISOString();
+    `${String(minute).padStart(2, "0")}:00-05:00`
+  ).toISOString();
 }
 
-// =============================================
-// EXTRAER CANDIDATO BCP
-// =============================================
+function parseBCP(message) {
+  const body = normalize(
+    plainText(message.payload)
+  );
 
-function parseBCPCandidate(candidate) {
-  const body = normalize(candidate.body);
-
-  if (!candidate.gmail_message_id ||
-      !/^[A-Za-z0-9_-]{5,255}$/.test(
-        candidate.gmail_message_id
-      )) {
-    throw Error("Invalid Gmail message ID");
+  if (!body) {
+    throw Error("BCP plain text unavailable");
   }
 
   if (!/Consumo Tarjeta de Debito/i.test(body)) {
-    throw Error("Operation not recognized");
+    throw Error("BCP operation unrecognized");
   }
 
-  const amountMatch = body.match(
+  const amount = body.match(
     /Total del consumo\s*(S\/|US\$|\$)\s*(\d[\d.,]*)/i
   );
 
-  if (!amountMatch) {
-    throw Error("Amount not found");
-  }
-
-  const merchantMatch = body.match(
+  const merchant = body.match(
     /Empresa\s+(.+?)(?=\s+Numero de operacion|\s+No reconoces|\s+Seguimos mejorando|$)/i
   );
 
-  if (!merchantMatch) {
-    throw Error("Merchant not found");
+  if (!amount || !merchant) {
+    throw Error("BCP fields missing");
   }
 
-  const merchant = merchantMatch[1].trim();
+  const name = merchant[1].trim();
 
   if (
-    !merchant ||
-    merchant.length > 150 ||
+    !name ||
+    name.length > 150 ||
     /^(Numero de operacion|No reconoces|Seguimos mejorando)\b/i
-      .test(merchant)
+      .test(name)
   ) {
     throw Error("Invalid merchant");
   }
 
   return {
-    gmail_message_id: candidate.gmail_message_id,
-    merchant,
-    amount: parseAmount(amountMatch[2]),
-    currency:
-      amountMatch[1] === "S/" ? "PEN" : "USD",
+    gmail_message_id: message.id,
+    merchant: name,
+    amount: parseAmount(amount[2]),
+    currency: amount[1] === "S/" ? "PEN" : "USD",
     transaction_date: parseDate(body)
   };
 }
 
-// =============================================
-// ENDPOINT AUTENTICADO
-// =============================================
+async function readHistory(start, end, token) {
+  const ids = new Set();
+  let pageToken;
+  let complete = false;
+
+  for (let page = 0; page < 10; page++) {
+    const result = await gmailGet(
+      "/history",
+      token,
+      {
+        startHistoryId: start,
+        historyTypes: "messageAdded",
+        maxResults: 100,
+        pageToken
+      }
+    );
+
+    if (!validId(String(result.historyId || ""))) {
+      throw Error("Invalid history response");
+    }
+
+    for (const item of result.history || []) {
+      if (!validId(String(item.id || ""))) {
+        throw Error("Invalid history entry");
+      }
+
+      // No procesar cambios posteriores
+      // al evento reservado.
+      if (BigInt(item.id) > BigInt(end)) {
+        continue;
+      }
+
+      for (const added of item.messagesAdded || []) {
+        if (added.message?.id) {
+          ids.add(added.message.id);
+        }
+
+        if (ids.size > 50) {
+          throw Error("Batch too large");
+        }
+      }
+    }
+
+    pageToken = result.nextPageToken;
+
+    if (!pageToken) {
+      complete = true;
+      break;
+    }
+  }
+
+  if (!complete) {
+    throw Error("History pagination incomplete");
+  }
+
+  return [...ids];
+}
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
   res.setHeader("Allow", "POST");
 
   if (req.method !== "POST") {
-    return response(
-      res, 405, "Metodo no permitido."
-    );
+    return reply(res, 405, {
+      ok: false,
+      message: "Metodo no permitido"
+    });
   }
 
-  const authorization =
-    req.headers.authorization || "";
+  const env = process.env;
 
-  const match = authorization.match(
-    /^Bearer\s+(\S+)$/i
-  );
+  if (
+    !env.SUPABASE_SECRET_KEY ||
+    !env.GOOGLE_CLIENT_ID ||
+    !env.GOOGLE_CLIENT_SECRET ||
+    !env.GMAIL_ENCRYPTION_KEY
+  ) {
+    return reply(res, 503, {
+      ok: false,
+      message: "Configuracion incompleta"
+    });
+  }
+
+  const match = String(
+    req.headers.authorization || ""
+  ).match(/^Bearer\s+(\S+)$/i);
 
   if (!match) {
-    return response(
-      res, 401, "Autenticacion requerida."
-    );
+    return reply(res, 401, {
+      ok: false,
+      message: "Autenticacion requerida"
+    });
   }
 
-  if (!process.env.SUPABASE_SECRET_KEY) {
-    return response(
-      res, 503, "Configuracion incompleta."
-    );
-  }
+  let claimed = false;
 
   try {
     const auth = createClient(
@@ -280,16 +453,17 @@ module.exports = async function handler(req, res) {
       await auth.auth.getUser(match[1]);
 
     if (authError || !authData?.user?.id) {
-      return response(
-        res, 401, "Sesion invalida."
-      );
+      return reply(res, 401, {
+        ok: false,
+        message: "Sesion invalida"
+      });
     }
 
     const userId = authData.user.id;
 
     const admin = createClient(
       SUPABASE_URL,
-      process.env.SUPABASE_SECRET_KEY,
+      env.SUPABASE_SECRET_KEY,
       {
         auth: {
           persistSession: false,
@@ -297,10 +471,6 @@ module.exports = async function handler(req, res) {
         }
       }
     );
-
-    // =====================================
-    // COMPROBAR MONITOR
-    // =====================================
 
     const { data: monitor, error: monitorError } =
       await admin
@@ -311,69 +481,24 @@ module.exports = async function handler(req, res) {
         .eq("user_id", userId)
         .maybeSingle();
 
-    if (monitorError) {
-      throw Error("Monitor query failed");
-    }
+    if (monitorError) throw monitorError;
 
     if (
       !monitor ||
-      !validCursor(monitor.last_history_id) ||
-      monitor.monitor_status !== "active"
+      monitor.monitor_status !== "active" ||
+      !validId(monitor.last_history_id)
     ) {
-      return response(
-        res,
-        409,
-        "El monitor Gmail todavia no esta activo.",
-        {
-          cursor_initialized: false,
-          processing_started: false,
-          expenses_created: 0
-        }
-      );
+      return reply(res, 409, {
+        ok: false,
+        message: "Monitor no inicializado",
+        processing_started: false
+      });
     }
-
-    // =====================================
-    // COMPROBAR EVENTOS
-    // =====================================
-
-    const { data: events, error: eventError } =
-      await admin
-        .from("gmail_events")
-        .select("id,gmail_history_id")
-        .eq("user_id", userId)
-        .eq("status", "pending")
-        .order("created_at", {
-          ascending: true
-        })
-        .limit(20);
-
-    if (eventError) {
-      throw Error("Event query failed");
-    }
-
-    if (!events?.length) {
-      return response(
-        res,
-        200,
-        "No hay eventos pendientes.",
-        {
-          pending_events: 0,
-          expenses_created: 0,
-          cursor_updated: false
-        }
-      );
-    }
-
-    // =====================================
-    // COMPROBAR CONEXION GMAIL
-    // =====================================
 
     const { data: connection, error: connectionError } =
       await admin
         .from("gmail_connections")
-        .select(
-          "refresh_token_encrypted,status"
-        )
+        .select("refresh_token_encrypted,status")
         .eq("user_id", userId)
         .maybeSingle();
 
@@ -383,134 +508,117 @@ module.exports = async function handler(req, res) {
       connection.status !== "connected" ||
       !connection.refresh_token_encrypted
     ) {
-      return response(
-        res, 409, "Gmail no conectado."
-      );
+      return reply(res, 409, {
+        ok: false,
+        message: "Gmail no conectado"
+      });
     }
 
-    // =====================================
-    // INSPECCIONAR GMAIL
-    // =====================================
-
-    const inspection = await inspectNewMessages(
-      connection.refresh_token_encrypted,
-      monitor.last_history_id
+    // No reclamar el evento hasta comprobar
+    // que podemos obtener un token de Gmail.
+    const token = await accessToken(
+      connection.refresh_token_encrypted
     );
 
-    if (!inspection.ok) {
-      throw Error("Gmail inspection failed");
+    const { data: claims, error: claimError } =
+      await admin.rpc("claim_gmail_event", {
+        p_user_id: userId
+      });
+
+    if (claimError) throw claimError;
+
+    if (!claims?.length) {
+      return reply(res, 200, {
+        ok: true,
+        message: "No hay eventos disponibles",
+        processed: 0
+      });
     }
 
-    let created = 0;
+    claimed = true;
+
+    const event = claims[0];
+
+    if (!validId(event.event_history_id)) {
+      throw Error("Invalid event history");
+    }
+
+    if (
+      BigInt(event.event_history_id) <
+      BigInt(monitor.last_history_id)
+    ) {
+      throw Error("Event precedes current cursor");
+    }
+
+    const ids = await readHistory(
+      monitor.last_history_id,
+      event.event_history_id,
+      token
+    );
+
+    let saved = 0;
     let existing = 0;
-    let rejected = 0;
+    let ignored = 0;
 
-    // =====================================
-    // GUARDAR CANDIDATOS
-    // =====================================
+    for (const id of ids) {
+      const message = await gmailGet(
+        "/messages/" + encodeURIComponent(id),
+        token,
+        { format: "full" }
+      );
 
-    for (const candidate of inspection.candidates) {
-      let parsed;
-
-      try {
-        parsed = parseBCPCandidate(candidate);
-      } catch (error) {
-        // No aceptar un correo con datos
-        // incompletos o inconsistentes.
-        rejected++;
+      if (!isBCP(message)) {
+        ignored++;
         continue;
       }
 
-      // No guardar mensajes anteriores al
-      // inicio configurado del monitor.
-      if (
-        !candidate.received_at ||
-        !Number.isFinite(
-          Date.parse(candidate.received_at)
-        )
-      ) {
-        rejected++;
-        continue;
-      }
+      // El remitente visible NO prueba
+      // autenticidad. Bloquear el guardado
+      // hasta implementar esa verificacion.
+      throw Error(
+        "BCP authentication verification pending"
+      );
 
-      if (
-        new Date(candidate.received_at) <
-        new Date(monitor.started_at)
-      ) {
-        continue;
-      }
-
-      const { data: saved, error: saveError } =
-        await admin.rpc("save_bcp_candidate", {
-          p_user_id: userId,
-          p_gmail_message_id:
-            parsed.gmail_message_id,
-          p_merchant: parsed.merchant,
-          p_amount: parsed.amount,
-          p_currency: parsed.currency,
-          p_transaction_date:
-            parsed.transaction_date
-        });
-
-      if (saveError) {
-        throw Error("Candidate persistence failed");
-      }
-
-      if (!saved?.length) {
-        throw Error("Candidate not confirmed");
-      }
-
-      if (saved[0].was_created) {
-        created++;
-      } else {
-        existing++;
-      }
+      // El guardado mediante save_bcp_candidate
+      // se habilitara exclusivamente despues
+      // de validar la autenticidad del mensaje.
     }
 
-    // =====================================
-    // NO AVANZAR CURSOR TODAVIA
-    // =====================================
-    //
-    // El cursor solo podra avanzar cuando
-    // implementemos:
-    //
-    // 1. Control de concurrencia.
-    // 2. Finalizacion atomica de eventos.
-    // 3. Gestion de mensajes no verificables.
-    // 4. Recuperacion de errores.
-    //
-    // Esta version no marca eventos
-    // como completados.
+    // Finalizar solo cuando todas las páginas
+    // y mensajes fueron atendidos sin error.
+    const { data: finished, error: finishError } =
+      await admin.rpc("finish_gmail_event", {
+        p_user_id: userId,
+        p_event_id: event.event_id,
+        p_claim_token: event.reservation_token,
+        p_new_history_id: event.event_history_id
+      });
 
-    return response(
-      res,
-      200,
-      "Procesamiento preliminar completado.",
-      {
-        mode: "preliminary",
-        scanned_messages:
-          inspection.scanned_messages,
-        candidates_found:
-          inspection.candidates.length,
-        candidates_created: created,
-        candidates_existing: existing,
-        candidates_rejected: rejected,
-        cursor_updated: false,
-        events_completed: 0,
-        expenses_confirmed: 0,
-        notifications_sent: 0
-      }
-    );
+    if (finishError || finished !== true) {
+      throw Error("Atomic completion failed");
+    }
+
+    return reply(res, 200, {
+      ok: true,
+      event_completed: true,
+      scanned_messages: ids.length,
+      candidates_created: saved,
+      candidates_existing: existing,
+      ignored_messages: ignored,
+      cursor_updated: true,
+      expenses_confirmed: 0,
+      notifications_sent: 0
+    });
 
   } catch (error) {
-    console.error(
-      "PAPI RIKI Gmail processing failed"
-    );
+    console.error("Gmail processor failed");
 
-    return response(
-      res,
-      503,
-      "No se pudo completar el procesamiento."
-    );
+    return reply(res, 503, {
+      ok: false,
+      message: claimed
+        ? "Evento pendiente de recuperacion"
+        : "No se pudo iniciar el procesamiento",
+      cursor_update_confirmed: false
+    });
   }
 };
