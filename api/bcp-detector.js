@@ -2,14 +2,20 @@
 "use strict";
 
 // ==========================================
-// PAPI RIKI - PASO 9.11.2
-// DETECTOR BCP + VALIDACION
+// PAPI RIKI - PASO 9.11.3
+// DETECTOR BCP CORREGIDO
 // ==========================================
-
-// Solo pruebas con datos ficticios.
-// No consulta Gmail.
-// No escribe en Supabase.
-// No envía notificaciones.
+//
+// MODO PRUEBA
+//
+// - No accede a Gmail.
+// - No modifica Supabase.
+// - No registra gastos.
+// - No envía notificaciones.
+// - No utiliza claves secretas.
+//
+// Valida siete escenarios con datos ficticios.
+// ==========================================
 
 const SENDER =
   "notificaciones@notificacionesbcp.com.pe";
@@ -18,19 +24,23 @@ const SUBJECT =
   "realizaste un consumo con tu tarjeta de debito bcp";
 
 const MONTHS = {
-  enero:1,
-  febrero:2,
-  marzo:3,
-  abril:4,
-  mayo:5,
-  junio:6,
-  julio:7,
-  agosto:8,
-  septiembre:9,
-  octubre:10,
-  noviembre:11,
-  diciembre:12
+  enero: 1,
+  febrero: 2,
+  marzo: 3,
+  abril: 4,
+  mayo: 5,
+  junio: 6,
+  julio: 7,
+  agosto: 8,
+  septiembre: 9,
+  octubre: 10,
+  noviembre: 11,
+  diciembre: 12
 };
+
+// ==========================================
+// NORMALIZAR TEXTO
+// ==========================================
 
 function normalize(value) {
   return String(value ?? "")
@@ -40,138 +50,222 @@ function normalize(value) {
     .trim();
 }
 
+// ==========================================
+// VALIDAR IMPORTE
+// ==========================================
+
 function parseAmount(value) {
-  let raw=String(value).trim();
+  let raw = String(value).trim();
 
   if (!/^\d[\d.,]*$/.test(raw)) {
-    throw Error("Importe invalido");
+    throw new Error("Importe invalido");
   }
 
   if (raw.includes(",") && raw.includes(".")) {
     if (raw.lastIndexOf(",") > raw.lastIndexOf(".")) {
-      raw=raw.replace(/\./g,"").replace(",",".");
+      raw = raw.replace(/\./g, "").replace(",", ".");
     } else {
-      raw=raw.replace(/,/g,"");
+      raw = raw.replace(/,/g, "");
     }
   } else if (raw.includes(",")) {
-    const parts=raw.split(",");
-    raw=parts.length===2 && parts[1].length<=2
-      ?raw.replace(",",".")
-      :raw.replace(/,/g,"");
+    const parts = raw.split(",");
+
+    raw =
+      parts.length === 2 && parts[1].length <= 2
+        ? raw.replace(",", ".")
+        : raw.replace(/,/g, "");
   }
 
-  const amount=Number(raw);
+  const amount = Number(raw);
 
-  if (!Number.isFinite(amount) || amount<=0) {
-    throw Error("Importe invalido");
+  if (
+    !Number.isFinite(amount) ||
+    amount <= 0 ||
+    !Number.isSafeInteger(Math.round(amount * 100))
+  ) {
+    throw new Error("Importe invalido");
   }
 
-  return Math.round(amount*100)/100;
+  return Math.round(amount * 100) / 100;
 }
 
+// ==========================================
+// VALIDAR FECHA
+// ==========================================
+
 function parseDate(body) {
-  const match=body.match(
+  const match = body.match(
     /Fecha y hora\s+(\d{1,2}) de ([a-z]+) de (\d{4})\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i
   );
 
-  if (!match)throw Error("Fecha no encontrada");
-
-  const day=Number(match[1]);
-  const month=MONTHS[match[2].toLowerCase()];
-  const year=Number(match[3]);
-  const hour12=Number(match[4]);
-  const minute=Number(match[5]);
-
-  if (!month || hour12<1 || hour12>12 ||
-      minute>59 || year<2000) {
-    throw Error("Fecha invalida");
+  if (!match) {
+    throw new Error("Fecha no encontrada");
   }
 
-  const valid=new Date(Date.UTC(year,month-1,day));
+  const day = Number(match[1]);
+  const month = MONTHS[match[2].toLowerCase()];
+  const year = Number(match[3]);
+  const hour12 = Number(match[4]);
+  const minute = Number(match[5]);
 
   if (
-    valid.getUTCFullYear()!==year ||
-    valid.getUTCMonth()!==month-1 ||
-    valid.getUTCDate()!==day
+    !month ||
+    year < 2000 ||
+    year > 2100 ||
+    hour12 < 1 ||
+    hour12 > 12 ||
+    minute < 0 ||
+    minute > 59
   ) {
-    throw Error("Fecha invalida");
+    throw new Error("Fecha invalida");
   }
 
-  let hour=hour12%12;
+  const valid = new Date(
+    Date.UTC(year, month - 1, day)
+  );
 
-  if (match[6].toUpperCase()==="PM") {
-    hour+=12;
+  if (
+    valid.getUTCFullYear() !== year ||
+    valid.getUTCMonth() !== month - 1 ||
+    valid.getUTCDate() !== day
+  ) {
+    throw new Error("Fecha invalida");
   }
 
-  const local=
-    `${year}-${String(month).padStart(2,"0")}-`+
-    `${String(day).padStart(2,"0")}T`+
-    `${String(hour).padStart(2,"0")}:`+
-    `${String(minute).padStart(2,"0")}:00-05:00`;
+  let hour = hour12 % 12;
 
-  return new Date(local).toISOString();
+  if (match[6].toUpperCase() === "PM") {
+    hour += 12;
+  }
+
+  // Hora de Peru: UTC-05:00.
+  const local =
+    `${year}-` +
+    `${String(month).padStart(2, "0")}-` +
+    `${String(day).padStart(2, "0")}T` +
+    `${String(hour).padStart(2, "0")}:` +
+    `${String(minute).padStart(2, "0")}:00-05:00`;
+
+  const parsed = new Date(local);
+
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error("Fecha invalida");
+  }
+
+  return parsed.toISOString();
 }
 
+// ==========================================
+// VALIDAR COMERCIO
+// ==========================================
+
+function parseMerchant(body) {
+  // Buscar el campo Empresa y detenerse
+  // antes del siguiente campo conocido.
+  //
+  // El limite evita interpretar
+  // "Numero de operacion" como comercio.
+
+  const match = body.match(
+    /(?:^|\s)Empresa\s+(.+?)(?=\s+Numero de operacion|\s+No reconoces|\s+Seguimos mejorando|$)/i
+  );
+
+  if (!match) {
+    throw new Error("Comercio no encontrado");
+  }
+
+  const merchant = match[1].trim();
+
+  if (
+    !merchant ||
+    /^Numero de operacion\b/i.test(merchant) ||
+    /^No reconoces\b/i.test(merchant) ||
+    /^Seguimos mejorando\b/i.test(merchant)
+  ) {
+    throw new Error("Comercio no encontrado");
+  }
+
+  if (merchant.length > 150) {
+    throw new Error("Comercio demasiado largo");
+  }
+
+  return merchant;
+}
+
+// ==========================================
+// DETECTAR CORREO BCP
+// ==========================================
+
 function parseBCPEmail(email) {
-  const from=normalize(email.from).toLowerCase();
-  const subject=normalize(email.subject).toLowerCase();
-  const body=normalize(email.body);
+  const from = normalize(email.from).toLowerCase();
 
-  const address=from.includes("<")
-    ?from.match(/<([^<>]+)>/)?.[1]
-    :from;
+  const subject = normalize(
+    email.subject
+  ).toLowerCase();
 
-  if (address!==SENDER) {
-    throw Error("Remitente no reconocido");
+  const body = normalize(email.body);
+
+  const address = from.includes("<")
+    ? from.match(/<([^<>]+)>/)?.[1]
+    : from;
+
+  if (address !== SENDER) {
+    throw new Error("Remitente no reconocido");
   }
 
   if (!subject.includes(SUBJECT)) {
-    throw Error("Asunto no reconocido");
+    throw new Error("Asunto no reconocido");
   }
 
   if (!/Consumo Tarjeta de Debito/i.test(body)) {
-    throw Error("Operacion no reconocida");
+    throw new Error("Operacion no reconocida");
   }
 
-  const amountMatch=body.match(
+  const amountMatch = body.match(
     /Total del consumo\s*(S\/|US\$|\$)\s*(\d[\d.,]*)/i
   );
 
   if (!amountMatch) {
-    throw Error("Importe no encontrado");
+    throw new Error("Importe no encontrado");
   }
 
-  const amount=parseAmount(amountMatch[2]);
-
-  const merchantMatch=body.match(
-    /Empresa\s+(.+?)(?=\s+Numero de operacion|\s+No reconoces|\s+Seguimos mejorando|$)/i
+  const amount = parseAmount(
+    amountMatch[2]
   );
 
-  if (!merchantMatch || !merchantMatch[1].trim()) {
-    throw Error("Comercio no encontrado");
-  }
+  const currency =
+    amountMatch[1] === "S/" ? "PEN" : "USD";
+
+  const merchant = parseMerchant(body);
+
+  const transactionDate = parseDate(body);
 
   return {
-    bank:"BCP",
-    operation_type:"debit_card_purchase",
-    merchant:merchantMatch[1].trim(),
+    bank: "BCP",
+    operation_type: "debit_card_purchase",
+    merchant,
     amount,
-    currency:amountMatch[1]==="S/"?"PEN":"USD",
-    transaction_date:parseDate(body),
-    status:"pending",
-    gmail_message_id:email.messageId||null
+    currency,
+    transaction_date: transactionDate,
+    status: "pending",
+    gmail_message_id: email.messageId || null
   };
 }
 
 // ==========================================
-// CORREO FICTICIO DE PRUEBA
+// CORREO FICTICIO
 // ==========================================
 
-const validEmail={
-  messageId:"bcp-test-001",
-  from:"BCP Notificaciones <notificaciones@notificacionesbcp.com.pe>",
-  subject:"Realizaste un consumo con tu Tarjeta de Débito BCP",
-  body:`
+const VALID_EMAIL = {
+  messageId: "bcp-test-001",
+
+  from:
+    "BCP Notificaciones <notificaciones@notificacionesbcp.com.pe>",
+
+  subject:
+    "Realizaste un consumo con tu Tarjeta de Débito BCP",
+
+  body: `
     Realizaste un consumo de S/ 1.00
     con tu Tarjeta de Débito BCP
     en COMERCIO DE PRUEBA.
@@ -192,92 +286,158 @@ const validEmail={
   `
 };
 
-function runTest(name,email,shouldPass) {
+// ==========================================
+// EJECUTAR PRUEBA INDIVIDUAL
+// ==========================================
+
+function runTest(name, email, shouldPass) {
   try {
-    const result=parseBCPEmail(email);
+    const result = parseBCPEmail(email);
+
+    if (!shouldPass) {
+      return {
+        test: name,
+        passed: false,
+        error: "Se acepto un correo invalido"
+      };
+    }
 
     return {
-      test:name,
-      passed:shouldPass,
-      result:shouldPass?result:undefined,
-      error:shouldPass?undefined:"Se acepto un correo invalido"
+      test: name,
+      passed: true,
+      result
     };
 
   } catch (error) {
+    if (shouldPass) {
+      return {
+        test: name,
+        passed: false,
+        error: error.message
+      };
+    }
+
     return {
-      test:name,
-      passed:!shouldPass,
-      error:shouldPass?error.message:undefined
+      test: name,
+      passed: true
     };
   }
 }
 
-module.exports=async function handler(req,res) {
-  res.setHeader("Cache-Control","no-store");
-  res.setHeader("Allow","GET");
+// ==========================================
+// SIETE PRUEBAS
+// ==========================================
 
-  if(req.method!=="GET") {
+function runAllTests() {
+  const tests = [
+    runTest(
+      "Consumo valido",
+      VALID_EMAIL,
+      true
+    ),
+
+    runTest(
+      "Remitente diferente",
+      {
+        ...VALID_EMAIL,
+        from: "desconocido@example.com"
+      },
+      false
+    ),
+
+    runTest(
+      "Asunto incorrecto",
+      {
+        ...VALID_EMAIL,
+        subject: "Promocion bancaria"
+      },
+      false
+    ),
+
+    runTest(
+      "Importe inexistente",
+      {
+        ...VALID_EMAIL,
+        body: VALID_EMAIL.body.replace(
+          "Total del consumo S/ 1.00",
+          "Total del consumo"
+        )
+      },
+      false
+    ),
+
+    runTest(
+      "Importe cero",
+      {
+        ...VALID_EMAIL,
+        body: VALID_EMAIL.body.replace(
+          "Total del consumo S/ 1.00",
+          "Total del consumo S/ 0.00"
+        )
+      },
+      false
+    ),
+
+    runTest(
+      "Fecha invalida",
+      {
+        ...VALID_EMAIL,
+        body: VALID_EMAIL.body.replace(
+          "11 de noviembre de 2026",
+          "31 de febrero de 2026"
+        )
+      },
+      false
+    ),
+
+    runTest(
+      "Comercio inexistente",
+      {
+        ...VALID_EMAIL,
+        body: VALID_EMAIL.body.replace(
+          "Empresa\n    COMERCIO DE PRUEBA",
+          "Empresa\n    "
+        )
+      },
+      false
+    )
+  ];
+
+  return tests;
+}
+
+// ==========================================
+// ENDPOINT DE PRUEBAS
+// ==========================================
+
+module.exports = async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("Allow", "GET");
+
+  if (req.method !== "GET") {
     return res.status(405).json({
-      ok:false,
-      message:"Metodo no permitido"
+      ok: false,
+      message: "Metodo no permitido"
     });
   }
 
-  const tests=[
-    runTest("Consumo valido",validEmail,true),
+  const tests = runAllTests();
 
-    runTest("Remitente diferente",{
-      ...validEmail,
-      from:"desconocido@example.com"
-    },false),
+  const passed = tests.filter(
+    test => test.passed
+  ).length;
 
-    runTest("Asunto incorrecto",{
-      ...validEmail,
-      subject:"Promocion bancaria"
-    },false),
+  const failed = tests.length - passed;
 
-    runTest("Importe inexistente",{
-      ...validEmail,
-      body:validEmail.body.replace(
-        "Total del consumo S/ 1.00",
-        "Total del consumo"
-      )
-    },false),
-
-    runTest("Importe cero",{
-      ...validEmail,
-      body:validEmail.body.replace(
-        "Total del consumo S/ 1.00",
-        "Total del consumo S/ 0.00"
-      )
-    },false),
-
-    runTest("Fecha invalida",{
-      ...validEmail,
-      body:validEmail.body.replace(
-        "11 de noviembre de 2026",
-        "31 de febrero de 2026"
-      )
-    },false),
-
-    runTest("Comercio inexistente",{
-      ...validEmail,
-      body:validEmail.body.replace(
-        "Empresa\n    COMERCIO DE PRUEBA",
-        "Empresa\n    "
-      )
-    },false)
-  ];
-
-  const passed=tests.filter(t=>t.passed).length;
-
-  return res.status(passed===tests.length?200:422).json({
-    ok:passed===tests.length,
-    total:tests.length,
+  return res.status(failed === 0 ? 200 : 422).json({
+    ok: failed === 0,
+    detector: "BCP Debit Card",
+    mode: "test",
+    total: tests.length,
     passed,
-    failed:tests.length-passed,
+    failed,
     tests,
-    saved_to_database:false,
-    notification_sent:false
+    saved_to_database: false,
+    notification_sent: false
   });
 };
