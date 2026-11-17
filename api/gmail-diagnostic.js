@@ -1,13 +1,13 @@
 
 "use strict";
 
-// PAPI RIKI - Diagnostico OAuth
-// No devuelve claves ni tokens.
-// Acceso restringido a usuario autenticado.
+// PAPI RIKI - Diagnóstico OAuth
+// No devuelve valores secretos.
+// Acceso exclusivo al usuario autenticado.
 
 const { createClient } = require("@supabase/supabase-js");
 
-const SUPABASE_URL =
+const URL_SUPABASE =
   "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
 const PUBLIC_KEY =
@@ -20,35 +20,27 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({
       ok: false,
-      message: "Metodo no permitido."
+      message: "Método no permitido"
     });
   }
 
-  const authorization =
-    req.headers.authorization || "";
-
-  const match = authorization.match(
-    /^Bearer\s+(\S+)$/i
-  );
+  const authorization = req.headers.authorization || "";
+  const match = authorization.match(/^Bearer\s+(\S+)$/i);
 
   if (!match) {
     return res.status(401).json({
       ok: false,
-      message: "Autenticacion requerida."
+      message: "Autenticación requerida"
     });
   }
 
   try {
-    const auth = createClient(
-      SUPABASE_URL,
-      PUBLIC_KEY,
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false
-        }
+    const auth = createClient(URL_SUPABASE, PUBLIC_KEY, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false
       }
-    );
+    });
 
     const { data, error } =
       await auth.auth.getUser(match[1]);
@@ -56,39 +48,46 @@ module.exports = async function handler(req, res) {
     if (error || !data?.user?.id) {
       return res.status(401).json({
         ok: false,
-        message: "Sesion invalida."
+        message: "Sesión inválida"
       });
     }
 
     const env = process.env;
 
-    // Resultado general sin identificar
-    // ni exponer variables individuales.
-    const configured =
-      Boolean(env.GOOGLE_CLIENT_ID) &&
-      Boolean(env.GOOGLE_CLIENT_SECRET) &&
-      Boolean(env.SUPABASE_SECRET_KEY) &&
-      /^[a-f0-9]{64}$/i.test(
-        env.GMAIL_STATE_SECRET || ""
-      ) &&
-      /^[a-f0-9]{64}$/i.test(
-        env.GMAIL_ENCRYPTION_KEY || ""
-      );
+    const checks = {
+      GOOGLE_CLIENT_ID:
+        Boolean(env.GOOGLE_CLIENT_ID),
+
+      GOOGLE_CLIENT_SECRET:
+        Boolean(env.GOOGLE_CLIENT_SECRET),
+
+      SUPABASE_SECRET_KEY:
+        Boolean(env.SUPABASE_SECRET_KEY),
+
+      GMAIL_STATE_SECRET:
+        /^[a-f0-9]{64}$/i.test(
+          env.GMAIL_STATE_SECRET || ""
+        ),
+
+      GMAIL_ENCRYPTION_KEY:
+        /^[a-f0-9]{64}$/i.test(
+          env.GMAIL_ENCRYPTION_KEY || ""
+        )
+    };
 
     return res.status(200).json({
       ok: true,
-      oauthConfigurationComplete: configured,
-      message: configured
-        ? "Configuracion OAuth completa."
-        : "Alguna variable falta o tiene formato incorrecto."
+      checks,
+      allConfigured:
+        Object.values(checks).every(Boolean)
     });
 
   } catch (error) {
-    console.error("Diagnostico OAuth fallido");
+    console.error("OAuth diagnostic failed");
 
     return res.status(500).json({
       ok: false,
-      message: "No se pudo completar el diagnostico."
+      message: "Error interno de diagnóstico"
     });
   }
 };
