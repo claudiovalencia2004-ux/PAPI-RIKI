@@ -347,6 +347,19 @@ label{color:var(--muted)}
 .expense-chip:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
 @media(max-width:370px){.expense-chips{gap:5px}.expense-chip small{font-size:10px}}
 
+
+/* PAPI RIKI 2.1 - Accesos ilustrativos y movimientos */
+.quick-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:17px 0 20px}
+.quick-link{border:1px solid var(--line);background:linear-gradient(150deg,var(--panel),var(--panel2));color:var(--text);border-radius:20px;padding:18px 15px;min-height:134px;text-align:left;display:flex;flex-direction:column;gap:8px;cursor:pointer}
+.quick-link:focus-visible{outline:3px solid var(--mint)}
+.quick-link .ql-icon{font-size:29px}.quick-link strong{font-size:16px}.quick-link small{color:var(--muted);font-size:12px}.quick-link .ql-arrow{margin-left:auto;color:var(--mint)}
+.quick-link-primary{background:linear-gradient(135deg,var(--accent-soft),var(--panel));border-color:var(--mint)}
+.money-expense{color:#ff727d!important}.money-income{color:#43dc9e!important}.money-transfer{color:var(--muted)!important}
+.transaction-amount{font-size:19px;font-weight:800;white-space:nowrap}
+.recurring-panel{margin-top:16px}.recurring-panel .formgrid{margin-top:12px}.recurring-panel .note{margin-top:9px}
+#undoExpense{margin:10px 0;display:none}
+@media(max-width:380px){.quick-links{gap:9px}.quick-link{padding:14px 11px;min-height:126px}}
+
 </style>
 </head>
 
@@ -397,6 +410,15 @@ label{color:var(--muted)}
   <p id="netWorthNote" class="note"></p>
  </div>
  <div id="summary" class="grid"></div>
+ <h2 style="margin-top:22px">Explora tus finanzas</h2>
+ <div class="quick-links" aria-label="Accesos a módulos">
+  <button class="quick-link quick-link-primary" data-tab="accounts"><span class="ql-icon">💳</span><strong>Mis cuentas</strong><small>Saldos, débito y crédito</small><span class="ql-arrow">↗</span></button>
+  <button class="quick-link" data-tab="movements"><span class="ql-icon">🧾</span><strong>Movimientos</strong><small>Gastos e ingresos</small><span class="ql-arrow">↗</span></button>
+  <button class="quick-link" data-tab="investments"><span class="ql-icon">📈</span><strong>Inversiones</strong><small>Flip, fondos y acciones</small><span class="ql-arrow">↗</span></button>
+  <button class="quick-link" data-tab="budgets"><span class="ql-icon">📊</span><strong>Presupuestos</strong><small>Controla tu mes</small><span class="ql-arrow">↗</span></button>
+  <button class="quick-link" data-tab="goals"><span class="ql-icon">🎯</span><strong>Mis metas</strong><small>Ahorro y objetivos</small><span class="ql-arrow">↗</span></button>
+  <button class="quick-link" data-tab="reports"><span class="ql-icon">📋</span><strong>Reportes</strong><small>Entiende tus gastos</small><span class="ql-arrow">↗</span></button>
+ </div>
  <div class="card" style="margin-top:15px">
   <h3>🎯 Meta patrimonial</h3>
   <div id="goalSummary"></div>
@@ -424,6 +446,7 @@ label{color:var(--muted)}
   </button>
  </div>
  <p class="note">Ingresos, gastos y transferencias manuales.</p>
+ <button id="undoExpense" class="btn alt" type="button">↩ Deshacer último gasto</button>
  <div id="transactionList"></div>
 </section>
 
@@ -490,6 +513,23 @@ label{color:var(--muted)}
 
 <section id="settings" class="tab" hidden>
  <h2>⚙️ Configuración</h2>
+ <div class="card recurring-panel">
+ <h2>💰 Mensualidad recurrente</h2>
+ <p>Configura tu ingreso mensual. En modo automático se registra una sola vez por mes cuando abres PAPI RIKI después de la fecha indicada. No verifica depósitos bancarios.</p>
+ <form id="recurringForm">
+  <div class="formgrid">
+   <label>Importe mensual (S/)<input class="field" id="recAmount" type="number" min="0.01" step="0.01" required></label>
+   <label>Día del mes<input class="field" id="recDay" type="number" min="1" max="28" value="1" required></label>
+   <label>Cuenta que recibe el ingreso<select class="field" id="recAccount" required></select></label>
+   <label>Registro<select class="field" id="recMode"><option value="confirm">Confirmar antes de registrar</option><option value="auto">Automático al abrir la app</option></select></label>
+  </div>
+  <label style="display:flex;align-items:center;gap:10px;margin:12px 0"><input id="recEnabled" type="checkbox" checked style="width:20px;height:20px"> Activar mensualidad</label>
+  <button class="btn" type="submit">Guardar mensualidad</button>
+  <button class="btn alt" type="button" id="recPost">Registrar mensualidad de este mes</button>
+  <p id="recStatus" class="message" role="status"></p>
+ </form>
+ <p class="note">Si no abres la app, el registro automático espera hasta tu siguiente visita. Los registros no son confirmaciones bancarias.</p>
+</div>
  <div class="card" id="appearanceCard">
   <h2>🎨 Personaliza PAPI RIKI</h2>
   <p>Elige una paleta y una temática. Se guarda en este dispositivo sin modificar tus datos financieros.</p>
@@ -713,6 +753,8 @@ const defaults={
  fx_date:null
 };
 
+let recurringConfig=null;
+let recurringChecked=false;
 let sb=null;
 let user=null;
 let active="dashboard";
@@ -1331,6 +1373,22 @@ async function loadAll(){
   ...(results[5].data||{})
  };
 
+ // La tabla de mensualidades se habilita con el SQL adjunto.
+ const {data:rec,error:recError}=await sb.from("finance_recurring_income")
+  .select("*").eq("user_id",uid).maybeSingle();
+ if(!recError){
+  recurringConfig=rec;
+  if(rec?.enabled&&rec.mode==="auto"&&!recurringChecked){
+   recurringChecked=true;
+   const {error:autoError}=await sb.rpc("post_monthly_income",{p_force:false});
+   if(!autoError){
+    const {data:tx}=await sb.from("finance_transactions").select("*").eq("user_id",uid);
+    if(tx)data.transactions=tx;
+   }else console.warn("Mensualidad no procesada; revisa Ajustes.");
+  }
+ }else{
+  recurringConfig=null;
+ }
  render();
 }
 
@@ -1392,7 +1450,7 @@ function renderDashboard(){
  },0);
  const cards=[
   ["Ingreso mensual previsto",money(s.monthly_income),"mint"],
-  ["Gastos del mes",money(spent),""],
+  ["Gastos del mes","−"+money(spent),"money-expense"],
   ["Presupuesto mensual",money(s.expense_plan),""],
   ["Objetivo de inversión",money(s.investment_target),"purple"]
  ];
@@ -1440,6 +1498,9 @@ function renderAccounts(){
 }
 
 function renderTransactions(){
+ const recent=sessionStorage.getItem("papi_recent_expense_id");
+ const age=Date.now()-Number(sessionStorage.getItem("papi_recent_expense_at")||0);
+ $("undoExpense").style.display=recent&&age<10*60*1000?"inline-block":"none";
  const rows=[...data.transactions].sort(
   (a,b)=>b.occurred_on.localeCompare(a.occurred_on)
  );
@@ -1449,7 +1510,7 @@ function renderTransactions(){
    `<div class="item">
     <div class="row">
      <strong>${esc(t.description||t.category)}</strong>
-     <strong>${money(t.amount,t.currency)}</strong>
+     <strong class="transaction-amount ${t.kind==="expense"?"money-expense":t.kind==="income"?"money-income":"money-transfer"}">${t.kind==="expense"?"−":t.kind==="income"?"+":"↔ "}${money(t.amount,t.currency)}</strong>
     </div>
     <p>${t.occurred_on} · ${esc(t.kind)} ·
      ${esc(account(t.account_id)?.name||"Cuenta")}</p>
@@ -1539,7 +1600,7 @@ function renderReports(){
    </div>
    <div class="card">
     <h3>Gastos PEN registrados</h3>
-    <div class="value">${money(sum("expense"))}</div>
+    <div class="value money-expense">−${money(sum("expense"))}</div>
    </div>
    </div>
    <p>Movimientos registrados:
@@ -1551,6 +1612,21 @@ function renderReports(){
 
 function renderSettings(){
  const s=data.settings;
+ const rec=recurringConfig;
+ const select=$("recAccount");
+ if(select){
+  select.replaceChildren();
+  for(const a of data.accounts.filter(a=>a.currency==="PEN"&&a.account_type!=="credit")){
+   select.add(new Option(a.name+" (PEN)",a.id));
+  }
+  if(rec?.account_id)select.value=rec.account_id;
+  $("recAmount").value=rec?.amount??s.monthly_income??"";
+  $("recDay").value=rec?.day_of_month??1;
+  $("recMode").value=rec?.mode??"confirm";
+  $("recEnabled").checked=rec?.enabled??false;
+  $("recPost").disabled=!rec?.enabled;
+ }
+
 
  for(const [id,key] of [
   ["sIncome","monthly_income"],
@@ -1979,7 +2055,9 @@ $("editorForm").onsubmit=async e=>{
    payload.kind=$("f_kind").value;
    payload.occurred_on=$("f_occurred_on").value||today();
    payload.category=payload.kind==="transfer"?null:($("f_category").value||"Otros");
-   payload.description=$("f_description").value.trim()||null;
+   payload.description=$("f_description").value.trim()||
+    (payload.kind==="expense"?($('f_category').value||"Otros"):
+     payload.kind==="income"?"Ingreso":"Transferencia");
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
 
@@ -2045,6 +2123,10 @@ $("editorForm").onsubmit=async e=>{
    throw Error("No se confirmo el guardado.");
   }
   if(editType==="transaction"&&payload.kind==="expense"){
+   if(!editId&&saved[0]?.id){
+    sessionStorage.setItem("papi_recent_expense_id",saved[0].id);
+    sessionStorage.setItem("papi_recent_expense_at",String(Date.now()));
+   }
    localStorage.setItem(lastAccountKey,payload.account_id);
    localStorage.setItem(lastCategoryKey,payload.category||"Otros");
   }
@@ -2101,6 +2183,52 @@ $("settingsForm").onsubmit=async e=>{
 // =====================================
 // EXPORTAR REPORTES
 // =====================================
+
+$("recurringForm").onsubmit=async e=>{
+ e.preventDefault();
+ const msg=$("recStatus");
+ try{
+  if(!user)throw Error("Inicia sesión.");
+  const amount=Number($("recAmount").value);
+  const day=Number($("recDay").value);
+  const accountId=$("recAccount").value;
+  if(!(amount>0)||!Number.isInteger(day)||day<1||day>28||!accountId)throw Error("Completa importe, día y cuenta.");
+  const {error}=await sb.from("finance_recurring_income").upsert({
+   user_id:user.id,account_id:accountId,amount,
+   day_of_month:day,mode:$("recMode").value,
+   enabled:$("recEnabled").checked
+  },{onConflict:"user_id"});
+  if(error)throw error;
+  recurringChecked=false;
+  await loadAll();
+  msg.textContent="Mensualidad guardada. Se registra como ingreso manual, no como depósito verificado.";
+  msg.className="message";
+ }catch(err){msg.textContent=err.message;msg.className="message error";}
+};
+$("recPost").onclick=async()=>{
+ const msg=$("recStatus");
+ if(!confirm("¿Registrar la mensualidad de este mes como ingreso?"))return;
+ try{
+  const {data:result,error}=await sb.rpc("post_monthly_income",{p_force:true});
+  if(error)throw error;
+  await loadAll();
+  navigate("settings");
+  msg.textContent=result?"Mensualidad registrada.":"Ya estaba registrada o aún no corresponde.";
+  msg.className="message";
+ }catch(err){msg.textContent=err.message;msg.className="message error";}
+};
+
+$("undoExpense").onclick=async()=>{
+ const id=sessionStorage.getItem("papi_recent_expense_id");
+ const when=Number(sessionStorage.getItem("papi_recent_expense_at")||0);
+ if(!id||Date.now()-when>10*60*1000)return;
+ if(!confirm("¿Deshacer el último gasto?"))return;
+ const {data:deleted,error}=await sb.from("finance_transactions").delete().eq("id",id).eq("user_id",user.id).eq("kind","expense").select("id");
+ if(error||!deleted?.length){alert(error?.message||"No se pudo deshacer.");return;}
+ sessionStorage.removeItem("papi_recent_expense_id");
+ sessionStorage.removeItem("papi_recent_expense_at");
+ await loadAll();
+};
 
 $("exportBtn").onclick=()=>{
  const rows=[
