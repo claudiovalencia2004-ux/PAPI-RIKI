@@ -1,79 +1,50 @@
 
 "use strict";
 
-// PAPI RIKI - PASO 9.19.2
-// Trabajador interno de Gmail.
-//
-// Primera fase:
-// - Autenticacion servidor a servidor.
-// - Consulta eventos pendientes.
-// - Comprueba estado del monitor.
-// - No procesa mensajes todavia.
-// - No modifica cursores.
-// - No confirma gastos.
-// - No envia Web Push.
-// - No activa Gmail Watch.
+// PAPI RIKI - Gmail Worker
+// Acceso exclusivo mediante secreto del servidor.
+// No necesita sesion del usuario.
+// No confirma gastos ni envia notificaciones.
+// No activa Gmail Watch.
 
 const crypto = require("node:crypto");
-
-const { createClient } =
-  require("@supabase/supabase-js");
+const { createClient } = require("@supabase/supabase-js");
 
 const SUPABASE_URL =
   "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
-function respond(res, status, data) {
-  return res.status(status).json(data);
-}
-
 function authorized(req) {
   const secret = process.env.GMAIL_WORKER_SECRET;
 
-  if (
-    !secret ||
-    Buffer.byteLength(secret) < 32
-  ) {
+  if (!secret || Buffer.byteLength(secret) < 32) {
     return false;
   }
 
-  const authorization = String(
+  const match = String(
     req.headers.authorization || ""
-  );
-
-  const match = authorization.match(
-    /^Bearer\s+(\S+)$/i
-  );
+  ).match(/^Bearer\s+(\S+)$/i);
 
   if (!match) return false;
 
-  const supplied = Buffer.from(match[1]);
-  const expected = Buffer.from(secret);
+  const a = Buffer.from(match[1]);
+  const b = Buffer.from(secret);
 
-  if (supplied.length !== expected.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(
-    supplied,
-    expected
-  );
+  return a.length === b.length &&
+    crypto.timingSafeEqual(a, b);
 }
 
-function createAdmin() {
-  const key = process.env.SUPABASE_SECRET_KEY;
-
-  if (!key) {
-    throw Error("Supabase configuration missing");
+function adminClient() {
+  if (!process.env.SUPABASE_SECRET_KEY) {
+    throw Error("Missing Supabase key");
   }
 
   return createClient(
     SUPABASE_URL,
-    key,
+    process.env.SUPABASE_SECRET_KEY,
     {
       auth: {
         persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
+        autoRefreshToken: false
       }
     }
   );
@@ -81,83 +52,73 @@ function createAdmin() {
 
 module.exports = async function handler(req, res) {
   res.setHeader("Cache-Control", "no-store");
-  res.setHeader("Allow", "POST");
 
   if (req.method !== "POST") {
-    return respond(res, 405, {
+    return res.status(405).json({
       ok: false,
       message: "Method not allowed"
     });
   }
 
   if (!authorized(req)) {
-    return respond(res, 401, {
+    return res.status(401).json({
       ok: false,
       message: "Unauthorized"
     });
   }
 
   try {
-    const admin = createAdmin();
-
-    // Consultar monitores activos.
-    // No consultar tokens OAuth aqui.
+    const admin = adminClient();
 
     const { data: monitors, error: monitorError } =
       await admin
         .from("gmail_monitor_state")
-        .select("user_id,monitor_status,last_history_id")
+        .select("user_id,last_history_id")
         .eq("monitor_status", "active")
-        .limit(100);
+        .limit(50);
 
-    if (monitorError) {
-      throw Error("Monitor query failed");
-    }
+    if (monitorError) throw monitorError;
 
-    const users = (monitors || []).map(
-      monitor => monitor.user_id
-    );
+    const results = [];
 
-    if (users.length === 0) {
-      return respond(res, 200, {
-        ok: true,
-        mode: "preflight",
-        active_monitors: 0,
-        pending_events: 0,
-        processing_enabled: false,
-        message: "No active Gmail monitors"
-      });
-    }
-
-    const { count, error: eventsError } =
-      await admin
+    for (const monitor of monitors || []) {
+      const { count, error } = await admin
         .from("gmail_events")
         .select("id", {
           count: "exact",
           head: true
         })
-        .in("user_id", users)
+        .eq("user_id", monitor.user_id)
         .eq("status", "pending");
 
-    if (eventsError) {
-      throw Error("Event query failed");
+      if (error) throw error;
+
+      results.push({
+        pending_events: count || 0,
+        cursor_initialized:
+          Boolean(monitor.last_history_id)
+      });
     }
 
-    return respond(res, 200, {
+    return res.status(200).json({
       ok: true,
-      mode: "preflight",
-      active_monitors: users.length,
-      pending_events: count || 0,
+      worker: "ready",
+      active_monitors: results.length,
+      total_pending_events:
+        results.reduce(
+          (sum, item) => sum + item.pending_events,
+          0
+        ),
       processing_enabled: false,
-      cursor_updated: false,
-      expenses_created: 0,
+      gmail_watch_active: false,
+      expenses_confirmed: 0,
       notifications_sent: 0
     });
 
   } catch {
-    console.error("Gmail worker preflight failed");
+    console.error("Gmail worker failed");
 
-    return respond(res, 503, {
+    return res.status(503).json({
       ok: false,
       message: "Worker unavailable"
     });
