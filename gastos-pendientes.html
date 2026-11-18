@@ -1,0 +1,359 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+ content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>PAPI RIKI | Gastos pendientes</title>
+
+<style>
+:root{
+ color-scheme:dark;
+ font-family:system-ui,-apple-system,sans-serif;
+ background:#0b1220;
+ color:#f3f6fa;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:24px 16px}
+main{max-width:520px;margin:auto}
+h1{color:#38d9a9}
+p{color:#aebed0;line-height:1.5}
+.card{
+ background:#17243a;
+ border:1px solid #34465e;
+ border-radius:18px;
+ padding:20px;
+ margin:14px 0;
+}
+input,select,button{
+ width:100%;
+ font:inherit;
+ font-size:16px;
+ border-radius:10px;
+ padding:13px;
+ margin-top:9px;
+}
+input,select{
+ background:#0b1220;
+ color:white;
+ border:1px solid #52647d;
+}
+button{
+ border:0;
+ background:#38d9a9;
+ color:#09241d;
+ font-weight:700;
+ cursor:pointer;
+}
+button.secondary{
+ background:#30435b;
+ color:white;
+}
+button:disabled{opacity:.55}
+[hidden]{display:none!important}
+.row{display:flex;gap:10px}
+.row button{flex:1}
+label{display:block;margin-top:12px}
+a{color:#38d9a9}
+#status{
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+}
+</style>
+</head>
+
+<body>
+<main>
+<h1>💸 PAPI RIKI</h1>
+<h2>Gastos por confirmar</h2>
+
+<p>
+Los correos detectados no afectan tus finanzas
+hasta que apruebes cada gasto.
+</p>
+
+<div class="card" id="login">
+<form id="loginForm">
+<label>Correo
+<input id="email" type="email"
+ autocomplete="username" required>
+</label>
+<label>Contraseña
+<input id="password" type="password"
+ autocomplete="current-password" required>
+</label>
+<button type="submit">Iniciar sesión</button>
+</form>
+</div>
+
+<div id="panel" hidden>
+<button id="reload" class="secondary">
+Actualizar pendientes
+</button>
+<div id="items"></div>
+<button id="logout" class="secondary">
+Cerrar sesión de esta página
+</button>
+</div>
+
+<p id="status" role="status" aria-live="polite"></p>
+<a href="/">Volver a PAPI RIKI</a>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+<script>
+"use strict";
+
+const URL_SUPABASE =
+ "https://kbwrxebdcpgsplfjpkxv.supabase.co";
+
+const PUBLIC_KEY =
+ "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+
+const $ = id => document.getElementById(id);
+
+const sb = window.supabase.createClient(
+ URL_SUPABASE,
+ PUBLIC_KEY,
+ {
+  auth:{
+   persistSession:false,
+   autoRefreshToken:false,
+   detectSessionInUrl:false
+  }
+ }
+);
+
+let accounts = [];
+let pending = [];
+
+function status(text){
+ $("status").textContent=text;
+}
+
+function money(amount,currency){
+ return new Intl.NumberFormat("es-PE",{
+  style:"currency",
+  currency
+ }).format(Number(amount));
+}
+
+function el(tag,text){
+ const element=document.createElement(tag);
+ if(text!==undefined)element.textContent=text;
+ return element;
+}
+
+async function load(){
+ const {data:{user},error:userError}=
+  await sb.auth.getUser();
+
+ if(userError||!user){
+  throw Error("Inicia sesión nuevamente.");
+ }
+
+ const [accountResult,expenseResult]=
+  await Promise.all([
+   sb.from("accounts")
+    .select("id,name,currency,account_type")
+    .eq("user_id",user.id),
+
+   sb.from("detected_expenses")
+    .select(
+     "id,bank,merchant,amount,currency,"+
+     "transaction_date,status"
+    )
+    .eq("user_id",user.id)
+    .eq("status","pending")
+    .order("created_at",{ascending:false})
+    .limit(100)
+  ]);
+
+ if(accountResult.error)throw accountResult.error;
+ if(expenseResult.error)throw expenseResult.error;
+
+ accounts=accountResult.data||[];
+ pending=expenseResult.data||[];
+
+ render();
+ status(pending.length+" gasto(s) pendiente(s).");
+}
+
+function render(){
+ const container=$("items");
+ container.replaceChildren();
+
+ if(!pending.length){
+  container.append(
+   el("p","No hay gastos pendientes.")
+  );
+  return;
+ }
+
+ for(const expense of pending){
+  const card=el("section");
+  card.className="card";
+
+  card.append(
+   el("h3",expense.merchant),
+   el(
+    "p",
+    expense.bank+" · "+
+    money(expense.amount,expense.currency)+" · "+
+    (expense.transaction_date
+     ?new Date(expense.transaction_date)
+       .toLocaleString("es-PE",{
+        timeZone:"America/Lima"
+       })
+     :"Fecha no disponible")
+   )
+  );
+
+  const accountLabel=el(
+   "label","Cuenta para registrar el gasto"
+  );
+
+  const accountSelect=el("select");
+  accountSelect.append(
+   new Option("Selecciona una cuenta","")
+  );
+
+  const eligible=accounts.filter(
+   a=>a.currency===expense.currency &&
+      a.account_type!=="credit"
+  );
+
+  for(const account of eligible){
+   accountSelect.append(
+    new Option(
+     account.name+" · "+account.currency,
+     account.id
+    )
+   );
+  }
+
+  accountLabel.append(accountSelect);
+  card.append(accountLabel);
+
+  const categoryLabel=el("label","Categoría");
+  const categorySelect=el("select");
+
+  const categories=[
+   "Compras","Comida","Entretenimiento",
+   "Transporte","Universidad","Salud",
+   "Servicios","Otros"
+  ];
+
+  for(const category of categories){
+   categorySelect.append(
+    new Option(category,category)
+   );
+  }
+
+  categoryLabel.append(categorySelect);
+  card.append(categoryLabel);
+
+  const row=el("div");
+  row.className="row";
+
+  const approve=el("button","Confirmar");
+  const reject=el("button","Rechazar");
+  reject.className="secondary";
+
+  row.append(approve,reject);
+  card.append(row);
+
+  async function action(which){
+   if(which==="confirm"&&!accountSelect.value){
+    status("Selecciona una cuenta.");
+    return;
+   }
+
+   const question=which==="confirm"
+    ?"¿Registrar este gasto en tus finanzas?"
+    :"¿Rechazar este gasto?";
+
+   if(!window.confirm(question))return;
+
+   approve.disabled=true;
+   reject.disabled=true;
+
+   try{
+    const {data,error}=await sb.rpc(
+     "resolve_detected_expense",
+     {
+      p_expense_id:expense.id,
+      p_action:which,
+      p_account_id:which==="confirm"
+       ?accountSelect.value:null,
+      p_category:categorySelect.value
+     }
+    );
+
+    if(error)throw error;
+
+    await load();
+
+    status(
+     which==="confirm"
+      ?"Gasto confirmado correctamente."
+      :"Gasto rechazado."
+    );
+
+   }catch(error){
+    status("Error: "+error.message);
+    approve.disabled=false;
+    reject.disabled=false;
+   }
+  }
+
+  approve.onclick=()=>action("confirm");
+  reject.onclick=()=>action("reject");
+
+  container.append(card);
+ }
+}
+
+$("loginForm").onsubmit=async event=>{
+ event.preventDefault();
+
+ try{
+  status("Iniciando sesión...");
+
+  const {error}=await sb.auth.signInWithPassword({
+   email:$("email").value.trim(),
+   password:$("password").value
+  });
+
+  if(error)throw error;
+
+  $("password").value="";
+  $("login").hidden=true;
+  $("panel").hidden=false;
+
+  await load();
+
+ }catch(error){
+  status("Error: "+error.message);
+ }
+};
+
+$("reload").onclick=()=>{
+ load().catch(error=>status(error.message));
+};
+
+$("logout").onclick=async()=>{
+ await sb.auth.signOut();
+
+ $("panel").hidden=true;
+ $("login").hidden=false;
+ status("Sesión cerrada.");
+};
+
+status("Inicia sesión para revisar gastos pendientes.");
+</script>
+</body>
+</html>
