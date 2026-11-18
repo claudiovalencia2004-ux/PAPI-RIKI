@@ -321,6 +321,7 @@ label{color:var(--muted)}
  #dashboard>.card:first-of-type{padding:23px}
 }
 
+[hidden]{display:none!important}
 </style>
 </head>
 
@@ -1359,7 +1360,7 @@ function render(){
 
 function renderDashboard(){
  const s=data.settings;
- const month=new Date().toISOString().slice(0,7);
+ const month=today().slice(0,7);
  const monthly=data.transactions.filter(t=>String(t.occurred_on||"").startsWith(month));
  const spent=monthly.filter(t=>t.kind==="expense").reduce((n,t)=>{
   const x=converted(t.amount,t.currency);return n+(x===null?0:x);
@@ -1581,7 +1582,7 @@ const fields={
   ["account_type","Tipo","select",
    "bank:Bancaria|cash:Efectivo|investment:Inversion|credit:Credito"],
   ["currency","Moneda","select","PEN|USD"],
-  ["opening_balance","Saldo inicial / deuda actual","number"],
+  ["opening_balance","Saldo inicial (o deuda actual)","number"],
   ["credit_limit","Línea de crédito total","optional_number"]
  ],
  transaction:[
@@ -1592,13 +1593,13 @@ const fields={
   ["amount","Importe","number"],
   ["linked_amount","Importe recibido","optional_number"],
   ["category","Categoria","select",
-   "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+   "Comida|Transporte|Compras|Ocio|Hormiga|Servicios|Educación|Otros"],
   ["description","Descripcion","text"],
   ["occurred_on","Fecha","date"]
  ],
  budget:[
   ["category","Categoria","select",
-   "Comida|Entretenimiento|Transporte|Universidad|Salud|Servicios|Compras|Otros"],
+   "Comida|Transporte|Compras|Ocio|Hormiga|Servicios|Educación|Otros"],
   ["amount","Limite PEN","number"]
  ],
  holding:[
@@ -1672,6 +1673,52 @@ function fieldHtml(f,record){
  return `<label>${label}${control}</label>`;
 }
 
+// PAPI RIKI: formulario compacto, sin cambiar el modelo de datos.
+const lastAccountKey="papi_last_expense_account";
+const lastCategoryKey="papi_last_expense_category";
+function configureTransactionEditor(record){
+ const kind=$("f_kind"),src=$("f_account_id"),dst=$("f_linked_account_id");
+ const received=$("f_linked_amount"),cat=$("f_category"),desc=$("f_description"),date=$("f_occurred_on");
+ const fieldsBox=$("editorFields");
+ const more=document.createElement("button");
+ more.type="button";more.className="btn alt";more.textContent="+ Detalles opcionales";
+ more.style.gridColumn="1/-1";
+ const hint=document.createElement("p");hint.className="note";hint.style.gridColumn="1/-1";
+ fieldsBox.append(more,hint);
+ let expanded=Boolean(record);
+ if(!record){
+  const last=localStorage.getItem(lastAccountKey);
+  if(last&&data.accounts.some(a=>a.id===last))src.value=last;
+  const savedCategory=localStorage.getItem(lastCategoryKey);
+  if(savedCategory&&[...cat.options].some(o=>o.value===savedCategory))cat.value=savedCategory;
+  if(!date.value)date.value=today();
+ }
+ const show=(element,visible,required=false)=>{
+  const label=element.closest("label");
+  label.hidden=!visible;element.disabled=!visible;element.required=visible&&required;
+ };
+ function update(){
+  const transfer=kind.value==="transfer";
+  const expense=kind.value==="expense";
+  show(dst,transfer,true);
+  show(received,transfer,false);
+  show(cat,!transfer&&expanded,false);
+  show(desc,expanded,false);
+  show(date,expanded,false);
+  show(kind,expanded,false);
+  show(src,true,true);
+  show($("f_amount"),true,true);
+  more.textContent=expanded?"− Ocultar detalles":"+ Detalles opcionales";
+  more.hidden=transfer;
+  hint.textContent=transfer
+   ?"Transferencia: no se registra como gasto. Si pagas una tarjeta, selecciónala como destino."
+   :expense?"Solo importe y cuenta son obligatorios. Categoría y descripción opcionales.":"Indica cuánto recibiste y en qué cuenta.";
+ }
+ more.onclick=()=>{expanded=!expanded;update();};
+ kind.addEventListener("change",()=>{expanded=kind.value!=="expense";update();});
+ update();
+}
+
 function openEditor(type,id=null){
  if(type==="transaction"&&!data.accounts.length){
   alert("Primero registra una cuenta.");
@@ -1695,7 +1742,7 @@ function openEditor(type,id=null){
   :null;
 
  $("editorTitle").textContent=
-  (id?"Editar ":"Nuevo ")+type;
+  type==="transaction"?(id?"Editar movimiento":"💸 Registrar movimiento"):(id?"Editar ":"Nuevo ")+type;
 
  $("editorFields").innerHTML=
   fields[type].map(f=>fieldHtml(f,record)).join("");
@@ -1755,6 +1802,7 @@ function openEditor(type,id=null){
  if(type==="transaction"&&!id&&quickKind){
   $("f_kind").value=quickKind;
  }
+ if(type==="transaction")configureTransactionEditor(record);
 
  $("editorMsg").textContent="";
  navigate("editor");
@@ -1864,6 +1912,11 @@ $("editorForm").onsubmit=async e=>{
   }
 
   if(editType==="transaction"){
+   // El tipo permanece en el formulario aunque el selector este oculto.
+   payload.kind=$("f_kind").value;
+   payload.occurred_on=$("f_occurred_on").value||today();
+   payload.category=payload.kind==="transfer"?null:($("f_category").value||"Otros");
+   payload.description=$("f_description").value.trim()||null;
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
 
@@ -1927,6 +1980,10 @@ $("editorForm").onsubmit=async e=>{
 
   if(!saved?.length){
    throw Error("No se confirmo el guardado.");
+  }
+  if(editType==="transaction"&&payload.kind==="expense"){
+   localStorage.setItem(lastAccountKey,payload.account_id);
+   localStorage.setItem(lastCategoryKey,payload.category||"Otros");
   }
 
   await loadAll();
