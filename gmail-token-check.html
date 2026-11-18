@@ -6,180 +6,237 @@
 <meta name="viewport"
  content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0b1220">
-<title>PAPI RIKI | Verificar Gmail OAuth</title>
+
+<title>PAPI RIKI | Gmail OAuth</title>
 
 <style>
-:root{
- color-scheme:dark;
- font-family:system-ui,-apple-system,Arial,sans-serif;
- background:#0b1220;
- color:#edf2fa;
+:root {
+  color-scheme: dark;
+  font-family: system-ui,-apple-system,Arial,sans-serif;
+  background: #0b1220;
+  color: #edf2fa;
 }
-*{box-sizing:border-box}
-body{
- margin:0;
- min-height:100vh;
- padding:24px 16px;
+
+* {
+  box-sizing: border-box;
 }
-main{
- max-width:460px;
- margin:35px auto;
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px 16px;
 }
-.logo{
- font-size:25px;
- font-weight:850;
+
+main {
+  max-width: 460px;
+  margin: 35px auto;
 }
-.logo span{color:#38d9a9}
-h1{
- font-size:24px;
- margin-top:28px;
+
+.logo {
+  font-size: 25px;
+  font-weight: 850;
 }
-p{
- color:#aab8ca;
- line-height:1.6;
+
+.logo span {
+  color: #38d9a9;
 }
-.card{
- background:#17243a;
- border:1px solid #34465e;
- border-radius:20px;
- padding:24px;
- margin-top:20px;
+
+h1 {
+  font-size: 24px;
+  margin-top: 28px;
 }
-label{
- display:block;
- margin:16px 0;
- color:#cbd5e1;
- font-size:14px;
+
+p {
+  color: #aab8ca;
+  line-height: 1.6;
 }
-input{
- display:block;
- width:100%;
- padding:14px;
- margin-top:8px;
- background:#0b1220;
- color:white;
- border:1px solid #52647d;
- border-radius:11px;
- font:inherit;
- font-size:16px;
+
+.card {
+  background: #17243a;
+  border: 1px solid #34465e;
+  border-radius: 20px;
+  padding: 24px;
+  margin-top: 20px;
 }
-button{
- display:block;
- width:100%;
- min-height:48px;
- border:0;
- border-radius:12px;
- background:#38d9a9;
- color:#09241d;
- font:inherit;
- font-weight:750;
- padding:14px;
- margin-top:15px;
- cursor:pointer;
+
+label {
+  display: block;
+  margin: 16px 0;
+  color: #cbd5e1;
+  font-size: 14px;
 }
-button:disabled{
- opacity:.5;
- cursor:wait;
+
+input {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  background: #0b1220;
+  color: white;
+  border: 1px solid #52647d;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 16px;
 }
-.secondary{
- background:#293d56;
- color:white;
+
+button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  border: 0;
+  border-radius: 12px;
+  background: #38d9a9;
+  color: #09241d;
+  font: inherit;
+  font-weight: 750;
+  padding: 14px;
+  margin-top: 15px;
+  cursor: pointer;
 }
-.status{
- margin-top:18px;
- padding:14px;
- background:#0d1b2b;
- border-radius:11px;
- font-size:14px;
- overflow-wrap:anywhere;
- white-space:pre-wrap;
- line-height:1.7;
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
 }
-.success{color:#38d9a9}
-.error{color:#ff9d9d}
-.note{
- font-size:12px;
- color:#9caec5;
+
+.secondary {
+  background: #293d56;
+  color: white;
 }
-a{color:#38d9a9}
-[hidden]{display:none!important}
+
+.status {
+  margin-top: 18px;
+  padding: 14px;
+  background: #0d1b2b;
+  border-radius: 11px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  line-height: 1.7;
+}
+
+.success {
+  color: #38d9a9;
+}
+
+.error {
+  color: #ff9d9d;
+}
+
+.note {
+  font-size: 12px;
+  color: #9caec5;
+}
+
+a {
+  color: #38d9a9;
+}
+
+[hidden] {
+  display: none !important;
+}
 </style>
 </head>
 
 <body>
+
 <main>
- <div class="logo">💸 PAPI <span>RIKI</span></div>
 
- <h1>🔐 Verificar conexión Gmail</h1>
+<div class="logo">
+  💸 PAPI <span>RIKI</span>
+</div>
 
- <p>
-  Comprobaremos que Google acepta renovar
-  la autorización OAuth de PAPI RIKI.
- </p>
+<h1>🔐 Configuración Gmail</h1>
 
- <section class="card">
-  <h2>Acceso seguro</h2>
+<p>
+  Verifica tu conexión OAuth e inicializa
+  el cursor real de Gmail para preparar
+  la detección de nuevos gastos BCP.
+</p>
 
-  <div id="loginBox">
-   <form id="loginForm">
-    <label for="email">
-     Correo de PAPI RIKI
-     <input
-      id="email"
-      type="email"
-      autocomplete="username"
-      required>
-    </label>
+<section class="card">
 
-    <label for="password">
-     Contraseña
-     <input
-      id="password"
-      type="password"
-      autocomplete="current-password"
-      required>
-    </label>
+<h2>Acceso seguro</h2>
 
-    <button id="loginButton" type="submit">
-     Iniciar sesión
-    </button>
-   </form>
-  </div>
+<div id="loginBox">
 
-  <div id="checkBox" hidden>
-   <p class="success">
-    Sesión de PAPI RIKI verificada.
-   </p>
+<form id="loginForm">
 
-   <button id="checkButton" type="button">
-    🔍 Verificar conexión Gmail
-   </button>
+<label for="email">
+  Correo de PAPI RIKI
 
-   <button
-    id="logoutButton"
-    class="secondary"
-    type="button">
-    Cerrar sesión de prueba
-   </button>
-  </div>
+  <input
+    id="email"
+    type="email"
+    autocomplete="username"
+    required>
+</label>
 
-  <p
-   id="result"
-   class="status"
-   role="status"
-   aria-live="polite">
-   Preparando verificación...
-  </p>
- </section>
+<label for="password">
+  Contraseña
 
- <p class="note">
-  Esta prueba no lee correos,
+  <input
+    id="password"
+    type="password"
+    autocomplete="current-password"
+    required>
+</label>
+
+<button id="loginButton" type="submit">
+  Iniciar sesión
+</button>
+
+</form>
+
+</div>
+
+<div id="checkBox" hidden>
+
+<p class="success">
+  Sesión de PAPI RIKI verificada.
+</p>
+
+<button id="checkButton" type="button">
+  🔍 Verificar conexión Gmail
+</button>
+
+<button id="initButton" type="button">
+  🚀 Inicializar Gmail
+</button>
+
+<button
+  id="logoutButton"
+  class="secondary"
+  type="button">
+  Cerrar sesión de prueba
+</button>
+
+</div>
+
+<p
+  id="result"
+  class="status"
+  role="status"
+  aria-live="polite">
+  Preparando verificación...
+</p>
+
+</section>
+
+<p class="note">
+  Esta página no lee correos bancarios,
   no registra gastos y no envía notificaciones.
- </p>
+</p>
 
- <p class="note">
+<p class="note">
+  Inicializar Gmail guarda un cursor real.
+  No activa Gmail Watch ni el monitoreo automático.
+</p>
+
+<p class="note">
   <a href="/">Volver a PAPI RIKI</a>
- </p>
+</p>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -192,53 +249,69 @@ a{color:#38d9a9}
 // ======================================
 
 const SUPABASE_URL =
- "https://kbwrxebdcpgsplfjpkxv.supabase.co";
+  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
 const SUPABASE_KEY =
- "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
+  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-let client=null;
-let busy=false;
+let client = null;
+let busy = false;
 
-function message(text,error=false){
- const el=$("result");
+function message(text, error = false) {
+  const element = $("result");
 
- el.textContent=text;
- el.className=
-  "status "+(error?"error":"success");
+  element.textContent = text;
+
+  element.className =
+    "status " + (error ? "error" : "success");
 }
 
-function authenticated(value){
- $("loginBox").hidden=value;
- $("checkBox").hidden=!value;
+function authenticated(value) {
+  $("loginBox").hidden = value;
+  $("checkBox").hidden = !value;
 }
 
-async function initialize(){
- if(!window.supabase){
-  message(
-   "No se pudo cargar Supabase.",
-   true
-  );
-  return;
- }
+function setBusy(value) {
+  busy = value;
 
- client=window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-   auth:{
-    persistSession:false,
-    autoRefreshToken:false,
-    detectSessionInUrl:false
-   }
+  $("loginButton").disabled = value;
+  $("checkButton").disabled = value;
+  $("initButton").disabled = value;
+  $("logoutButton").disabled = value;
+}
+
+// ======================================
+// INICIALIZAR SUPABASE
+// ======================================
+
+function initialize() {
+  if (!window.supabase) {
+    message(
+      "No se pudo cargar Supabase.",
+      true
+    );
+    return;
   }
- );
 
- message(
-  "Inicia sesión para verificar Gmail."
- );
+  client = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    }
+  );
+
+  authenticated(false);
+
+  message(
+    "Inicia sesión para configurar Gmail."
+  );
 }
 
 // ======================================
@@ -246,128 +319,219 @@ async function initialize(){
 // ======================================
 
 $("loginForm").addEventListener(
- "submit",
- async event=>{
-  event.preventDefault();
+  "submit",
+  async event => {
+    event.preventDefault();
 
-  if(busy)return;
+    if (busy || !client) return;
 
-  busy=true;
-  $("loginButton").disabled=true;
+    setBusy(true);
 
-  try{
-   message("Verificando identidad...");
+    try {
+      message("Verificando identidad...");
 
-   const {data,error}=
-    await client.auth.signInWithPassword({
-     email:$("email").value.trim(),
-     password:$("password").value
-    });
+      const { data, error } =
+        await client.auth.signInWithPassword({
+          email: $("email").value.trim(),
+          password: $("password").value
+        });
 
-   if(error)throw error;
+      if (error) throw error;
 
-   if(!data?.session){
-    throw Error("Sesión inválida.");
-   }
+      if (!data?.session) {
+        throw Error("Sesión inválida.");
+      }
 
-   $("password").value="";
+      $("password").value = "";
 
-   authenticated(true);
+      authenticated(true);
 
-   message(
-    "Sesión correcta. Puedes verificar Gmail."
-   );
+      message(
+        "Sesión correcta.\n\n" +
+        "Puedes verificar OAuth o inicializar Gmail."
+      );
 
-  }catch(error){
-   message(
-    "Error de acceso: "+error.message,
-    true
-   );
-  }finally{
-   busy=false;
-   $("loginButton").disabled=false;
+    } catch (error) {
+      message(
+        "Error de acceso: " + error.message,
+        true
+      );
+
+    } finally {
+      setBusy(false);
+    }
   }
- }
 );
 
 // ======================================
-// VERIFICAR TOKEN OAUTH
+// OBTENER SESION AUTENTICADA
+// ======================================
+
+async function getAccessToken() {
+  if (!client) {
+    throw Error("Supabase no está disponible.");
+  }
+
+  const { data, error } =
+    await client.auth.getSession();
+
+  if (error || !data?.session?.access_token) {
+    throw Error(
+      "La sesión caducó. Vuelve a iniciar sesión."
+    );
+  }
+
+  return data.session.access_token;
+}
+
+// ======================================
+// PETICION SEGURA AL SERVIDOR
+// ======================================
+
+async function callEndpoint(path) {
+  const token = await getAccessToken();
+
+  const response = await fetch(path, {
+    method: "POST",
+    cache: "no-store",
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
+
+  let result;
+
+  try {
+    result = await response.json();
+  } catch {
+    throw Error(
+      "El servidor devolvió una respuesta inválida."
+    );
+  }
+
+  if (!response.ok || !result.ok) {
+    throw Error(
+      result.message ||
+      "No se pudo completar la operación."
+    );
+  }
+
+  return result;
+}
+
+// ======================================
+// VERIFICAR GMAIL OAUTH
 // ======================================
 
 $("checkButton").addEventListener(
- "click",
- async()=>{
-  if(busy)return;
+  "click",
+  async () => {
+    if (busy) return;
 
-  busy=true;
-  $("checkButton").disabled=true;
+    setBusy(true);
 
-  try{
-   message(
-    "Consultando autorización OAuth..."
-   );
+    try {
+      message(
+        "Verificando autorización OAuth..."
+      );
 
-   const {data,error}=
-    await client.auth.getSession();
+      const result = await callEndpoint(
+        "/api/gmail-token-check"
+      );
 
-   if(error||!data?.session?.access_token){
-    throw Error(
-     "La sesión caducó. Vuelve a iniciar sesión."
-    );
-   }
+      if (
+        result.gmail_oauth !== "valid" ||
+        result.refresh_successful !== true
+      ) {
+        throw Error(
+          "Google no confirmó la renovación OAuth."
+        );
+      }
 
-   const response=await fetch(
-    "/api/gmail-token-check",
-    {
-     method:"POST",
-     cache:"no-store",
-     headers:{
-      "Authorization":
-       "Bearer "+data.session.access_token
-     }
+      message(
+        "✅ CONEXIÓN GMAIL VERIFICADA\n\n" +
+        "Google aceptó renovar el token OAuth.\n" +
+        "Correos leídos: 0\n" +
+        "Gastos registrados: 0\n" +
+        "Notificaciones enviadas: No"
+      );
+
+    } catch (error) {
+      message(
+        "❌ " + error.message,
+        true
+      );
+
+    } finally {
+      setBusy(false);
     }
-   );
-
-   const result=await response.json();
-
-   if(!response.ok||!result.ok){
-    throw Error(
-     result.message||
-     "No se pudo verificar OAuth."
-    );
-   }
-
-   if(
-    result.gmail_oauth!=="valid" ||
-    result.refresh_successful!==true
-   ){
-    throw Error(
-     "Google no confirmó la renovación."
-    );
-   }
-
-   message(
-    "✅ CONEXIÓN GMAIL VERIFICADA\n\n"+
-    "Google aceptó renovar el token OAuth.\n"+
-    "Correos leídos: "+
-     result.messages_read+"\n"+
-    "Gastos registrados: "+
-     result.expenses_created+"\n"+
-    "Notificaciones enviadas: No\n\n"+
-    "La conexión está lista para la "+
-    "siguiente etapa de desarrollo."
-   );
-
-  }catch(error){
-   message(
-    "❌ "+error.message,
-    true
-   );
-  }finally{
-   busy=false;
-   $("checkButton").disabled=false;
   }
- }
+);
+
+// ======================================
+// INICIALIZAR CURSOR REAL GMAIL
+// ======================================
+
+$("initButton").addEventListener(
+  "click",
+  async () => {
+    if (busy) return;
+
+    const confirmed = window.confirm(
+      "¿Inicializar el cursor de Gmail?\n\n" +
+      "Se establecerá el punto de partida " +
+      "para detectar nuevos correos.\n\n" +
+      "No se importarán gastos antiguos " +
+      "ni se activará Gmail Watch."
+    );
+
+    if (!confirmed) return;
+
+    setBusy(true);
+
+    try {
+      message(
+        "Obteniendo cursor real de Gmail..."
+      );
+
+      const result = await callEndpoint(
+        "/api/gmail-init"
+      );
+
+      if (
+        result.cursor_initialized !== true ||
+        result.monitor_status !== "inactive" ||
+        result.gmail_watch_active !== false
+      ) {
+        throw Error(
+          "El servidor no confirmó la inicialización."
+        );
+      }
+
+      message(
+        "✅ CURSOR GMAIL INICIALIZADO\n\n" +
+        "Google proporcionó un historyId real.\n" +
+        "Cursor guardado en Supabase.\n" +
+        "Monitor: inactivo.\n" +
+        "Gmail Watch: desactivado.\n" +
+        "Gastos antiguos importados: 0.\n\n" +
+        "Listo para preparar el monitoreo."
+      );
+
+      // Evitar inicializaciones repetidas
+      // durante esta sesión de la página.
+      $("initButton").disabled = true;
+
+    } catch (error) {
+      message(
+        "❌ " + error.message,
+        true
+      );
+
+    } finally {
+      setBusy(false);
+    }
+  }
 );
 
 // ======================================
@@ -375,18 +539,34 @@ $("checkButton").addEventListener(
 // ======================================
 
 $("logoutButton").addEventListener(
- "click",
- async()=>{
-  try{
-   await client.auth.signOut();
-  }finally{
-   authenticated(false);
+  "click",
+  async () => {
+    if (busy || !client) return;
 
-   message(
-    "Sesión de prueba cerrada."
-   );
+    setBusy(true);
+
+    try {
+      await client.auth.signOut();
+
+      $("email").value = "";
+      $("password").value = "";
+
+      authenticated(false);
+
+      message(
+        "Sesión de prueba cerrada."
+      );
+
+    } catch (error) {
+      message(
+        "No se pudo cerrar sesión.",
+        true
+      );
+
+    } finally {
+      setBusy(false);
+    }
   }
- }
 );
 
 // ======================================
@@ -394,6 +574,8 @@ $("logoutButton").addEventListener(
 // ======================================
 
 initialize();
+
 </script>
+
 </body>
 </html>
