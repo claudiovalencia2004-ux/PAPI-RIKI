@@ -1,28 +1,34 @@
 
 "use strict";
 
-// ==========================================
-// PAPI RIKI - PASO 9.14.2
-// GMAIL PUB/SUB WEBHOOK
-// RECEPCION Y PERSISTENCIA SEGURA
-// ==========================================
+// ============================================
+// PAPI RIKI - PASO 9.19.1
+// GMAIL PUB/SUB WEBHOOK SEGURO
+// ============================================
 //
-// - Verifica token OIDC de Google.
-// - Verifica cuenta de servicio y audiencia.
-// - Comprueba la suscripcion Pub/Sub.
-// - Identifica al usuario por Gmail conectado.
-// - Guarda historyId en Supabase.
-// - Evita duplicados.
-// - No lee mensajes de Gmail.
-// - No registra gastos.
-// - No envia notificaciones al iPhone.
-// ==========================================
+// Recibe eventos autenticados de Google.
+// Identifica la conexion Gmail.
+// Guarda eventos pendientes en Supabase.
+// Evita duplicados.
+//
+// NO lee correos.
+// NO confirma gastos.
+// NO envia Web Push.
+// NO activa Gmail Watch.
+// NO ejecuta el procesador todavia.
+//
+// El procesamiento automatico requiere
+// un trabajador interno independiente.
+// ============================================
 
 const { OAuth2Client } =
   require("google-auth-library");
 
 const { createClient } =
   require("@supabase/supabase-js");
+
+const SUPABASE_URL =
+  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
 
 const AUDIENCE =
   "https://papi-riki.vercel.app/api/gmail-webhook";
@@ -33,12 +39,9 @@ const SERVICE_ACCOUNT =
 const SUBSCRIPTION =
   "projects/papi-riki-finance/subscriptions/papi-riki-gmail-push";
 
-const SUPABASE_URL =
-  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
-
 const googleClient = new OAuth2Client();
 
-function reply(res, status, data) {
+function respond(res, status, data) {
   return res.status(status).json(data);
 }
 
@@ -49,67 +52,150 @@ function validHistoryId(value) {
   );
 }
 
-module.exports = async function handler(req, res) {
-  res.setHeader("Cache-Control", "no-store");
-  res.setHeader("Allow", "POST");
+function validEmail(value) {
+  return (
+    typeof value === "string" &&
+    value.length <= 254 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+  );
+}
 
-  if (req.method !== "POST") {
-    return reply(res, 405, {
-      ok: false,
-      message: "Metodo no permitido."
-    });
+function decodeNotification(encoded) {
+  if (
+    typeof encoded !== "string" ||
+    encoded.length === 0 ||
+    encoded.length > 8192 ||
+    !/^[A-Za-z0-9+/]*={0,2}$/.test(encoded)
+  ) {
+    throw Error("Invalid PubSub data");
   }
 
-  // ======================================
-  // 1. VERIFICAR IDENTIDAD DE GOOGLE
-  // ======================================
+  const raw = Buffer.from(
+    encoded,
+    "base64"
+  ).toString("utf8");
 
-  const authorization =
-    req.headers.authorization || "";
+  if (raw.length > 4096) {
+    throw Error("Payload too large");
+  }
+
+  const notification = JSON.parse(raw);
+
+  if (
+    !notification ||
+    typeof notification !== "object"
+  ) {
+    throw Error("Invalid Gmail notification");
+  }
+
+  const email = String(
+    notification.emailAddress || ""
+  ).trim().toLowerCase();
+
+  const historyId = String(
+    notification.historyId || ""
+  );
+
+  if (
+    !validEmail(email) ||
+    !validHistoryId(historyId)
+  ) {
+    throw Error("Invalid Gmail notification fields");
+  }
+
+  return { email, historyId };
+}
+
+function createAdmin() {
+  const key = process.env.SUPABASE_SECRET_KEY;
+
+  if (!key) {
+    throw Error("Supabase configuration missing");
+  }
+
+  return createClient(
+    SUPABASE_URL,
+    key,
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      }
+    }
+  );
+}
+
+async function verifyGoogle(req) {
+  const authorization = String(
+    req.headers.authorization || ""
+  );
 
   const match = authorization.match(
     /^Bearer\s+(\S+)$/i
   );
 
   if (!match) {
-    return reply(res, 401, {
+    return false;
+  }
+
+  const ticket =
+    await googleClient.verifyIdToken({
+      idToken: match[1],
+      audience: AUDIENCE
+    });
+
+  const identity = ticket.getPayload();
+
+  return Boolean(
+    identity &&
+    identity.email_verified === true &&
+    identity.email === SERVICE_ACCOUNT &&
+    (
+      identity.iss === "https://accounts.google.com" ||
+      identity.iss === "accounts.google.com"
+    )
+  );
+}
+
+module.exports = async function handler(req, res) {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("Allow", "POST");
+
+  if (req.method !== "POST") {
+    return respond(res, 405, {
       ok: false,
-      message: "Autenticacion requerida."
+      message: "Method not allowed"
     });
   }
+
+  // ========================================
+  // 1. VERIFICAR IDENTIDAD DE GOOGLE
+  // ========================================
 
   try {
-    const ticket =
-      await googleClient.verifyIdToken({
-        idToken: match[1],
-        audience: AUDIENCE
-      });
+    const authorized = await verifyGoogle(req);
 
-    const identity = ticket.getPayload();
-
-    if (
-      !identity ||
-      identity.email !== SERVICE_ACCOUNT ||
-      identity.email_verified !== true
-    ) {
-      return reply(res, 403, {
+    if (!authorized) {
+      return respond(res, 401, {
         ok: false,
-        message: "Identidad no autorizada."
+        message: "Unauthorized"
       });
     }
+  } catch {
+    console.error("PubSub authentication failed");
 
-  } catch (error) {
-    console.error("Google OIDC validation failed");
-
-    return reply(res, 401, {
+    return respond(res, 401, {
       ok: false,
-      message: "Token de Google invalido."
+      message: "Authentication failed"
     });
   }
 
-  // ======================================
-  // 2. VALIDAR MENSAJE PUB/SUB
-  // ======================================
+  // ========================================
+  // 2. VALIDAR MENSAJE
+  // ========================================
+
+  let notification;
 
   try {
     const envelope = req.body;
@@ -119,104 +205,45 @@ module.exports = async function handler(req, res) {
       typeof envelope !== "object" ||
       envelope.subscription !== SUBSCRIPTION ||
       !envelope.message ||
-      typeof envelope.message.data !== "string"
+      typeof envelope.message !== "object"
     ) {
-      return reply(res, 400, {
-        ok: false,
-        message: "Mensaje Pub/Sub invalido."
-      });
+      throw Error("Invalid envelope");
     }
 
-    const encoded = envelope.message.data;
-
-    if (
-      encoded.length > 8192 ||
-      !/^[A-Za-z0-9+/]*={0,2}$/.test(encoded)
-    ) {
-      return reply(res, 400, {
-        ok: false,
-        message: "Payload invalido."
-      });
-    }
-
-    const raw = Buffer.from(
-      encoded,
-      "base64"
-    ).toString("utf8");
-
-    const notification = JSON.parse(raw);
-
-    if (
-      typeof notification.emailAddress !== "string" ||
-      !validHistoryId(
-        String(notification.historyId || "")
-      )
-    ) {
-      return reply(res, 400, {
-        ok: false,
-        message: "Notificacion Gmail invalida."
-      });
-    }
-
-    const email = notification.emailAddress
-      .trim()
-      .toLowerCase();
-
-    if (
-      !email ||
-      email.length > 254 ||
-      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-    ) {
-      return reply(res, 400, {
-        ok: false,
-        message: "Cuenta Gmail invalida."
-      });
-    }
-
-    // ====================================
-    // 3. CONECTAR CON SUPABASE
-    // ====================================
-
-    if (!process.env.SUPABASE_SECRET_KEY) {
-      return reply(res, 503, {
-        ok: false,
-        message: "Servidor sin configurar."
-      });
-    }
-
-    const admin = createClient(
-      SUPABASE_URL,
-      process.env.SUPABASE_SECRET_KEY,
-      {
-        auth: {
-          persistSession: false,
-          autoRefreshToken: false
-        }
-      }
+    notification = decodeNotification(
+      envelope.message.data
     );
 
-    // ====================================
-    // 4. IDENTIFICAR USUARIO
-    // ====================================
+  } catch {
+    return respond(res, 400, {
+      ok: false,
+      message: "Invalid notification"
+    });
+  }
 
-    const { data: connections, error: findError } =
+  // ========================================
+  // 3. IDENTIFICAR USUARIO
+  // ========================================
+
+  try {
+    const admin = createAdmin();
+
+    const { data: connections, error: lookupError } =
       await admin
         .from("gmail_connections")
         .select("user_id")
-        .eq("gmail_address", email)
+        .eq("gmail_address", notification.email)
         .eq("status", "connected")
         .limit(2);
 
-    if (findError) {
-      throw new Error(
-        "Error consultando conexion Gmail."
-      );
+    if (lookupError) {
+      throw Error("Connection lookup failed");
     }
 
     if (!connections || connections.length === 0) {
-      // No reconocer una cuenta desconocida
-      // como un gasto valido.
-      return reply(res, 200, {
+      // No existe una conexion asociada.
+      // No crear eventos para usuarios desconocidos.
+      return respond(res, 200, {
         ok: true,
         accepted: false,
         reason: "unlinked_account"
@@ -224,60 +251,69 @@ module.exports = async function handler(req, res) {
     }
 
     if (connections.length !== 1) {
-      // No asociar un aviso ambiguo.
-      return reply(res, 409, {
+      // No asociar eventos a una cuenta ambigua.
+      // Devolver error para permitir reintento.
+      return respond(res, 503, {
         ok: false,
-        message: "Conexion Gmail ambigua."
+        message: "Ambiguous connection"
       });
     }
 
     const userId = connections[0].user_id;
 
-    // ====================================
-    // 5. GUARDAR EVENTO SIN DUPLICAR
-    // ====================================
+    // ======================================
+    // 4. GUARDAR EVENTO SIN DUPLICADOS
+    // ======================================
 
     const { error: insertError } =
       await admin
         .from("gmail_events")
-        .upsert({
-          user_id: userId,
-          gmail_history_id:
-            String(notification.historyId),
-          status: "pending"
-        }, {
-          onConflict:
-            "user_id,gmail_history_id",
-          ignoreDuplicates: true
-        });
+        .upsert(
+          {
+            user_id: userId,
+            gmail_history_id:
+              notification.historyId,
+            status: "pending"
+          },
+          {
+            onConflict:
+              "user_id,gmail_history_id",
+            ignoreDuplicates: true
+          }
+        );
 
     if (insertError) {
-      throw new Error(
-        "Error guardando evento Gmail."
-      );
+      throw Error("Event persistence failed");
     }
 
-    // ====================================
-    // 6. CONFIRMAR ENTREGA A PUB/SUB
-    // ====================================
+    // ======================================
+    // 5. CONFIRMAR ENTREGA
+    // ======================================
 
-    return reply(res, 200, {
+    // HTTP 200 indica que el evento quedo
+    // almacenado o ya existia.
+    //
+    // NO significa que el gasto fue procesado.
+    // NO ejecuta Gmail History.
+    // NO envia notificaciones al iPhone.
+
+    return respond(res, 200, {
       ok: true,
       authenticated: true,
       persisted: true,
       processing_enabled: false,
-      expenses_created: 0,
-      notification_sent: false
+      expenses_confirmed: 0,
+      notifications_sent: 0
     });
 
-  } catch (error) {
-    // No imprimir tokens ni datos bancarios.
+  } catch {
     console.error("Gmail event persistence failed");
 
-    // Pub/Sub puede reintentar.
-    return reply(res, 503, {
+    // Un error temporal permite que Pub/Sub
+    // vuelva a intentar la entrega.
+    return respond(res, 503, {
       ok: false,
-      message: "No se pudo guardar el evento."
+      message: "Event persistence unavailable"
     });
   }
 };
