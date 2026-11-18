@@ -322,6 +322,31 @@ label{color:var(--muted)}
 }
 
 [hidden]{display:none!important}
+
+/* Registro de gastos PAPI RIKI: 4 campos, tactil y adaptable. */
+#editorFields.expense-friendly{display:flex;flex-direction:column;gap:18px}
+#editorFields.expense-friendly>label{display:flex;flex-direction:column;gap:9px;font-weight:650}
+#editorFields.expense-friendly #f_amount{
+ font-size:34px;font-weight:800;text-align:center;min-height:76px;
+ border:1px solid var(--mint);border-radius:20px;
+ background:rgba(56,217,169,.08);letter-spacing:.5px;
+}
+#editorFields.expense-friendly #f_account_id,
+#editorFields.expense-friendly #f_occurred_on{
+ min-height:56px;border-radius:16px;font-size:16px;
+}
+.expense-category-picker{grid-column:1/-1}
+.expense-label{font-weight:700;margin-bottom:12px}
+.expense-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.expense-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;
+ gap:6px;min-height:85px;border-radius:17px;border:1px solid #43546b;
+ background:#22344b;color:#f2f7ff;cursor:pointer;padding:9px 2px}
+.expense-chip span{font-size:27px;line-height:1.1}
+.expense-chip small{font-size:11px;font-weight:650}
+.expense-chip.chosen{border:2px solid var(--mint);background:rgba(45,200,153,.17)}
+.expense-chip:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
+@media(max-width:370px){.expense-chips{gap:5px}.expense-chip small{font-size:10px}}
+
 </style>
 </head>
 
@@ -1673,49 +1698,87 @@ function fieldHtml(f,record){
  return `<label>${label}${control}</label>`;
 }
 
-// PAPI RIKI: formulario compacto, sin cambiar el modelo de datos.
+// PAPI RIKI: registro amigable de gastos en cuatro campos.
 const lastAccountKey="papi_last_expense_account";
 const lastCategoryKey="papi_last_expense_category";
+const gastoCategories=[
+ ["Comida","🍔"],["Transporte","🚕"],["Compras","🛍️"],
+ ["Ocio","🎮"],["Hormiga","🐜"],["Servicios","📱"],
+ ["Educación","🎓"],["Otros","📦"]
+];
 function configureTransactionEditor(record){
  const kind=$("f_kind"),src=$("f_account_id"),dst=$("f_linked_account_id");
  const received=$("f_linked_amount"),cat=$("f_category"),desc=$("f_description"),date=$("f_occurred_on");
- const fieldsBox=$("editorFields");
- const more=document.createElement("button");
- more.type="button";more.className="btn alt";more.textContent="+ Detalles opcionales";
- more.style.gridColumn="1/-1";
- const hint=document.createElement("p");hint.className="note";hint.style.gridColumn="1/-1";
- fieldsBox.append(more,hint);
- let expanded=Boolean(record);
+ const amount=$("f_amount"),box=$("editorFields");
+ const show=(element,visible,required=false)=>{
+  const label=element.closest("label");
+  if(label)label.hidden=!visible;
+  element.disabled=!visible;element.required=visible&&required;
+ };
  if(!record){
   const last=localStorage.getItem(lastAccountKey);
   if(last&&data.accounts.some(a=>a.id===last))src.value=last;
-  const savedCategory=localStorage.getItem(lastCategoryKey);
-  if(savedCategory&&[...cat.options].some(o=>o.value===savedCategory))cat.value=savedCategory;
+  const saved=localStorage.getItem(lastCategoryKey);
+  if(saved&&gastoCategories.some(x=>x[0]===saved))cat.value=saved;
   if(!date.value)date.value=today();
  }
- const show=(element,visible,required=false)=>{
-  const label=element.closest("label");
-  label.hidden=!visible;element.disabled=!visible;element.required=visible&&required;
- };
- function update(){
-  const transfer=kind.value==="transfer";
-  const expense=kind.value==="expense";
-  show(dst,transfer,true);
-  show(received,transfer,false);
-  show(cat,!transfer&&expanded,false);
-  show(desc,expanded,false);
-  show(date,expanded,false);
-  show(kind,expanded,false);
-  show(src,true,true);
-  show($("f_amount"),true,true);
-  more.textContent=expanded?"− Ocultar detalles":"+ Detalles opcionales";
-  more.hidden=transfer;
-  hint.textContent=transfer
-   ?"Transferencia: no se registra como gasto. Si pagas una tarjeta, selecciónala como destino."
-   :expense?"Solo importe y cuenta son obligatorios. Categoría y descripción opcionales.":"Indica cuánto recibiste y en qué cuenta.";
+ const title=$("editorTitle");
+ const chips=document.createElement("div");
+ chips.className="expense-category-picker";
+ chips.innerHTML='<div class="expense-label">¿En qué gastaste?</div><div class="expense-chips"></div>';
+ box.append(chips);
+ const chipRow=chips.querySelector(".expense-chips");
+ for(const [value,emoji] of gastoCategories){
+  const button=document.createElement("button");
+  button.type="button";button.className="expense-chip";
+  button.dataset.value=value;
+  const symbol=document.createElement("span");symbol.textContent=emoji;
+  const label=document.createElement("small");label.textContent=value;
+  button.append(symbol,label);
+  button.onclick=()=>{cat.value=value;refreshChips();};
+  chipRow.append(button);
  }
- more.onclick=()=>{expanded=!expanded;update();};
- kind.addEventListener("change",()=>{expanded=kind.value!=="expense";update();});
+ function refreshChips(){
+  chipRow.querySelectorAll("button").forEach(b=>{
+   const chosen=b.dataset.value===cat.value;
+   b.classList.toggle("chosen",chosen);
+   b.setAttribute("aria-pressed",String(chosen));
+  });
+ }
+ function relabel(element,label){
+  const holder=element.closest("label");
+  if(holder&&holder.firstChild)holder.firstChild.textContent=label;
+ }
+ function update(){
+  const expense=kind.value==="expense";
+  const transfer=kind.value==="transfer";
+  box.classList.toggle("expense-friendly",expense);
+  title.textContent=expense?(record?"Editar gasto":"💸 Nuevo gasto"):
+   transfer?"Transferencia":"Registrar ingreso";
+  show(kind,!expense,false);
+  show(src,true,true);
+  show(amount,true,true);
+  show(dst,transfer,transfer);
+  show(received,transfer,false);
+  show(cat,!expense&&!transfer,false);
+  show(desc,!expense,false);
+  show(date,true,true);
+  chips.hidden=!expense;
+  if(expense){
+   relabel(amount,"¿Cuánto gastaste?");
+   relabel(src,"¿De dónde salió el dinero?");
+   relabel(date,"¿Cuándo fue?");
+   // El selector original sigue activo internamente para el guardado.
+   cat.disabled=false;cat.required=false;
+   if(!gastoCategories.some(x=>x[0]===cat.value))cat.value="Otros";
+   refreshChips();
+  }else{
+   relabel(amount,"Importe");
+   relabel(src,"Cuenta origen");
+   relabel(date,"Fecha");
+  }
+ }
+ kind.addEventListener("change",update);
  update();
 }
 
