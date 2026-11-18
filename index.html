@@ -1,4 +1,4 @@
- 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -259,7 +259,7 @@ label{display:block;color:#c9d5e6;font-size:14px}
   transition:none!important;
  }
 }
- 
+
 /* PAPI RIKI 2.0 — diseño adaptable sin dependencias externas */
 :root{--bg:#080f1c;--panel:#14243a;--panel2:#0f1c30;--line:#30455e;--text:#f4f8ff;--muted:#a9bbcf;--mint:#45e3b5;--red:#ff8f9c;--accent-soft:rgba(69,227,181,.13);--hero1:#153e46;--hero2:#122138;--shadow:0 18px 44px rgba(0,0,0,.17)}
 body{background:radial-gradient(ellipse 95% 45% at 50% -10%,var(--accent-soft),transparent 75%),var(--bg);background-attachment:fixed}
@@ -320,10 +320,10 @@ label{color:var(--muted)}
  .mobile-more button{background:var(--panel);border-color:var(--line);min-height:90px}
  #dashboard>.card:first-of-type{padding:23px}
 }
- 
+
 </style>
 </head>
- 
+
 <body>
 <header>
  <div class="logo">💸 PAPI <span>RIKI</span></div>
@@ -331,9 +331,9 @@ label{color:var(--muted)}
   Cerrar sesión
  </button>
 </header>
- 
+
 <p id="loading">Verificando acceso...</p>
- 
+
 <section id="auth" class="auth" hidden>
  <div class="card">
   <h2>🔐 Iniciar sesión</h2>
@@ -358,10 +358,10 @@ label{color:var(--muted)}
   <p id="loginMsg" class="message" role="status"></p>
  </div>
 </section>
- 
+
 <main id="app" hidden>
 <nav id="desktopNav" class="desktop-nav"></nav>
- 
+
 <section id="dashboard" class="tab">
  <div class="dashboard-intro"><div id="seasonBanner" class="season-pill" hidden></div><h1>Tu dinero, más claro ✨</h1>
  <p>Tu resumen financiero en un solo lugar.</p></div>
@@ -380,7 +380,7 @@ label{color:var(--muted)}
   <div id="spendable"></div>
  </div>
 </section>
- 
+
 <section id="accounts" class="tab" hidden>
  <div class="row">
   <h2>🏦 Mis cuentas</h2>
@@ -389,7 +389,7 @@ label{color:var(--muted)}
  <p class="note">Cuentas de débito, efectivo y tarjetas de crédito. La deuda de tarjeta se muestra separada de tu dinero disponible.</p>
  <div id="accountList" class="grid"></div>
 </section>
- 
+
 <section id="movements" class="tab" hidden>
  <div class="row">
   <h2>🧾 Movimientos</h2>
@@ -400,7 +400,7 @@ label{color:var(--muted)}
  <p class="note">Ingresos, gastos y transferencias manuales.</p>
  <div id="transactionList"></div>
 </section>
- 
+
 <section id="budgets" class="tab" hidden>
  <div class="row">
   <h2>📊 Presupuestos</h2>
@@ -409,16 +409,16 @@ label{color:var(--muted)}
  <p class="note">Alertas visuales al 80%.</p>
  <div id="budgetList"></div>
 </section>
- 
+
 <section id="investments" class="tab" hidden>
  <div class="row">
   <h2>📈 Inversiones</h2>
   <button class="btn" data-new="holding">+ Activo</button>
  </div>
- <div class="holding-tip"><strong>¿Inviertes en Flip?</strong> Registra Flip como <strong>Fondo</strong>, cantidad <strong>1</strong>, costo total = lo aportado y valor actual = el saldo que ves en Flip. Puedes actualizarlo cuando cambie, sin inventar una tasa fija.</div><p class="note">El rendimiento se calcula comparando valor actual con costo registrado. No se actualiza automáticamente.</p>
+ <div class="holding-tip"><strong>Inversiones a tu manera.</strong> Elige Fondo mutuo, Acciones/ETF, Renta fija, Otra renta variable, Cripto u Otros. Solo verás los campos que correspondan. Flip: indica lo aportado y el valor actual, sin tasa fija.</div><p class="note">Las valoraciones son manuales. El resultado acumulado simple no equivale a rentabilidad anualizada. Los aportes y retiros deben actualizar el costo y el valor, y no se cuentan como gastos de consumo.</p>
  <div id="holdingList"></div>
 </section>
- 
+
 <section id="goals" class="tab" hidden>
  <div class="row">
   <h2>🎯 Mis metas</h2>
@@ -426,7 +426,7 @@ label{color:var(--muted)}
  </div>
  <div id="goalList"></div>
 </section>
- 
+
 <section id="projections" class="tab" hidden>
  <h2>🔮 Proyecciones</h2>
  <div class="card">
@@ -453,7 +453,7 @@ label{color:var(--muted)}
   <p class="note">Simulación sin rentabilidad garantizada.</p>
  </div>
 </section>
- 
+
 <section id="reports" class="tab" hidden>
  <h2>📋 Reportes</h2>
  <div id="reportBody"></div>
@@ -461,7 +461,7 @@ label{color:var(--muted)}
   Exportar movimientos CSV
  </button>
 </section>
- 
+
 <section id="settings" class="tab" hidden>
  <h2>⚙️ Configuración</h2>
  <div class="card" id="appearanceCard">
@@ -490,14 +490,14 @@ label{color:var(--muted)}
   <div id="themePreview" class="theme-preview" aria-label="Vista previa de colores"></div>
   <p id="themeDescription" class="theme-status"></p>
  </div>
- 
+
  <div class="card notification-card">
   <h2>🔔 Notificaciones en mi iPhone</h2>
   <p>
    Registra tu iPhone para recibir avisos
    de movimientos pendientes.
   </p>
- 
+
   <div class="notification-status">
    <p id="swStatus" class="message">
     Comprobando Service Worker...
@@ -509,29 +509,29 @@ label{color:var(--muted)}
     Comprobando suscripción...
    </p>
   </div>
- 
+
   <button id="registerPush" class="btn full"
    type="button">
    📱 Registrar mi iPhone
   </button>
- 
+
   <div style="height:10px"></div>
- 
+
   <button id="refreshPush" class="btn alt full"
    type="button">
    Comprobar registro
   </button>
- 
+
   <p id="pushMessage" class="message"
    role="status" aria-live="polite"></p>
- 
+
   <p class="note">
    Registrar el dispositivo no envía todavía
    notificaciones. El servidor de envío
    se configurará posteriormente.
   </p>
  </div>
- 
+
  <div class="card">
   <h2>Mis preferencias</h2>
   <form id="settingsForm">
@@ -565,12 +565,12 @@ label{color:var(--muted)}
   </form>
  </div>
 </section>
- 
+
 <section id="more" class="tab" hidden>
  <h2>Más opciones</h2>
  <div id="moreMenu" class="mobile-more"></div>
 </section>
- 
+
 <section id="editor" class="tab" hidden>
  <h2 id="editorTitle">Nuevo registro</h2>
  <div class="card">
@@ -585,13 +585,13 @@ label{color:var(--muted)}
   </form>
  </div>
 </section>
- 
+
 <p class="note">
  PAPI RIKI · Versión de desarrollo.
  Sin sincronización bancaria automática.
 </p>
 </main>
- 
+
 <nav id="bottomNav" class="bottom-nav"
  aria-label="Navegación principal" hidden>
  <button data-tab="dashboard" class="active">
@@ -612,7 +612,7 @@ label{color:var(--muted)}
   <span class="nav-icon">☰</span>Más
  </button>
 </nav>
- 
+
 <div id="quickSheet" class="quick-sheet" hidden>
  <div class="sheet-panel" role="dialog"
   aria-modal="true" aria-label="Añadir registro">
@@ -638,26 +638,26 @@ label{color:var(--muted)}
   </button>
  </div>
 </div>
- 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 "use strict";
- 
+
 // =====================================
 // CONFIGURACION PUBLICA
 // =====================================
- 
+
 const SUPABASE_URL =
  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
- 
+
 const SUPABASE_KEY =
  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
- 
+
 const VAPID_PUBLIC_KEY =
  "BD-pMOOx6oN_9Ok0npxKEh0HSjiK2A14tAoL0udhfCt_AsdS92qVq3PnI6DSZIaTDvgwkjcAvlsvcylx9Ksypj0";
- 
+
 const $=id=>document.getElementById(id);
- 
+
 const tables={
  account:"accounts",
  transaction:"finance_transactions",
@@ -665,7 +665,7 @@ const tables={
  holding:"finance_holdings",
  goal:"finance_goals"
 };
- 
+
 const sections=[
  ["dashboard","🏠 Inicio"],
  ["accounts","🏦 Cuentas"],
@@ -677,7 +677,7 @@ const sections=[
  ["reports","📋 Reportes"],
  ["settings","⚙️ Ajustes"]
 ];
- 
+
 const defaults={
  monthly_income:1350,
  expense_plan:700,
@@ -686,7 +686,7 @@ const defaults={
  fx_pen_per_usd:null,
  fx_date:null
 };
- 
+
 let sb=null;
 let user=null;
 let active="dashboard";
@@ -696,7 +696,7 @@ let busy=false;
 let quickKind=null;
 let swRegistration=null;
 let pushBusy=false;
- 
+
 let data={
  accounts:[],
  transactions:[],
@@ -705,19 +705,19 @@ let data={
  goals:[],
  settings:{...defaults}
 };
- 
+
 // =====================================
 // RECORDAR SESION
 // =====================================
- 
+
 const rememberKey="papi_riki_remember";
 const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
- 
+
 let remember=
  localStorage.getItem(rememberKey)!=="false";
- 
+
 $("remember").checked=remember;
- 
+
 const storage={
  getItem(k){
   return (remember?localStorage:sessionStorage)
@@ -732,18 +732,18 @@ const storage={
   sessionStorage.removeItem(k);
  }
 };
- 
+
 // =====================================
 // UTILIDADES
 // =====================================
- 
+
 function money(n,c="PEN"){
  return new Intl.NumberFormat("es-PE",{
   style:"currency",
   currency:c
  }).format(Number(n)||0);
 }
- 
+
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;",
@@ -753,7 +753,7 @@ function esc(v){
   "'":"&#39;"
  })[c]);
 }
- 
+
 function today(){
  const d=new Date();
  return [
@@ -762,83 +762,83 @@ function today(){
   String(d.getDate()).padStart(2,"0")
  ].join("-");
 }
- 
+
 // =====================================
 // WEB PUSH
 // =====================================
- 
+
 // Convertir la clave publica VAPID
 // a formato Uint8Array para PushManager.
- 
+
 function urlBase64ToUint8Array(base64String){
  const padding="=".repeat(
   (4-base64String.length%4)%4
  );
- 
+
  const base64=(base64String+padding)
   .replace(/-/g,"+")
   .replace(/_/g,"/");
- 
+
  const raw=atob(base64);
- 
+
  return Uint8Array.from(
   raw,
   character=>character.charCodeAt(0)
  );
 }
- 
+
 function isStandalone(){
  return (
   window.matchMedia("(display-mode: standalone)").matches ||
   window.navigator.standalone===true
  );
 }
- 
+
 function setPushMessage(text,error=false){
  $("pushMessage").textContent=text;
  $("pushMessage").className=
   "message "+(error?"error":"success");
 }
- 
+
 async function registerPWA(){
  if(!("serviceWorker" in navigator)){
   $("swStatus").textContent=
    "Service Worker no disponible.";
   return null;
  }
- 
+
  try{
   swRegistration=await navigator.serviceWorker.register(
    "/sw.js",
    {scope:"/"}
   );
- 
+
   swRegistration=await navigator.serviceWorker.ready;
- 
+
   $("swStatus").textContent=
    "Service Worker activo.";
- 
+
   return swRegistration;
- 
+
  }catch(error){
   console.error("Service Worker:",error);
- 
+
   $("swStatus").textContent=
    "Error al registrar Service Worker.";
- 
+
   return null;
  }
 }
- 
+
 function refreshNotificationStatus(){
  if(!("Notification" in window)){
   $("notificationStatus").textContent=
    "Notificaciones no disponibles.";
   return;
  }
- 
+
  const permission=Notification.permission;
- 
+
  if(permission==="granted"){
   $("notificationStatus").textContent=
    "Permiso de notificaciones concedido.";
@@ -850,53 +850,53 @@ function refreshNotificationStatus(){
    "Permiso pendiente.";
  }
 }
- 
+
 // =====================================
 // CONSULTAR SUSCRIPCION
 // =====================================
- 
+
 async function checkPushSubscription(){
  refreshNotificationStatus();
- 
+
  if(!user){
   $("subscriptionStatus").textContent=
    "Inicia sesion para consultar tu dispositivo.";
   return;
  }
- 
+
  if(!("serviceWorker" in navigator) ||
     !("PushManager" in window)){
   $("subscriptionStatus").textContent=
    "Web Push no disponible.";
   return;
  }
- 
+
  try{
   const registration=
    swRegistration||await navigator.serviceWorker.ready;
- 
+
   const subscription=
    await registration.pushManager.getSubscription();
- 
+
   if(!subscription){
    $("subscriptionStatus").textContent=
     "iPhone todavia no registrado.";
    return;
   }
- 
+
   const uid=user.id;
- 
+
   const {data:stored,error}=await sb
    .from("push_subscriptions")
    .select("id")
    .eq("user_id",uid)
    .eq("endpoint",subscription.endpoint)
    .maybeSingle();
- 
+
   if(error)throw error;
- 
+
   if(!user||user.id!==uid)return;
- 
+
   if(stored){
    $("subscriptionStatus").textContent=
     "Dispositivo registrado en Supabase.";
@@ -904,27 +904,27 @@ async function checkPushSubscription(){
    $("subscriptionStatus").textContent=
     "Suscripcion local encontrada, pendiente de guardar.";
   }
- 
+
  }catch(error){
   console.error("Consultar push:",error);
- 
+
   $("subscriptionStatus").textContent=
    "No se pudo verificar: "+error.message;
  }
 }
- 
+
 // =====================================
 // REGISTRAR IPHONE
 // =====================================
- 
+
 async function registerIphone(){
  if(pushBusy)return;
- 
+
  if(!user){
   setPushMessage("Primero inicia sesion.",true);
   return;
  }
- 
+
  if(!isStandalone()){
   setPushMessage(
    "Abre PAPI RIKI desde el icono de la pantalla de inicio de tu iPhone.",
@@ -932,7 +932,7 @@ async function registerIphone(){
   );
   return;
  }
- 
+
  if(!("serviceWorker" in navigator) ||
     !("PushManager" in window) ||
     !("Notification" in window)){
@@ -942,7 +942,7 @@ async function registerIphone(){
   );
   return;
  }
- 
+
  if(Notification.permission==="denied"){
   setPushMessage(
    "Las notificaciones estan bloqueadas. Revisa los ajustes de iOS.",
@@ -950,35 +950,35 @@ async function registerIphone(){
   );
   return;
  }
- 
+
  pushBusy=true;
  $("registerPush").disabled=true;
- 
+
  try{
   // El permiso debe solicitarse directamente
   // desde la pulsacion del boton.
   let permission=Notification.permission;
- 
+
   if(permission==="default"){
    permission=await Notification.requestPermission();
   }
- 
+
   refreshNotificationStatus();
- 
+
   if(permission!=="granted"){
    throw new Error(
     "Necesitas permitir las notificaciones."
    );
   }
- 
+
   setPushMessage("Preparando suscripcion...");
- 
+
   const registration=
    swRegistration||await navigator.serviceWorker.ready;
- 
+
   let subscription=
    await registration.pushManager.getSubscription();
- 
+
   if(!subscription){
    subscription=await registration.pushManager.subscribe({
     userVisibleOnly:true,
@@ -986,15 +986,15 @@ async function registerIphone(){
      urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
    });
   }
- 
+
   if(!subscription){
    throw new Error(
     "El navegador no devolvio una suscripcion."
    );
   }
- 
+
   const subscriptionData=subscription.toJSON();
- 
+
   if(!subscriptionData.endpoint ||
      !subscriptionData.keys?.p256dh ||
      !subscriptionData.keys?.auth){
@@ -1002,12 +1002,12 @@ async function registerIphone(){
     "La suscripcion esta incompleta."
    );
   }
- 
+
   // Guardar exclusivamente para el usuario
   // que inicio la operacion.
- 
+
   const uid=user.id;
- 
+
   const payload={
    user_id:uid,
    endpoint:subscriptionData.endpoint,
@@ -1016,13 +1016,13 @@ async function registerIphone(){
    device_name:"iPhone",
    updated_at:new Date().toISOString()
   };
- 
+
   if(!user||user.id!==uid){
    throw new Error(
     "La sesion cambio durante el registro."
    );
   }
- 
+
   const {data:saved,error}=await sb
    .from("push_subscriptions")
    .upsert(payload,{
@@ -1030,53 +1030,53 @@ async function registerIphone(){
    })
    .select("id")
    .single();
- 
+
   if(error)throw error;
- 
+
   if(!saved?.id){
    throw new Error(
     "Supabase no confirmo el registro."
    );
   }
- 
+
   $("subscriptionStatus").textContent=
    "iPhone registrado correctamente.";
- 
+
   setPushMessage(
    "¡Tu iPhone ya esta registrado en Supabase! " +
    "El siguiente paso sera configurar el servidor de envio."
   );
- 
+
  }catch(error){
   console.error("Registrar iPhone:",error);
- 
+
   setPushMessage(
    "No se pudo completar el registro: "+error.message,
    true
   );
- 
+
  }finally{
   pushBusy=false;
   $("registerPush").disabled=false;
  }
 }
- 
+
 $("registerPush").addEventListener(
  "click",registerIphone
 );
- 
+
 $("refreshPush").addEventListener(
  "click",checkPushSubscription
 );
- 
+
 // =====================================
 // AUTENTICACION
 // =====================================
- 
+
 function closeSheet(){
  $("quickSheet").hidden=true;
 }
- 
+
 function showLogin(){
  user=null;
  $("loading").hidden=true;
@@ -1086,7 +1086,7 @@ function showLogin(){
  $("bottomNav").hidden=true;
  closeSheet();
 }
- 
+
 async function showApp(u){
  user=u;
  $("loading").hidden=true;
@@ -1095,24 +1095,24 @@ async function showApp(u){
  $("logout").hidden=false;
  $("bottomNav").hidden=false;
  $("password").value="";
- 
+
  await loadAll();
  navigate("dashboard");
- 
+
  refreshNotificationStatus();
 }
- 
+
 async function init(){
  // Registrar el Service Worker
  // independientemente del login.
  void registerPWA();
- 
+
  if(!window.supabase){
   $("loading").textContent=
    "No se pudo cargar Supabase.";
   return;
  }
- 
+
  try{
   sb=window.supabase.createClient(
    SUPABASE_URL,
@@ -1127,56 +1127,56 @@ async function init(){
     }
    }
   );
- 
+
   sb.auth.onAuthStateChange(event=>{
    if(event==="SIGNED_OUT"){
     showLogin();
    }
   });
- 
+
   const {data:auth,error}=await sb.auth.getUser();
- 
+
   if(error||!auth?.user){
    showLogin();
   }else{
    await showApp(auth.user);
   }
- 
+
  }catch(error){
   console.error(error);
   $("loading").textContent="Error de conexion.";
  }
 }
- 
+
 $("loginForm").onsubmit=async e=>{
  e.preventDefault();
- 
+
  const btn=$("loginBtn");
  btn.disabled=true;
  $("loginMsg").textContent="";
- 
+
  try{
   remember=$("remember").checked;
- 
+
   localStorage.setItem(
    rememberKey,
    String(remember)
   );
- 
+
   localStorage.removeItem(authKey);
   sessionStorage.removeItem(authKey);
- 
+
   const {data:result,error}=
    await sb.auth.signInWithPassword({
     email:$("email").value.trim(),
     password:$("password").value
    });
- 
+
   if(error)throw error;
   if(!result?.user)throw Error("Sesion invalida");
- 
+
   await showApp(result.user);
- 
+
  }catch(error){
   $("loginMsg").textContent=error.message;
   $("loginMsg").className="message error";
@@ -1184,79 +1184,79 @@ $("loginForm").onsubmit=async e=>{
   btn.disabled=false;
  }
 };
- 
+
 $("logout").onclick=async()=>{
  const {error}=await sb.auth.signOut();
- 
+
  if(error){
   alert(error.message);
  }else{
   showLogin();
  }
 };
- 
+
 // =====================================
 // NAVEGACION
 // =====================================
- 
+
 function navigate(id){
  active=id;
- 
+
  document.querySelectorAll(".tab").forEach(el=>{
   el.hidden=el.id!==id;
  });
- 
+
  document.querySelectorAll("[data-tab]").forEach(el=>{
   el.classList.toggle(
    "active",
    el.dataset.tab===id
   );
  });
- 
+
  if(id==="projections")project();
- 
+
  if(id==="settings"){
   refreshNotificationStatus();
   void checkPushSubscription();
  }
- 
+
  window.scrollTo({top:0,behavior:"instant"});
 }
- 
+
 $("desktopNav").innerHTML=sections.map(
  ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
- 
+
 $("moreMenu").innerHTML=sections.slice(2).map(
  ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
- 
+
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-tab]");
  if(b)navigate(b.dataset.tab);
 });
- 
+
 $("quickAddBtn").onclick=()=>{
  $("quickSheet").hidden=false;
 };
- 
+
 $("closeSheet").onclick=closeSheet;
- 
+
 $("quickSheet").addEventListener("click",e=>{
  if(e.target===$("quickSheet"))closeSheet();
 });
- 
+
 document.addEventListener("keydown",e=>{
  if(e.key==="Escape")closeSheet();
 });
- 
+
 document.querySelectorAll("[data-quick]").forEach(b=>{
  b.onclick=()=>{
   const kind=b.dataset.quick;
   closeSheet();
- 
+
   if(["expense","income","transfer"].includes(kind)){
    quickKind=kind;
    openEditor("transaction");
@@ -1266,16 +1266,16 @@ document.querySelectorAll("[data-quick]").forEach(b=>{
   }
  };
 });
- 
+
 // =====================================
 // DATOS FINANCIEROS
 // =====================================
- 
+
 async function loadAll(){
  if(!user)return;
- 
+
  const uid=user.id;
- 
+
  const results=await Promise.all([
   sb.from("accounts").select("*").eq("user_id",uid),
   sb.from("finance_transactions").select("*").eq("user_id",uid),
@@ -1285,16 +1285,16 @@ async function loadAll(){
   sb.from("finance_settings").select("*")
    .eq("user_id",uid).maybeSingle()
  ]);
- 
+
  const failed=results.find(r=>r.error);
- 
+
  if(failed){
   alert("Error de base de datos: "+failed.error.message);
   return;
  }
- 
+
  if(!user||user.id!==uid)return;
- 
+
  data.accounts=results[0].data||[];
  data.transactions=results[1].data||[];
  data.budgets=results[2].data||[];
@@ -1304,14 +1304,14 @@ async function loadAll(){
   ...defaults,
   ...(results[5].data||{})
  };
- 
+
  render();
 }
- 
+
 function account(id){
  return data.accounts.find(a=>a.id===id);
 }
- 
+
 function balance(a){
  let n=Number(a.opening_balance)||0;
  const credit=a.account_type==="credit";
@@ -1327,14 +1327,14 @@ function balance(a){
  }
  return n;
 }
- 
+
 function converted(n,c){
  if(c==="PEN")return Number(n);
- 
+
  const fx=Number(data.settings.fx_pen_per_usd);
  return fx>0?Number(n)*fx:null;
 }
- 
+
 function actions(type,id){
  return `<div class="actions">
   <button class="btn alt" data-edit="${type}:${id}">
@@ -1345,7 +1345,7 @@ function actions(type,id){
   </button>
  </div>`;
 }
- 
+
 function render(){
  renderDashboard();
  renderAccounts();
@@ -1356,7 +1356,7 @@ function render(){
  renderReports();
  renderSettings();
 }
- 
+
 function renderDashboard(){
  const s=data.settings;
  const month=new Date().toISOString().slice(0,7);
@@ -1396,7 +1396,7 @@ function renderDashboard(){
  const margin=Number(s.monthly_income)-Number(s.expense_plan);
  $("spendable").innerHTML=`<div class="value mint">${money(Math.max(0,Math.min(margin,Number(s.investment_target))))}</div><p>Meta de aporte mensual sugerido</p><p class="note">Es una referencia presupuestaria, no dinero disponible ni rentabilidad garantizada.</p>`;
 }
- 
+
 function renderAccounts(){
  const types={bank:["🏦","Cuenta bancaria"],cash:["💵","Efectivo"],investment:["📦","Cuenta de inversión"],credit:["💳","Tarjeta de crédito"]};
  $("accountList").innerHTML=data.accounts.length
@@ -1412,12 +1412,12 @@ function renderAccounts(){
   }).join("")
   :'<div class="card"><h3>Tu dinero empieza aquí</h3><p>Añade una cuenta bancaria, efectivo o tarjeta de crédito.</p><button class="btn" data-new="account">+ Añadir primera cuenta</button></div>';
 }
- 
+
 function renderTransactions(){
  const rows=[...data.transactions].sort(
   (a,b)=>b.occurred_on.localeCompare(a.occurred_on)
  );
- 
+
  $("transactionList").innerHTML=rows.length
   ?rows.map(t=>
    `<div class="item">
@@ -1432,7 +1432,7 @@ function renderTransactions(){
   ).join("")
   :"<p>No hay movimientos registrados.</p>";
 }
- 
+
 function renderBudgets(){
  $("budgetList").innerHTML=data.budgets.length
   ?data.budgets.map(b=>{
@@ -1441,11 +1441,11 @@ function renderBudgets(){
     t.category===b.category&&
     t.currency===b.currency
    ).reduce((n,t)=>n+Number(t.amount),0);
- 
+
    const pct=Number(b.amount)>0
     ?spent/Number(b.amount)*100
     :0;
- 
+
    return `<div class="item">
     <div class="row">
      <strong>${esc(b.category)}</strong>
@@ -1462,29 +1462,31 @@ function renderBudgets(){
   }).join("")
   :"<p>No hay presupuestos configurados.</p>";
 }
- 
+
 function renderHoldings(){
  $("holdingList").innerHTML=data.holdings.length
   ?data.holdings.map(h=>{
    const cost=Number(h.cost_basis)||0;
    const value=Number(h.market_value)||0;
+   const kind=h.investment_kind||({fund:"fund",stock:"stock",etf:"etf",deposit:"fixed",other:"other"}[h.asset_type]||"other");
+   const labels={fund:"Fondo mutuo",stock:"Acción",etf:"ETF",fixed:"Renta fija",variable:"Renta variable",crypto:"Criptomoneda",other:"Otra inversión"};
    const diff=value-cost;
    const pct=cost>0?diff/cost*100:null;
-   return `<div class="item"><div class="row"><div><strong>📈 ${esc(h.symbol)}</strong><p>${esc(h.broker)} · ${esc(h.asset_type)} · ${esc(h.currency)}</p></div><div class="value">${money(value,h.currency)}</div></div>
+   return `<div class="item"><div class="row"><div><strong>📈 ${esc(h.symbol)}</strong><p>${esc(h.broker)} · ${esc(labels[kind]||"Inversión")} · ${esc(h.currency)}</p></div><div class="value">${money(value,h.currency)}</div></div>
     <div class="holding-stats"><div class="holding-stat"><small>Capital registrado</small><strong>${money(cost,h.currency)}</strong></div><div class="holding-stat"><small>Ganancia / pérdida estimada</small><strong class="${diff>=0?"mint":"error"}">${diff>=0?"+":""}${money(diff,h.currency)}</strong></div></div>
-    <p class="note">${pct===null?"Rentabilidad no calculable sin capital registrado":`Variación acumulada: ${pct.toFixed(2)}%`} · Valor manual al ${esc(h.price_date||"último registro")}. No es rentabilidad anualizada.</p>
+    <p class="note">${pct===null?"Rentabilidad no calculable sin capital registrado":`Resultado acumulado simple: ${pct.toFixed(2)}%`} · ${kind==="fixed"?"Valor al vencimiento estimado, no saldo disponible · ":""}Valor al ${esc(h.price_date||"último registro")}. No es rentabilidad anualizada.</p>
     ${actions("holding",h.id)}</div>`;
   }).join("")
-  :'<div class="card"><h3>Empieza a seguir tus inversiones</h3><p>Para Flip: broker «Flip», activo «Mi inversión Flip», tipo «Fondo», cantidad 1, capital aportado y saldo actual.</p><button class="btn" data-new="holding">+ Registrar Flip u otra inversión</button></div>';
+  :'<div class="card"><h3>Empieza a seguir tus inversiones</h3><p>Para Flip elige «Fondo mutuo», escribe el capital aportado y el valor actual. Para acciones/ETF introduce unidades y precio; para renta fija, tasa y plazo.</p><button class="btn" data-new="holding">+ Registrar Flip u otra inversión</button></div>';
 }
- 
+
 function renderGoals(){
  $("goalList").innerHTML=data.goals.length
   ?data.goals.map(g=>{
    const pct=Math.min(
     100,Number(g.saved)/Number(g.target)*100
    );
- 
+
    return `<div class="item">
     <strong>${esc(g.name)}</strong>
     <p>${money(g.saved,g.currency)} /
@@ -1497,12 +1499,12 @@ function renderGoals(){
   }).join("")
   :"<p>No hay metas adicionales.</p>";
 }
- 
+
 function renderReports(){
  const sum=kind=>data.transactions
   .filter(t=>t.kind===kind&&t.currency==="PEN")
   .reduce((n,t)=>n+Number(t.amount),0);
- 
+
  $("reportBody").innerHTML=
   `<div class="grid">
    <div class="card">
@@ -1520,10 +1522,10 @@ function renderReports(){
     Reporte acumulado, no cierre semanal.
    </p>`;
 }
- 
+
 function renderSettings(){
  const s=data.settings;
- 
+
  for(const [id,key] of [
   ["sIncome","monthly_income"],
   ["sExpense","expense_plan"],
@@ -1535,26 +1537,26 @@ function renderSettings(){
   $(id).value=s[key]??"";
  }
 }
- 
+
 function project(){
  const p=Number($("pInitial").value);
  const a=Number($("pMonthly").value);
  const y=Number($("pYears").value);
  const r=Number($("pRate").value);
- 
+
  if(![p,a,y,r].every(Number.isFinite)||
   p<0||a<0||y<1||y>50||r< -50||r>50){
   $("projectionResult").textContent="Revisa los valores.";
   return;
  }
- 
+
  const m=Math.pow(1+r/100,1/12)-1;
  const n=Math.round(y*12);
  const factor=Math.pow(1+m,n);
- 
+
  const future=p*factor+
   (Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
- 
+
  $("projectionResult").innerHTML=
   `<h3>Patrimonio proyectado</h3>
    <div class="value mint">${money(future)}</div>
@@ -1563,15 +1565,15 @@ function project(){
     Escenario hipotetico, sin impuestos ni inflacion.
    </p>`;
 }
- 
+
 ["pInitial","pMonthly","pYears","pRate"].forEach(
  id=>$(id).addEventListener("input",project)
 );
- 
+
 // =====================================
 // FORMULARIOS FINANCIEROS
 // =====================================
- 
+
 const fields={
  account:[
   ["name","Nombre","text"],
@@ -1600,15 +1602,20 @@ const fields={
   ["amount","Limite PEN","number"]
  ],
  holding:[
-  ["broker","Broker","text"],
+  ["investment_kind","Tipo de inversión","select",
+   "fund:Fondo mutuo|stock:Acción|etf:ETF|fixed:Renta fija|variable:Otra renta variable|crypto:Criptomoneda|other:Otra inversión"],
+  ["broker","Plataforma / entidad","text"],
   ["symbol","Nombre de la inversión","text"],
-  ["asset_type","Tipo","select",
-   "stock:Accion|etf:ETF|fund:Fondo|deposit:Deposito|other:Otro"],
-  ["quantity","Cantidad","number"],
+  ["asset_type","Tipo interno","select",
+   "fund:Fondo|stock:Acción|etf:ETF|deposit:Depósito|other:Otro"],
+  ["quantity","Unidades / participaciones","number"],
   ["cost_basis","Capital aportado / costo total","number"],
-  ["market_value","Valor actual (saldo de inversión)","number"],
+  ["market_value","Valor actual","number"],
+  ["unit_price","Precio actual por unidad","optional_number"],
+  ["annual_rate","Tasa anual nominal o efectiva (%)","optional_number"],
+  ["term_months","Plazo (meses)","optional_number"],
   ["currency","Moneda","select","PEN|USD"],
-  ["price_date","Fecha valoracion","date"]
+  ["price_date","Fecha de valoración","date"]
  ],
  goal:[
   ["name","Nombre","text"],
@@ -1618,15 +1625,15 @@ const fields={
   ["due_on","Fecha objetivo","date"]
  ]
 };
- 
+
 function fieldHtml(f,record){
  const [key,label,type,opts]=f;
  const value=record?.[key]??(
-  key==="occurred_on"?today():""
+  (key==="occurred_on"||key==="price_date")?today():""
  );
- 
+
  let control="";
- 
+
  if(type==="select"){
   control=`<select class="field" id="f_${key}">`+
    opts.split("|").map(o=>{
@@ -1635,7 +1642,7 @@ function fieldHtml(f,record){
      ${String(value)===v?"selected":""}>
      ${t||v}</option>`;
    }).join("")+"</select>";
- 
+
  }else if(
   type==="account"||type==="optional_account"
  ){
@@ -1649,11 +1656,11 @@ function fieldHtml(f,record){
      ${esc(a.name)} (${a.currency})
      </option>`
    ).join("")+"</select>";
- 
+
  }else{
   const number=
    type==="number"||type==="optional_number";
- 
+
   control=`<input class="field"
    id="f_${key}"
    type="${number?"number":type}"
@@ -1661,20 +1668,20 @@ function fieldHtml(f,record){
    value="${esc(value)}"
    ${type.startsWith("optional")?"":"required"}>`;
  }
- 
+
  return `<label>${label}${control}</label>`;
 }
- 
+
 function openEditor(type,id=null){
  if(type==="transaction"&&!data.accounts.length){
   alert("Primero registra una cuenta.");
   navigate("accounts");
   return;
  }
- 
+
  editType=type;
  editId=id;
- 
+
  const sets={
   account:data.accounts,
   transaction:data.transactions,
@@ -1682,14 +1689,14 @@ function openEditor(type,id=null){
   holding:data.holdings,
   goal:data.goals
  };
- 
+
  const record=id
   ?sets[type].find(x=>x.id===id)
   :null;
- 
+
  $("editorTitle").textContent=
   (id?"Editar ":"Nuevo ")+type;
- 
+
  $("editorFields").innerHTML=
   fields[type].map(f=>fieldHtml(f,record)).join("");
  if(type==="account"){
@@ -1714,35 +1721,62 @@ function openEditor(type,id=null){
  }
  if(type==="holding"){
   const help=document.createElement("p");help.className="note";help.style.gridColumn="1/-1";
-  help.textContent="Para Flip: Broker = Flip; Tipo = Fondo; Cantidad = 1; Capital aportado = lo que invertiste; Valor actual = saldo actual mostrado en Flip. Puedes editar el valor cada vez que cambie.";
   $("editorFields").append(help);
+  const kind=$("f_investment_kind");
+  if(!record)kind.value="fund";
+  const show=(id,visible,label)=>{
+   const el=$("f_"+id),parent=el.closest("label");
+   parent.hidden=!visible;el.disabled=!visible;
+   if(label)parent.firstChild.textContent=label;
+  };
+  const update=()=>{
+   const k=kind.value;
+   const units=["stock","etf","crypto"].includes(k);
+   const fixed=k==="fixed";
+   show("asset_type",false);
+   show("quantity",units,units?"Cantidad de unidades":"Cantidad");
+   show("unit_price",units,"Precio actual por unidad");
+   show("annual_rate",fixed,"Tasa anual efectiva (%)");
+   show("term_months",fixed,"Plazo (meses)");
+   show("market_value",!fixed&&!units,"Valor actual de la inversión");
+   show("cost_basis",true,units?"Costo total de compra":"Capital aportado");
+   const q=$("f_quantity"),v=$("f_market_value"),price=$("f_unit_price");
+   if(!units){q.value="1";price.value="";}
+   if(fixed){v.value="";}
+   help.textContent=fixed
+    ?"La tasa se usa para estimar el valor al vencimiento, no una ganancia garantizada. Se supone capitalización anual efectiva; impuestos y comisiones no incluidos."
+    :units?"Introduce cantidad, precio actual y costo total. El valor se calcula automáticamente. No hay cotizaciones en tiempo real."
+    :"Indica cuánto aportaste y cuánto vale hoy. Para Flip selecciona Fondo mutuo; no se solicita una tasa fija.";
+  };
+  kind.addEventListener("change",update);
+  update();
  }
- 
+
  if(type==="transaction"&&!id&&quickKind){
   $("f_kind").value=quickKind;
  }
- 
+
  $("editorMsg").textContent="";
  navigate("editor");
 }
- 
+
 document.addEventListener("click",async e=>{
  const create=e.target.closest("[data-new]");
  if(create)openEditor(create.dataset.new);
- 
+
  const edit=e.target.closest("[data-edit]");
  if(edit){
   const [type,id]=edit.dataset.edit.split(":");
   openEditor(type,id);
  }
- 
+
  const del=e.target.closest("[data-delete]");
- 
+
  if(del){
   const [type,id]=del.dataset.delete.split(":");
- 
+
   if(!confirm("¿Eliminar este registro?"))return;
- 
+
   try{
    const {data:deleted,error}=
     await sb.from(tables[type])
@@ -1750,51 +1784,51 @@ document.addEventListener("click",async e=>{
      .eq("id",id)
      .eq("user_id",user.id)
      .select("id");
- 
+
    if(error)throw error;
- 
+
    if(deleted?.length!==1){
     throw Error("No se confirmo la eliminacion.");
    }
- 
+
    await loadAll();
- 
+
   }catch(error){
    alert(error.message);
   }
  }
 });
- 
+
 $("cancelBtn").onclick=()=>navigate("dashboard");
- 
+
 $("editorForm").onsubmit=async e=>{
  e.preventDefault();
  if(busy)return;
- 
+
  busy=true;
  $("saveBtn").disabled=true;
- 
+
  try{
   const payload={};
- 
+
   for(const [key,,type] of fields[editType]){
    const raw=$("f_"+key).value;
- 
+
    if(type==="number"||type==="optional_number"){
     payload[key]=raw===""?null:Number(raw);
- 
+
     if(payload[key]!==null&&(
      !Number.isFinite(payload[key])||
      payload[key]<0
     )){
      throw Error("Importe invalido.");
     }
- 
+
    }else{
     payload[key]=raw||null;
    }
   }
- 
+
   if(editType==="account"){
    if(payload.account_type!=="credit"){
     payload.credit_limit=null;
@@ -1807,13 +1841,34 @@ $("editorForm").onsubmit=async e=>{
     }
    }
   }
- 
+
+  if(editType==="holding"){
+   const kind=payload.investment_kind;
+   const mapping={fund:"fund",stock:"stock",etf:"etf",fixed:"deposit",variable:"other",crypto:"other",other:"other"};
+   if(!mapping[kind])throw Error("Selecciona el tipo de inversión.");
+   payload.asset_type=mapping[kind];
+   if(!(payload.cost_basis>=0)||payload.cost_basis===null)throw Error("Indica el capital aportado.");
+   if(["stock","etf","crypto"].includes(kind)){
+    if(!(payload.quantity>0)||!(payload.unit_price>=0))throw Error("Indica cantidad y precio por unidad.");
+    payload.market_value=Math.round(payload.quantity*payload.unit_price*100)/100;
+    payload.annual_rate=null;payload.term_months=null;
+   }else if(kind==="fixed"){
+    if(payload.annual_rate===null||payload.annual_rate<0||payload.annual_rate>100||!(payload.term_months>0)||payload.term_months>600)throw Error("Indica una tasa entre 0 y 100 y un plazo válido.");
+    payload.quantity=1;payload.unit_price=null;
+    payload.market_value=Math.round(payload.cost_basis*Math.pow(1+payload.annual_rate/100,payload.term_months/12)*100)/100;
+   }else{
+    if(payload.market_value===null||payload.market_value<0)throw Error("Indica el valor actual.");
+    payload.quantity=1;payload.unit_price=null;payload.annual_rate=null;payload.term_months=null;
+   }
+   if(!payload.price_date)payload.price_date=today();
+  }
+
   if(editType==="transaction"){
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
- 
+
    if(!src)throw Error("Selecciona una cuenta.");
- 
+
    payload.currency=src.currency;
    if(src.account_type==="credit"&&payload.kind==="income"){
     throw Error("Para pagar una tarjeta usa Transferencia desde tu cuenta bancaria hacia la tarjeta.");
@@ -1821,42 +1876,42 @@ $("editorForm").onsubmit=async e=>{
    if(src.account_type==="credit"&&payload.kind==="transfer"){
     throw Error("Para pagar una tarjeta elige una cuenta bancaria como origen y la tarjeta como destino.");
    }
- 
+
    if(payload.kind==="transfer"){
     if(!dst||dst.id===src.id){
      throw Error("Selecciona otra cuenta de destino.");
     }
- 
+
     if(
      payload.linked_amount===null&&
      src.currency===dst.currency
     ){
      payload.linked_amount=payload.amount;
     }
- 
+
     if(!(payload.linked_amount>0)){
      throw Error("Indica el importe recibido.");
     }
- 
+
    }else{
     payload.linked_account_id=null;
     payload.linked_amount=null;
    }
- 
+
    if(!(payload.amount>0)){
     throw Error("Importe invalido.");
    }
   }
- 
+
   if(editType==="budget"){
    payload.currency="PEN";
   }
- 
+
   if(editType==="goal"&&!(payload.target>0)){
    throw Error("Objetivo invalido.");
   }
- 
- 
+
+
   const query=editId
    ?sb.from(tables[editType])
      .update(payload)
@@ -1864,18 +1919,18 @@ $("editorForm").onsubmit=async e=>{
      .eq("user_id",user.id)
    :sb.from(tables[editType])
      .insert({...payload,user_id:user.id});
- 
+
   const {data:saved,error}=
    await query.select("id");
- 
+
   if(error)throw error;
- 
+
   if(!saved?.length){
    throw Error("No se confirmo el guardado.");
   }
- 
+
   await loadAll();
- 
+
   navigate({
    account:"accounts",
    transaction:"movements",
@@ -1883,24 +1938,24 @@ $("editorForm").onsubmit=async e=>{
    holding:"investments",
    goal:"goals"
   }[editType]);
- 
+
  }catch(error){
   $("editorMsg").textContent=error.message;
   $("editorMsg").className="message error";
- 
+
  }finally{
   busy=false;
   $("saveBtn").disabled=false;
  }
 };
- 
+
 // =====================================
 // CONFIGURACION
 // =====================================
- 
+
 $("settingsForm").onsubmit=async e=>{
  e.preventDefault();
- 
+
  const payload={
   user_id:user.id,
   monthly_income:Number($("sIncome").value),
@@ -1912,21 +1967,21 @@ $("settingsForm").onsubmit=async e=>{
    :null,
   fx_date:$("sFxDate").value||null
  };
- 
+
  const {error}=await sb.from("finance_settings")
   .upsert(payload,{onConflict:"user_id"});
- 
+
  $("settingsMsg").textContent=error
   ?error.message
   :"Preferencias guardadas.";
- 
+
  if(!error)await loadAll();
 };
- 
+
 // =====================================
 // EXPORTAR REPORTES
 // =====================================
- 
+
 $("exportBtn").onclick=()=>{
  const rows=[
   ["fecha","tipo","cuenta","categoria",
@@ -1941,33 +1996,33 @@ $("exportBtn").onclick=()=>{
    t.currency
   ])
  ];
- 
+
  const csv=rows.map(row=>
   row.map(v=>
    '"'+String(v??"").replace(/"/g,'""')+'"'
   ).join(",")
  ).join("\r\n");
- 
+
  const blob=new Blob(
   ["\ufeff"+csv],
   {type:"text/csv;charset=utf-8"}
  );
- 
+
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
- 
+
  a.href=url;
  a.download="papi-riki-movimientos.csv";
  a.click();
- 
+
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
- 
+
 // =====================================
 // INICIAR APLICACION
 // =====================================
- 
- 
+
+
 // =====================================
 // APARIENCIA PERSONALIZABLE Y FESTIVIDADES
 // =====================================
@@ -2026,8 +2081,9 @@ $("themeMode").addEventListener("change",e=>{
  localStorage.setItem("papi_theme",e.target.value);appearance();
 });
 appearance();
- 
+
 init();
 </script>
 </body>
 </html>
+
