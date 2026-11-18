@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -259,9 +258,71 @@ label{display:block;color:#c9d5e6;font-size:14px}
   transition:none!important;
  }
 }
+ 
+/* PAPI RIKI 2.0 — diseño adaptable sin dependencias externas */
+:root{--bg:#080f1c;--panel:#14243a;--panel2:#0f1c30;--line:#30455e;--text:#f4f8ff;--muted:#a9bbcf;--mint:#45e3b5;--red:#ff8f9c;--accent-soft:rgba(69,227,181,.13);--hero1:#153e46;--hero2:#122138;--shadow:0 18px 44px rgba(0,0,0,.17)}
+body{background:radial-gradient(ellipse 95% 45% at 50% -10%,var(--accent-soft),transparent 75%),var(--bg);background-attachment:fixed}
+header{background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(18px);padding:13px clamp(16px,4vw,36px);box-shadow:0 2px 18px #0002}
+.logo{font-size:22px;letter-spacing:-.8px}
+main{width:min(1120px,100%);padding-top:30px}
+h1{font-size:clamp(27px,5vw,37px);letter-spacing:-1.1px;font-weight:800}
+h2{font-size:clamp(21px,4vw,27px);letter-spacing:-.6px}
+h3{letter-spacing:.05px}
+p{line-height:1.55}
+.card,.item{border:1px solid var(--line);background:linear-gradient(155deg,var(--panel),var(--panel2));box-shadow:var(--shadow);border-radius:22px}
+.card{padding:22px}.item{padding:19px}
+.card h3{color:var(--muted);font-size:13px;font-weight:650}
+.value{font-variant-numeric:tabular-nums;letter-spacing:-.8px}
+.btn{border-radius:14px;background:var(--mint);color:#08241c;box-shadow:0 4px 14px var(--accent-soft)}
+.btn.alt{background:var(--panel2);color:var(--text);border:1px solid var(--line);box-shadow:none}
+.btn.danger{background:#633442;color:#fff0f2;box-shadow:none}
+.field{background:var(--bg);color:var(--text);border-color:var(--line);border-radius:13px}
+label{color:var(--muted)}
+.progress{height:11px;background:var(--line)}
+.progress>div{background:linear-gradient(90deg,var(--mint),#b6ffe6)}
+#dashboard>.card:first-of-type{background:linear-gradient(135deg,var(--hero1),var(--hero2));border-color:color-mix(in srgb,var(--mint) 35%,var(--line));padding:27px;position:relative;overflow:hidden}
+#dashboard>.card:first-of-type:after{content:'✦';position:absolute;right:19px;top:8px;font-size:80px;color:var(--mint);opacity:.13;pointer-events:none}
+#dashboard #netWorth{font-size:clamp(32px,7vw,48px)}
+#summary .card{min-height:118px}
+#accountList{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:13px}
+#accountList .item{margin:0}
+.account-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.account-icon{width:45px;height:45px;border-radius:15px;display:grid;place-items:center;background:var(--accent-soft);font-size:23px}
+.account-type{font-size:12px;color:var(--muted);margin-top:5px}
+.account-amount{margin:18px 0 5px;font-size:clamp(24px,5vw,32px);font-weight:800;letter-spacing:-.8px}
+.account-amount.debt{color:#ffb4b9}
+.account-caption{font-size:12px;color:var(--muted)}
+#holdingList .item{margin-bottom:12px}
+.holding-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.holding-stat{padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--bg)}
+.holding-stat small{display:block;margin-bottom:6px}
+.holding-stat strong{font-size:18px}
+.holding-tip{border-left:3px solid var(--mint);padding:10px 14px;background:var(--accent-soft);border-radius:0 12px 12px 0}
+.theme-preview{display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap}
+.theme-dot{width:24px;height:24px;border-radius:50%;border:2px solid #fff5}
+.theme-status{font-size:13px;color:var(--muted);margin-top:9px}
+.season-pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;background:var(--accent-soft);padding:8px 13px;color:var(--text);font-size:12px;font-weight:650;margin-bottom:16px}
+#dashboard .dashboard-intro{margin-bottom:19px}
+#dashboard .dashboard-intro p{margin:4px 0 0}
+#moreMenu button{display:flex;align-items:center;justify-content:flex-start;text-align:left;padding:20px;font-weight:650}
+.sheet-panel{background:var(--panel);border-color:var(--line);box-shadow:0 -15px 55px #0007}
+.sheet-option{background:var(--panel2);border-color:var(--line)}
+.desktop-nav button{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+.desktop-nav button.active{background:var(--mint);color:#09251d}
+@media(max-width:700px){
+ main{padding:22px 16px calc(128px + env(safe-area-inset-bottom))}
+ header{padding:12px 16px}
+ .card{padding:19px}.grid{gap:12px}
+ .bottom-nav{background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(18px);border-color:var(--line);height:calc(80px + env(safe-area-inset-bottom))}
+ .bottom-nav button{color:var(--muted)}.bottom-nav button.active{color:var(--mint)}
+ .add-circle{background:var(--mint);border-color:var(--bg);color:#08251d;box-shadow:0 6px 24px var(--accent-soft)}
+ .mobile-more button{background:var(--panel);border-color:var(--line);min-height:90px}
+ #dashboard>.card:first-of-type{padding:23px}
+}
+ 
 </style>
 </head>
-
+ 
 <body>
 <header>
  <div class="logo">💸 PAPI <span>RIKI</span></div>
@@ -269,9 +330,9 @@ label{display:block;color:#c9d5e6;font-size:14px}
   Cerrar sesión
  </button>
 </header>
-
+ 
 <p id="loading">Verificando acceso...</p>
-
+ 
 <section id="auth" class="auth" hidden>
  <div class="card">
   <h2>🔐 Iniciar sesión</h2>
@@ -296,13 +357,13 @@ label{display:block;color:#c9d5e6;font-size:14px}
   <p id="loginMsg" class="message" role="status"></p>
  </div>
 </section>
-
+ 
 <main id="app" hidden>
 <nav id="desktopNav" class="desktop-nav"></nav>
-
+ 
 <section id="dashboard" class="tab">
- <h1>Hola, bienvenido 👋</h1>
- <p>Tu centro de control financiero.</p>
+ <div class="dashboard-intro"><div id="seasonBanner" class="season-pill" hidden></div><h1>Tu dinero, más claro ✨</h1>
+ <p>Tu resumen financiero en un solo lugar.</p></div>
  <div class="card">
   <h3>💰 Patrimonio registrado</h3>
   <div id="netWorth" class="value">Por configurar</div>
@@ -318,16 +379,16 @@ label{display:block;color:#c9d5e6;font-size:14px}
   <div id="spendable"></div>
  </div>
 </section>
-
+ 
 <section id="accounts" class="tab" hidden>
  <div class="row">
   <h2>🏦 Mis cuentas</h2>
   <button class="btn" data-new="account">+ Cuenta</button>
  </div>
- <p class="note">BCP, BBVA, efectivo e inversiones.</p>
+ <p class="note">Cuentas de débito, efectivo y tarjetas de crédito. La deuda de tarjeta se muestra separada de tu dinero disponible.</p>
  <div id="accountList" class="grid"></div>
 </section>
-
+ 
 <section id="movements" class="tab" hidden>
  <div class="row">
   <h2>🧾 Movimientos</h2>
@@ -338,7 +399,7 @@ label{display:block;color:#c9d5e6;font-size:14px}
  <p class="note">Ingresos, gastos y transferencias manuales.</p>
  <div id="transactionList"></div>
 </section>
-
+ 
 <section id="budgets" class="tab" hidden>
  <div class="row">
   <h2>📊 Presupuestos</h2>
@@ -347,16 +408,16 @@ label{display:block;color:#c9d5e6;font-size:14px}
  <p class="note">Alertas visuales al 80%.</p>
  <div id="budgetList"></div>
 </section>
-
+ 
 <section id="investments" class="tab" hidden>
  <div class="row">
   <h2>📈 Inversiones</h2>
   <button class="btn" data-new="holding">+ Activo</button>
  </div>
- <p class="note">Valoraciones manuales.</p>
+ <div class="holding-tip"><strong>¿Inviertes en Flip?</strong> Registra Flip como <strong>Fondo</strong>, cantidad <strong>1</strong>, costo total = lo aportado y valor actual = el saldo que ves en Flip. Puedes actualizarlo cuando cambie, sin inventar una tasa fija.</div><p class="note">El rendimiento se calcula comparando valor actual con costo registrado. No se actualiza automáticamente.</p>
  <div id="holdingList"></div>
 </section>
-
+ 
 <section id="goals" class="tab" hidden>
  <div class="row">
   <h2>🎯 Mis metas</h2>
@@ -364,7 +425,7 @@ label{display:block;color:#c9d5e6;font-size:14px}
  </div>
  <div id="goalList"></div>
 </section>
-
+ 
 <section id="projections" class="tab" hidden>
  <h2>🔮 Proyecciones</h2>
  <div class="card">
@@ -391,7 +452,7 @@ label{display:block;color:#c9d5e6;font-size:14px}
   <p class="note">Simulación sin rentabilidad garantizada.</p>
  </div>
 </section>
-
+ 
 <section id="reports" class="tab" hidden>
  <h2>📋 Reportes</h2>
  <div id="reportBody"></div>
@@ -399,17 +460,43 @@ label{display:block;color:#c9d5e6;font-size:14px}
   Exportar movimientos CSV
  </button>
 </section>
-
+ 
 <section id="settings" class="tab" hidden>
  <h2>⚙️ Configuración</h2>
-
+ <div class="card" id="appearanceCard">
+  <h2>🎨 Personaliza PAPI RIKI</h2>
+  <p>Elige una paleta y una temática. Se guarda en este dispositivo sin modificar tus datos financieros.</p>
+  <div class="formgrid">
+   <label>Paleta de colores
+    <select id="colorPalette" class="field">
+     <option value="mint">Esmeralda</option><option value="ocean">Océano</option>
+     <option value="violet">Amatista</option><option value="rose">Rosa</option>
+     <option value="amber">Ámbar</option><option value="ice">Hielo</option>
+    </select>
+   </label>
+   <label>Temática
+    <select id="themeMode" class="field">
+     <option value="normal">Clásica</option>
+     <option value="festive">Festividades automáticas</option>
+     <option value="christmas">Navidad 🎄</option>
+     <option value="halloween">Halloween 🎃</option>
+     <option value="newyear">Año Nuevo 🎆</option>
+     <option value="peru">Fiestas Patrias 🇵🇪</option>
+     <option value="valentine">San Valentín 💗</option>
+    </select>
+   </label>
+  </div>
+  <div id="themePreview" class="theme-preview" aria-label="Vista previa de colores"></div>
+  <p id="themeDescription" class="theme-status"></p>
+ </div>
+ 
  <div class="card notification-card">
   <h2>🔔 Notificaciones en mi iPhone</h2>
   <p>
    Registra tu iPhone para recibir avisos
    de movimientos pendientes.
   </p>
-
+ 
   <div class="notification-status">
    <p id="swStatus" class="message">
     Comprobando Service Worker...
@@ -421,29 +508,29 @@ label{display:block;color:#c9d5e6;font-size:14px}
     Comprobando suscripción...
    </p>
   </div>
-
+ 
   <button id="registerPush" class="btn full"
    type="button">
    📱 Registrar mi iPhone
   </button>
-
+ 
   <div style="height:10px"></div>
-
+ 
   <button id="refreshPush" class="btn alt full"
    type="button">
    Comprobar registro
   </button>
-
+ 
   <p id="pushMessage" class="message"
    role="status" aria-live="polite"></p>
-
+ 
   <p class="note">
    Registrar el dispositivo no envía todavía
    notificaciones. El servidor de envío
    se configurará posteriormente.
   </p>
  </div>
-
+ 
  <div class="card">
   <h2>Mis preferencias</h2>
   <form id="settingsForm">
@@ -477,12 +564,12 @@ label{display:block;color:#c9d5e6;font-size:14px}
   </form>
  </div>
 </section>
-
+ 
 <section id="more" class="tab" hidden>
  <h2>Más opciones</h2>
  <div id="moreMenu" class="mobile-more"></div>
 </section>
-
+ 
 <section id="editor" class="tab" hidden>
  <h2 id="editorTitle">Nuevo registro</h2>
  <div class="card">
@@ -497,13 +584,13 @@ label{display:block;color:#c9d5e6;font-size:14px}
   </form>
  </div>
 </section>
-
+ 
 <p class="note">
  PAPI RIKI · Versión de desarrollo.
  Sin sincronización bancaria automática.
 </p>
 </main>
-
+ 
 <nav id="bottomNav" class="bottom-nav"
  aria-label="Navegación principal" hidden>
  <button data-tab="dashboard" class="active">
@@ -524,7 +611,7 @@ label{display:block;color:#c9d5e6;font-size:14px}
   <span class="nav-icon">☰</span>Más
  </button>
 </nav>
-
+ 
 <div id="quickSheet" class="quick-sheet" hidden>
  <div class="sheet-panel" role="dialog"
   aria-modal="true" aria-label="Añadir registro">
@@ -550,26 +637,26 @@ label{display:block;color:#c9d5e6;font-size:14px}
   </button>
  </div>
 </div>
-
+ 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 "use strict";
-
+ 
 // =====================================
 // CONFIGURACION PUBLICA
 // =====================================
-
+ 
 const SUPABASE_URL =
  "https://kbwrxebdcpgsplfjpkxv.supabase.co";
-
+ 
 const SUPABASE_KEY =
  "sb_publishable_khEJIOxXl5ytDpXFABTWcg_hKC0lak2";
-
+ 
 const VAPID_PUBLIC_KEY =
  "BD-pMOOx6oN_9Ok0npxKEh0HSjiK2A14tAoL0udhfCt_AsdS92qVq3PnI6DSZIaTDvgwkjcAvlsvcylx9Ksypj0";
-
+ 
 const $=id=>document.getElementById(id);
-
+ 
 const tables={
  account:"accounts",
  transaction:"finance_transactions",
@@ -577,7 +664,7 @@ const tables={
  holding:"finance_holdings",
  goal:"finance_goals"
 };
-
+ 
 const sections=[
  ["dashboard","🏠 Inicio"],
  ["accounts","🏦 Cuentas"],
@@ -589,7 +676,7 @@ const sections=[
  ["reports","📋 Reportes"],
  ["settings","⚙️ Ajustes"]
 ];
-
+ 
 const defaults={
  monthly_income:1350,
  expense_plan:700,
@@ -598,7 +685,7 @@ const defaults={
  fx_pen_per_usd:null,
  fx_date:null
 };
-
+ 
 let sb=null;
 let user=null;
 let active="dashboard";
@@ -608,7 +695,7 @@ let busy=false;
 let quickKind=null;
 let swRegistration=null;
 let pushBusy=false;
-
+ 
 let data={
  accounts:[],
  transactions:[],
@@ -617,19 +704,19 @@ let data={
  goals:[],
  settings:{...defaults}
 };
-
+ 
 // =====================================
 // RECORDAR SESION
 // =====================================
-
+ 
 const rememberKey="papi_riki_remember";
 const authKey="sb-kbwrxebdcpgsplfjpkxv-auth-token";
-
+ 
 let remember=
  localStorage.getItem(rememberKey)!=="false";
-
+ 
 $("remember").checked=remember;
-
+ 
 const storage={
  getItem(k){
   return (remember?localStorage:sessionStorage)
@@ -644,18 +731,18 @@ const storage={
   sessionStorage.removeItem(k);
  }
 };
-
+ 
 // =====================================
 // UTILIDADES
 // =====================================
-
+ 
 function money(n,c="PEN"){
  return new Intl.NumberFormat("es-PE",{
   style:"currency",
   currency:c
  }).format(Number(n)||0);
 }
-
+ 
 function esc(v){
  return String(v??"").replace(/[&<>"']/g,c=>({
   "&":"&amp;",
@@ -665,7 +752,7 @@ function esc(v){
   "'":"&#39;"
  })[c]);
 }
-
+ 
 function today(){
  const d=new Date();
  return [
@@ -674,83 +761,83 @@ function today(){
   String(d.getDate()).padStart(2,"0")
  ].join("-");
 }
-
+ 
 // =====================================
 // WEB PUSH
 // =====================================
-
+ 
 // Convertir la clave publica VAPID
 // a formato Uint8Array para PushManager.
-
+ 
 function urlBase64ToUint8Array(base64String){
  const padding="=".repeat(
   (4-base64String.length%4)%4
  );
-
+ 
  const base64=(base64String+padding)
   .replace(/-/g,"+")
   .replace(/_/g,"/");
-
+ 
  const raw=atob(base64);
-
+ 
  return Uint8Array.from(
   raw,
   character=>character.charCodeAt(0)
  );
 }
-
+ 
 function isStandalone(){
  return (
   window.matchMedia("(display-mode: standalone)").matches ||
   window.navigator.standalone===true
  );
 }
-
+ 
 function setPushMessage(text,error=false){
  $("pushMessage").textContent=text;
  $("pushMessage").className=
   "message "+(error?"error":"success");
 }
-
+ 
 async function registerPWA(){
  if(!("serviceWorker" in navigator)){
   $("swStatus").textContent=
    "Service Worker no disponible.";
   return null;
  }
-
+ 
  try{
   swRegistration=await navigator.serviceWorker.register(
    "/sw.js",
    {scope:"/"}
   );
-
+ 
   swRegistration=await navigator.serviceWorker.ready;
-
+ 
   $("swStatus").textContent=
    "Service Worker activo.";
-
+ 
   return swRegistration;
-
+ 
  }catch(error){
   console.error("Service Worker:",error);
-
+ 
   $("swStatus").textContent=
    "Error al registrar Service Worker.";
-
+ 
   return null;
  }
 }
-
+ 
 function refreshNotificationStatus(){
  if(!("Notification" in window)){
   $("notificationStatus").textContent=
    "Notificaciones no disponibles.";
   return;
  }
-
+ 
  const permission=Notification.permission;
-
+ 
  if(permission==="granted"){
   $("notificationStatus").textContent=
    "Permiso de notificaciones concedido.";
@@ -762,53 +849,53 @@ function refreshNotificationStatus(){
    "Permiso pendiente.";
  }
 }
-
+ 
 // =====================================
 // CONSULTAR SUSCRIPCION
 // =====================================
-
+ 
 async function checkPushSubscription(){
  refreshNotificationStatus();
-
+ 
  if(!user){
   $("subscriptionStatus").textContent=
    "Inicia sesion para consultar tu dispositivo.";
   return;
  }
-
+ 
  if(!("serviceWorker" in navigator) ||
     !("PushManager" in window)){
   $("subscriptionStatus").textContent=
    "Web Push no disponible.";
   return;
  }
-
+ 
  try{
   const registration=
    swRegistration||await navigator.serviceWorker.ready;
-
+ 
   const subscription=
    await registration.pushManager.getSubscription();
-
+ 
   if(!subscription){
    $("subscriptionStatus").textContent=
     "iPhone todavia no registrado.";
    return;
   }
-
+ 
   const uid=user.id;
-
+ 
   const {data:stored,error}=await sb
    .from("push_subscriptions")
    .select("id")
    .eq("user_id",uid)
    .eq("endpoint",subscription.endpoint)
    .maybeSingle();
-
+ 
   if(error)throw error;
-
+ 
   if(!user||user.id!==uid)return;
-
+ 
   if(stored){
    $("subscriptionStatus").textContent=
     "Dispositivo registrado en Supabase.";
@@ -816,27 +903,27 @@ async function checkPushSubscription(){
    $("subscriptionStatus").textContent=
     "Suscripcion local encontrada, pendiente de guardar.";
   }
-
+ 
  }catch(error){
   console.error("Consultar push:",error);
-
+ 
   $("subscriptionStatus").textContent=
    "No se pudo verificar: "+error.message;
  }
 }
-
+ 
 // =====================================
 // REGISTRAR IPHONE
 // =====================================
-
+ 
 async function registerIphone(){
  if(pushBusy)return;
-
+ 
  if(!user){
   setPushMessage("Primero inicia sesion.",true);
   return;
  }
-
+ 
  if(!isStandalone()){
   setPushMessage(
    "Abre PAPI RIKI desde el icono de la pantalla de inicio de tu iPhone.",
@@ -844,7 +931,7 @@ async function registerIphone(){
   );
   return;
  }
-
+ 
  if(!("serviceWorker" in navigator) ||
     !("PushManager" in window) ||
     !("Notification" in window)){
@@ -854,7 +941,7 @@ async function registerIphone(){
   );
   return;
  }
-
+ 
  if(Notification.permission==="denied"){
   setPushMessage(
    "Las notificaciones estan bloqueadas. Revisa los ajustes de iOS.",
@@ -862,35 +949,35 @@ async function registerIphone(){
   );
   return;
  }
-
+ 
  pushBusy=true;
  $("registerPush").disabled=true;
-
+ 
  try{
   // El permiso debe solicitarse directamente
   // desde la pulsacion del boton.
   let permission=Notification.permission;
-
+ 
   if(permission==="default"){
    permission=await Notification.requestPermission();
   }
-
+ 
   refreshNotificationStatus();
-
+ 
   if(permission!=="granted"){
    throw new Error(
     "Necesitas permitir las notificaciones."
    );
   }
-
+ 
   setPushMessage("Preparando suscripcion...");
-
+ 
   const registration=
    swRegistration||await navigator.serviceWorker.ready;
-
+ 
   let subscription=
    await registration.pushManager.getSubscription();
-
+ 
   if(!subscription){
    subscription=await registration.pushManager.subscribe({
     userVisibleOnly:true,
@@ -898,15 +985,15 @@ async function registerIphone(){
      urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
    });
   }
-
+ 
   if(!subscription){
    throw new Error(
     "El navegador no devolvio una suscripcion."
    );
   }
-
+ 
   const subscriptionData=subscription.toJSON();
-
+ 
   if(!subscriptionData.endpoint ||
      !subscriptionData.keys?.p256dh ||
      !subscriptionData.keys?.auth){
@@ -914,12 +1001,12 @@ async function registerIphone(){
     "La suscripcion esta incompleta."
    );
   }
-
+ 
   // Guardar exclusivamente para el usuario
   // que inicio la operacion.
-
+ 
   const uid=user.id;
-
+ 
   const payload={
    user_id:uid,
    endpoint:subscriptionData.endpoint,
@@ -928,13 +1015,13 @@ async function registerIphone(){
    device_name:"iPhone",
    updated_at:new Date().toISOString()
   };
-
+ 
   if(!user||user.id!==uid){
    throw new Error(
     "La sesion cambio durante el registro."
    );
   }
-
+ 
   const {data:saved,error}=await sb
    .from("push_subscriptions")
    .upsert(payload,{
@@ -942,53 +1029,53 @@ async function registerIphone(){
    })
    .select("id")
    .single();
-
+ 
   if(error)throw error;
-
+ 
   if(!saved?.id){
    throw new Error(
     "Supabase no confirmo el registro."
    );
   }
-
+ 
   $("subscriptionStatus").textContent=
    "iPhone registrado correctamente.";
-
+ 
   setPushMessage(
    "¡Tu iPhone ya esta registrado en Supabase! " +
    "El siguiente paso sera configurar el servidor de envio."
   );
-
+ 
  }catch(error){
   console.error("Registrar iPhone:",error);
-
+ 
   setPushMessage(
    "No se pudo completar el registro: "+error.message,
    true
   );
-
+ 
  }finally{
   pushBusy=false;
   $("registerPush").disabled=false;
  }
 }
-
+ 
 $("registerPush").addEventListener(
  "click",registerIphone
 );
-
+ 
 $("refreshPush").addEventListener(
  "click",checkPushSubscription
 );
-
+ 
 // =====================================
 // AUTENTICACION
 // =====================================
-
+ 
 function closeSheet(){
  $("quickSheet").hidden=true;
 }
-
+ 
 function showLogin(){
  user=null;
  $("loading").hidden=true;
@@ -998,7 +1085,7 @@ function showLogin(){
  $("bottomNav").hidden=true;
  closeSheet();
 }
-
+ 
 async function showApp(u){
  user=u;
  $("loading").hidden=true;
@@ -1007,24 +1094,24 @@ async function showApp(u){
  $("logout").hidden=false;
  $("bottomNav").hidden=false;
  $("password").value="";
-
+ 
  await loadAll();
  navigate("dashboard");
-
+ 
  refreshNotificationStatus();
 }
-
+ 
 async function init(){
  // Registrar el Service Worker
  // independientemente del login.
  void registerPWA();
-
+ 
  if(!window.supabase){
   $("loading").textContent=
    "No se pudo cargar Supabase.";
   return;
  }
-
+ 
  try{
   sb=window.supabase.createClient(
    SUPABASE_URL,
@@ -1039,56 +1126,56 @@ async function init(){
     }
    }
   );
-
+ 
   sb.auth.onAuthStateChange(event=>{
    if(event==="SIGNED_OUT"){
     showLogin();
    }
   });
-
+ 
   const {data:auth,error}=await sb.auth.getUser();
-
+ 
   if(error||!auth?.user){
    showLogin();
   }else{
    await showApp(auth.user);
   }
-
+ 
  }catch(error){
   console.error(error);
   $("loading").textContent="Error de conexion.";
  }
 }
-
+ 
 $("loginForm").onsubmit=async e=>{
  e.preventDefault();
-
+ 
  const btn=$("loginBtn");
  btn.disabled=true;
  $("loginMsg").textContent="";
-
+ 
  try{
   remember=$("remember").checked;
-
+ 
   localStorage.setItem(
    rememberKey,
    String(remember)
   );
-
+ 
   localStorage.removeItem(authKey);
   sessionStorage.removeItem(authKey);
-
+ 
   const {data:result,error}=
    await sb.auth.signInWithPassword({
     email:$("email").value.trim(),
     password:$("password").value
    });
-
+ 
   if(error)throw error;
   if(!result?.user)throw Error("Sesion invalida");
-
+ 
   await showApp(result.user);
-
+ 
  }catch(error){
   $("loginMsg").textContent=error.message;
   $("loginMsg").className="message error";
@@ -1096,79 +1183,79 @@ $("loginForm").onsubmit=async e=>{
   btn.disabled=false;
  }
 };
-
+ 
 $("logout").onclick=async()=>{
  const {error}=await sb.auth.signOut();
-
+ 
  if(error){
   alert(error.message);
  }else{
   showLogin();
  }
 };
-
+ 
 // =====================================
 // NAVEGACION
 // =====================================
-
+ 
 function navigate(id){
  active=id;
-
+ 
  document.querySelectorAll(".tab").forEach(el=>{
   el.hidden=el.id!==id;
  });
-
+ 
  document.querySelectorAll("[data-tab]").forEach(el=>{
   el.classList.toggle(
    "active",
    el.dataset.tab===id
   );
  });
-
+ 
  if(id==="projections")project();
-
+ 
  if(id==="settings"){
   refreshNotificationStatus();
   void checkPushSubscription();
  }
-
+ 
  window.scrollTo({top:0,behavior:"instant"});
 }
-
+ 
 $("desktopNav").innerHTML=sections.map(
  ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
-
+ 
 $("moreMenu").innerHTML=sections.slice(2).map(
  ([id,label])=>
  `<button data-tab="${id}">${label}</button>`
 ).join("");
-
+ 
 document.addEventListener("click",e=>{
  const b=e.target.closest("[data-tab]");
  if(b)navigate(b.dataset.tab);
 });
-
+ 
 $("quickAddBtn").onclick=()=>{
  $("quickSheet").hidden=false;
 };
-
+ 
 $("closeSheet").onclick=closeSheet;
-
+ 
 $("quickSheet").addEventListener("click",e=>{
  if(e.target===$("quickSheet"))closeSheet();
 });
-
+ 
 document.addEventListener("keydown",e=>{
  if(e.key==="Escape")closeSheet();
 });
-
+ 
 document.querySelectorAll("[data-quick]").forEach(b=>{
  b.onclick=()=>{
   const kind=b.dataset.quick;
   closeSheet();
-
+ 
   if(["expense","income","transfer"].includes(kind)){
    quickKind=kind;
    openEditor("transaction");
@@ -1178,16 +1265,16 @@ document.querySelectorAll("[data-quick]").forEach(b=>{
   }
  };
 });
-
+ 
 // =====================================
 // DATOS FINANCIEROS
 // =====================================
-
+ 
 async function loadAll(){
  if(!user)return;
-
+ 
  const uid=user.id;
-
+ 
  const results=await Promise.all([
   sb.from("accounts").select("*").eq("user_id",uid),
   sb.from("finance_transactions").select("*").eq("user_id",uid),
@@ -1197,16 +1284,16 @@ async function loadAll(){
   sb.from("finance_settings").select("*")
    .eq("user_id",uid).maybeSingle()
  ]);
-
+ 
  const failed=results.find(r=>r.error);
-
+ 
  if(failed){
   alert("Error de base de datos: "+failed.error.message);
   return;
  }
-
+ 
  if(!user||user.id!==uid)return;
-
+ 
  data.accounts=results[0].data||[];
  data.transactions=results[1].data||[];
  data.budgets=results[2].data||[];
@@ -1216,39 +1303,37 @@ async function loadAll(){
   ...defaults,
   ...(results[5].data||{})
  };
-
+ 
  render();
 }
-
+ 
 function account(id){
  return data.accounts.find(a=>a.id===id);
 }
-
+ 
 function balance(a){
- let n=Number(a.opening_balance);
-
+ let n=Number(a.opening_balance)||0;
+ const credit=a.account_type==="credit";
  for(const t of data.transactions){
   if(t.account_id===a.id){
-   if(t.kind==="income")n+=Number(t.amount);
-   if(t.kind==="expense")n-=Number(t.amount);
-   if(t.kind==="transfer")n-=Number(t.amount);
+   if(t.kind==="income")n+=credit?-Number(t.amount):Number(t.amount);
+   if(t.kind==="expense")n+=credit?Number(t.amount):-Number(t.amount);
+   if(t.kind==="transfer")n+=credit?Number(t.amount):-Number(t.amount);
   }
-
   if(t.kind==="transfer"&&t.linked_account_id===a.id){
-   n+=Number(t.linked_amount);
+   n+=credit?-Number(t.linked_amount):Number(t.linked_amount);
   }
  }
-
  return n;
 }
-
+ 
 function converted(n,c){
  if(c==="PEN")return Number(n);
-
+ 
  const fx=Number(data.settings.fx_pen_per_usd);
  return fx>0?Number(n)*fx:null;
 }
-
+ 
 function actions(type,id){
  return `<div class="actions">
   <button class="btn alt" data-edit="${type}:${id}">
@@ -1259,7 +1344,7 @@ function actions(type,id){
   </button>
  </div>`;
 }
-
+ 
 function render(){
  renderDashboard();
  renderAccounts();
@@ -1270,105 +1355,68 @@ function render(){
  renderReports();
  renderSettings();
 }
-
+ 
 function renderDashboard(){
  const s=data.settings;
-
+ const month=new Date().toISOString().slice(0,7);
+ const monthly=data.transactions.filter(t=>String(t.occurred_on||"").startsWith(month));
+ const spent=monthly.filter(t=>t.kind==="expense").reduce((n,t)=>{
+  const x=converted(t.amount,t.currency);return n+(x===null?0:x);
+ },0);
  const cards=[
-  ["Ingreso mensual",money(s.monthly_income),"mint"],
-  ["Presupuesto",money(s.expense_plan),""],
-  ["Objetivo inversion",money(s.investment_target),"purple"],
-  ["Margen teorico",
-   money(Number(s.monthly_income)-Number(s.expense_plan)),""]
+  ["Ingreso mensual previsto",money(s.monthly_income),"mint"],
+  ["Gastos del mes",money(spent),""],
+  ["Presupuesto mensual",money(s.expense_plan),""],
+  ["Objetivo de inversión",money(s.investment_target),"purple"]
  ];
-
  $("summary").innerHTML=cards.map(([t,v,c])=>
-  `<div class="card">
-   <h3>${t}</h3>
-   <div class="value ${c}">${v}</div>
-   </div>`
+  `<div class="card"><h3>${t}</h3><div class="value ${c}">${v}</div></div>`
  ).join("");
-
- let total=0;
- let complete=true;
-
+ let assets=0,debts=0,complete=true;
  for(const a of data.accounts){
   const n=converted(balance(a),a.currency);
   if(n===null)complete=false;
-  else total+=n;
+  else if(a.account_type==="credit")debts+=n;
+  else assets+=n;
  }
-
  for(const h of data.holdings){
   const n=converted(h.market_value,h.currency);
-  if(n===null)complete=false;
-  else total+=n;
+  if(n===null)complete=false;else assets+=n;
  }
-
- const creditDebt=data.accounts.some(
-  a=>a.account_type==="credit"
- );
-
- const canEstimate=complete&&!creditDebt;
-
- $("netWorth").textContent=
-  canEstimate&&(data.accounts.length||data.holdings.length)
-   ?money(total)
-   :"Por configurar";
-
- $("netWorthNote").textContent=
-  "Estimacion parcial: faltan deudas y conciliacion completa.";
-
- const pct=canEstimate&&Number(s.networth_target)>0
-  ?Math.max(0,Math.min(
-    100,total/Number(s.networth_target)*100
-   ))
-  :0;
-
- $("goalSummary").innerHTML=
-  `<div class="value">${money(s.networth_target)}</div>
-   <div class="progress">
-    <div style="width:${pct}%"></div>
-   </div>
-   <p class="note">Avance indicativo: ${pct.toFixed(1)}%</p>`;
-
- const margin=
-  Number(s.monthly_income)-Number(s.expense_plan);
-
- const suggested=Math.max(
-  0,Math.min(margin,Number(s.investment_target))
- );
-
- $("spendable").innerHTML=
-  `<p>Inversion objetivo:
-   <strong>${money(s.investment_target)}</strong></p>
-   <p>Maximo teorico:
-   <strong>${money(suggested)}</strong></p>
-   <p class="note">
-    No representa dinero disponible real.
-   </p>`;
+ const total=assets-debts;
+ const hasData=data.accounts.length||data.holdings.length;
+ $("netWorth").textContent=complete&&hasData?money(total):"Por configurar";
+ $("netWorthNote").textContent=complete
+  ?`Activos estimados ${money(assets)} · Deudas de tarjetas ${money(debts)}. Saldo manual; no sincronizado con bancos.`
+  :"Configura el tipo de cambio para incluir cuentas en USD. Los saldos son manuales.";
+ const pct=complete&&Number(s.networth_target)>0
+  ?Math.max(0,Math.min(100,total/Number(s.networth_target)*100)):0;
+ $("goalSummary").innerHTML=`<div class="value">${money(s.networth_target)}</div><div class="progress"><div style="width:${pct}%"></div></div><p class="note">Avance estimado: ${pct.toFixed(1)}%</p>`;
+ const margin=Number(s.monthly_income)-Number(s.expense_plan);
+ $("spendable").innerHTML=`<div class="value mint">${money(Math.max(0,Math.min(margin,Number(s.investment_target))))}</div><p>Meta de aporte mensual sugerido</p><p class="note">Es una referencia presupuestaria, no dinero disponible ni rentabilidad garantizada.</p>`;
 }
-
+ 
 function renderAccounts(){
+ const types={bank:["🏦","Cuenta bancaria"],cash:["💵","Efectivo"],investment:["📦","Cuenta de inversión"],credit:["💳","Tarjeta de crédito"]};
  $("accountList").innerHTML=data.accounts.length
-  ?data.accounts.map(a=>
-   `<div class="item">
-    <strong>${esc(a.name)}</strong>
-    <p>${esc(a.institution)} · ${a.currency}</p>
-    <div class="value mint">
-     ${money(balance(a),a.currency)}
-    </div>
-    <small>Saldo calculado de registros manuales</small>
-    ${actions("account",a.id)}
-   </div>`
-  ).join("")
-  :"<p>No hay cuentas registradas.</p>";
+  ?data.accounts.map(a=>{
+   const credit=a.account_type==="credit";
+   const [ico,type]=types[a.account_type]||["🏦","Cuenta"];
+   return `<div class="item">
+    <div class="account-head"><div><strong>${esc(a.name)}</strong><div class="account-type">${esc(a.institution)} · ${type} · ${esc(a.currency)}</div></div><span class="account-icon">${ico}</span></div>
+    <div class="account-amount ${credit?"debt":"mint"}">${money(balance(a),a.currency)}</div>
+    <div class="account-caption">${credit?"Deuda estimada pendiente de pago":"Saldo calculado a partir de registros manuales"}</div>
+    ${credit?'<p class="note">Para pagarla, registra una transferencia desde tu cuenta bancaria hacia esta tarjeta.</p>':""}
+    ${actions("account",a.id)}</div>`;
+  }).join("")
+  :'<div class="card"><h3>Tu dinero empieza aquí</h3><p>Añade una cuenta bancaria, efectivo o tarjeta de crédito.</p><button class="btn" data-new="account">+ Añadir primera cuenta</button></div>';
 }
-
+ 
 function renderTransactions(){
  const rows=[...data.transactions].sort(
   (a,b)=>b.occurred_on.localeCompare(a.occurred_on)
  );
-
+ 
  $("transactionList").innerHTML=rows.length
   ?rows.map(t=>
    `<div class="item">
@@ -1383,7 +1431,7 @@ function renderTransactions(){
   ).join("")
   :"<p>No hay movimientos registrados.</p>";
 }
-
+ 
 function renderBudgets(){
  $("budgetList").innerHTML=data.budgets.length
   ?data.budgets.map(b=>{
@@ -1392,11 +1440,11 @@ function renderBudgets(){
     t.category===b.category&&
     t.currency===b.currency
    ).reduce((n,t)=>n+Number(t.amount),0);
-
+ 
    const pct=Number(b.amount)>0
     ?spent/Number(b.amount)*100
     :0;
-
+ 
    return `<div class="item">
     <div class="row">
      <strong>${esc(b.category)}</strong>
@@ -1413,31 +1461,29 @@ function renderBudgets(){
   }).join("")
   :"<p>No hay presupuestos configurados.</p>";
 }
-
+ 
 function renderHoldings(){
  $("holdingList").innerHTML=data.holdings.length
-  ?data.holdings.map(h=>
-   `<div class="item">
-    <div class="row">
-     <strong>${esc(h.symbol)}</strong>
-     <strong>${money(h.market_value,h.currency)}</strong>
-    </div>
-    <p>${esc(h.broker)} · ${esc(h.asset_type)}
-     · ${h.quantity} unidades</p>
-    <small>Valoracion manual</small>
-    ${actions("holding",h.id)}
-   </div>`
-  ).join("")
-  :"<p>No hay inversiones registradas.</p>";
+  ?data.holdings.map(h=>{
+   const cost=Number(h.cost_basis)||0;
+   const value=Number(h.market_value)||0;
+   const diff=value-cost;
+   const pct=cost>0?diff/cost*100:null;
+   return `<div class="item"><div class="row"><div><strong>📈 ${esc(h.symbol)}</strong><p>${esc(h.broker)} · ${esc(h.asset_type)} · ${esc(h.currency)}</p></div><div class="value">${money(value,h.currency)}</div></div>
+    <div class="holding-stats"><div class="holding-stat"><small>Capital registrado</small><strong>${money(cost,h.currency)}</strong></div><div class="holding-stat"><small>Ganancia / pérdida estimada</small><strong class="${diff>=0?"mint":"error"}">${diff>=0?"+":""}${money(diff,h.currency)}</strong></div></div>
+    <p class="note">${pct===null?"Rentabilidad no calculable sin capital registrado":`Variación acumulada: ${pct.toFixed(2)}%`} · Valor manual al ${esc(h.price_date||"último registro")}. No es rentabilidad anualizada.</p>
+    ${actions("holding",h.id)}</div>`;
+  }).join("")
+  :'<div class="card"><h3>Empieza a seguir tus inversiones</h3><p>Para Flip: broker «Flip», activo «Mi inversión Flip», tipo «Fondo», cantidad 1, capital aportado y saldo actual.</p><button class="btn" data-new="holding">+ Registrar Flip u otra inversión</button></div>';
 }
-
+ 
 function renderGoals(){
  $("goalList").innerHTML=data.goals.length
   ?data.goals.map(g=>{
    const pct=Math.min(
     100,Number(g.saved)/Number(g.target)*100
    );
-
+ 
    return `<div class="item">
     <strong>${esc(g.name)}</strong>
     <p>${money(g.saved,g.currency)} /
@@ -1450,12 +1496,12 @@ function renderGoals(){
   }).join("")
   :"<p>No hay metas adicionales.</p>";
 }
-
+ 
 function renderReports(){
  const sum=kind=>data.transactions
   .filter(t=>t.kind===kind&&t.currency==="PEN")
   .reduce((n,t)=>n+Number(t.amount),0);
-
+ 
  $("reportBody").innerHTML=
   `<div class="grid">
    <div class="card">
@@ -1473,10 +1519,10 @@ function renderReports(){
     Reporte acumulado, no cierre semanal.
    </p>`;
 }
-
+ 
 function renderSettings(){
  const s=data.settings;
-
+ 
  for(const [id,key] of [
   ["sIncome","monthly_income"],
   ["sExpense","expense_plan"],
@@ -1488,26 +1534,26 @@ function renderSettings(){
   $(id).value=s[key]??"";
  }
 }
-
+ 
 function project(){
  const p=Number($("pInitial").value);
  const a=Number($("pMonthly").value);
  const y=Number($("pYears").value);
  const r=Number($("pRate").value);
-
+ 
  if(![p,a,y,r].every(Number.isFinite)||
   p<0||a<0||y<1||y>50||r< -50||r>50){
   $("projectionResult").textContent="Revisa los valores.";
   return;
  }
-
+ 
  const m=Math.pow(1+r/100,1/12)-1;
  const n=Math.round(y*12);
  const factor=Math.pow(1+m,n);
-
+ 
  const future=p*factor+
   (Math.abs(m)<1e-12?a*n:a*(factor-1)/m);
-
+ 
  $("projectionResult").innerHTML=
   `<h3>Patrimonio proyectado</h3>
    <div class="value mint">${money(future)}</div>
@@ -1516,15 +1562,15 @@ function project(){
     Escenario hipotetico, sin impuestos ni inflacion.
    </p>`;
 }
-
+ 
 ["pInitial","pMonthly","pYears","pRate"].forEach(
  id=>$(id).addEventListener("input",project)
 );
-
+ 
 // =====================================
 // FORMULARIOS FINANCIEROS
 // =====================================
-
+ 
 const fields={
  account:[
   ["name","Nombre","text"],
@@ -1532,7 +1578,7 @@ const fields={
   ["account_type","Tipo","select",
    "bank:Bancaria|cash:Efectivo|investment:Inversion|credit:Credito"],
   ["currency","Moneda","select","PEN|USD"],
-  ["opening_balance","Saldo inicial","number"]
+  ["opening_balance","Saldo inicial / deuda actual","number"]
  ],
  transaction:[
   ["kind","Tipo","select",
@@ -1553,12 +1599,12 @@ const fields={
  ],
  holding:[
   ["broker","Broker","text"],
-  ["symbol","Activo","text"],
+  ["symbol","Nombre de la inversión","text"],
   ["asset_type","Tipo","select",
    "stock:Accion|etf:ETF|fund:Fondo|deposit:Deposito|other:Otro"],
   ["quantity","Cantidad","number"],
-  ["cost_basis","Costo total","number"],
-  ["market_value","Valor manual","number"],
+  ["cost_basis","Capital aportado / costo total","number"],
+  ["market_value","Valor actual (saldo de inversión)","number"],
   ["currency","Moneda","select","PEN|USD"],
   ["price_date","Fecha valoracion","date"]
  ],
@@ -1570,15 +1616,15 @@ const fields={
   ["due_on","Fecha objetivo","date"]
  ]
 };
-
+ 
 function fieldHtml(f,record){
  const [key,label,type,opts]=f;
  const value=record?.[key]??(
   key==="occurred_on"?today():""
  );
-
+ 
  let control="";
-
+ 
  if(type==="select"){
   control=`<select class="field" id="f_${key}">`+
    opts.split("|").map(o=>{
@@ -1587,7 +1633,7 @@ function fieldHtml(f,record){
      ${String(value)===v?"selected":""}>
      ${t||v}</option>`;
    }).join("")+"</select>";
-
+ 
  }else if(
   type==="account"||type==="optional_account"
  ){
@@ -1601,11 +1647,11 @@ function fieldHtml(f,record){
      ${esc(a.name)} (${a.currency})
      </option>`
    ).join("")+"</select>";
-
+ 
  }else{
   const number=
    type==="number"||type==="optional_number";
-
+ 
   control=`<input class="field"
    id="f_${key}"
    type="${number?"number":type}"
@@ -1613,20 +1659,20 @@ function fieldHtml(f,record){
    value="${esc(value)}"
    ${type.startsWith("optional")?"":"required"}>`;
  }
-
+ 
  return `<label>${label}${control}</label>`;
 }
-
+ 
 function openEditor(type,id=null){
  if(type==="transaction"&&!data.accounts.length){
   alert("Primero registra una cuenta.");
   navigate("accounts");
   return;
  }
-
+ 
  editType=type;
  editId=id;
-
+ 
  const sets={
   account:data.accounts,
   transaction:data.transactions,
@@ -1634,42 +1680,61 @@ function openEditor(type,id=null){
   holding:data.holdings,
   goal:data.goals
  };
-
+ 
  const record=id
   ?sets[type].find(x=>x.id===id)
   :null;
-
+ 
  $("editorTitle").textContent=
   (id?"Editar ":"Nuevo ")+type;
-
+ 
  $("editorFields").innerHTML=
   fields[type].map(f=>fieldHtml(f,record)).join("");
-
+ if(type==="account"){
+  const help=document.createElement("p");
+  help.id="accountEditorHelp";
+  help.className="note";
+  help.style.gridColumn="1/-1";
+  $("editorFields").append(help);
+  const update=()=>{
+   const credit=$("f_account_type").value==="credit";
+   help.textContent=credit
+    ?"Tarjeta de crédito: registra en Saldo inicial la DEUDA actual (no la línea de crédito). Los gastos aumentan la deuda; una transferencia desde débito hacia esta tarjeta la reduce. No se registra límite crediticio en esta versión."
+    :"Saldo inicial: dinero disponible al crear la cuenta. Los movimientos posteriores ajustan el saldo.";
+  };
+  $("f_account_type").addEventListener("change",update);update();
+ }
+ if(type==="holding"){
+  const help=document.createElement("p");help.className="note";help.style.gridColumn="1/-1";
+  help.textContent="Para Flip: Broker = Flip; Tipo = Fondo; Cantidad = 1; Capital aportado = lo que invertiste; Valor actual = saldo actual mostrado en Flip. Puedes editar el valor cada vez que cambie.";
+  $("editorFields").append(help);
+ }
+ 
  if(type==="transaction"&&!id&&quickKind){
   $("f_kind").value=quickKind;
  }
-
+ 
  $("editorMsg").textContent="";
  navigate("editor");
 }
-
+ 
 document.addEventListener("click",async e=>{
  const create=e.target.closest("[data-new]");
  if(create)openEditor(create.dataset.new);
-
+ 
  const edit=e.target.closest("[data-edit]");
  if(edit){
   const [type,id]=edit.dataset.edit.split(":");
   openEditor(type,id);
  }
-
+ 
  const del=e.target.closest("[data-delete]");
-
+ 
  if(del){
   const [type,id]=del.dataset.delete.split(":");
-
+ 
   if(!confirm("¿Eliminar este registro?"))return;
-
+ 
   try{
    const {data:deleted,error}=
     await sb.from(tables[type])
@@ -1677,102 +1742,100 @@ document.addEventListener("click",async e=>{
      .eq("id",id)
      .eq("user_id",user.id)
      .select("id");
-
+ 
    if(error)throw error;
-
+ 
    if(deleted?.length!==1){
     throw Error("No se confirmo la eliminacion.");
    }
-
+ 
    await loadAll();
-
+ 
   }catch(error){
    alert(error.message);
   }
  }
 });
-
+ 
 $("cancelBtn").onclick=()=>navigate("dashboard");
-
+ 
 $("editorForm").onsubmit=async e=>{
  e.preventDefault();
  if(busy)return;
-
+ 
  busy=true;
  $("saveBtn").disabled=true;
-
+ 
  try{
   const payload={};
-
+ 
   for(const [key,,type] of fields[editType]){
    const raw=$("f_"+key).value;
-
+ 
    if(type==="number"||type==="optional_number"){
     payload[key]=raw===""?null:Number(raw);
-
+ 
     if(payload[key]!==null&&(
      !Number.isFinite(payload[key])||
      payload[key]<0
     )){
      throw Error("Importe invalido.");
     }
-
+ 
    }else{
     payload[key]=raw||null;
    }
   }
-
+ 
   if(editType==="transaction"){
    const src=account(payload.account_id);
    const dst=account(payload.linked_account_id);
-
+ 
    if(!src)throw Error("Selecciona una cuenta.");
-
+ 
    payload.currency=src.currency;
-
+   if(src.account_type==="credit"&&payload.kind==="income"){
+    throw Error("Para pagar una tarjeta usa Transferencia desde tu cuenta bancaria hacia la tarjeta.");
+   }
+   if(src.account_type==="credit"&&payload.kind==="transfer"){
+    throw Error("Para pagar una tarjeta elige una cuenta bancaria como origen y la tarjeta como destino.");
+   }
+ 
    if(payload.kind==="transfer"){
     if(!dst||dst.id===src.id){
      throw Error("Selecciona otra cuenta de destino.");
     }
-
+ 
     if(
      payload.linked_amount===null&&
      src.currency===dst.currency
     ){
      payload.linked_amount=payload.amount;
     }
-
+ 
     if(!(payload.linked_amount>0)){
      throw Error("Indica el importe recibido.");
     }
-
+ 
    }else{
     payload.linked_account_id=null;
     payload.linked_amount=null;
    }
-
+ 
    if(!(payload.amount>0)){
     throw Error("Importe invalido.");
    }
   }
-
+ 
   if(editType==="budget"){
    payload.currency="PEN";
   }
-
+ 
   if(editType==="goal"&&!(payload.target>0)){
    throw Error("Objetivo invalido.");
   }
-
-  if(
-   editType==="account"&&
-   payload.account_type==="credit"
-  ){
-   throw Error(
-    "El modulo de deuda de tarjetas todavia no esta habilitado."
-   );
-  }
-
+ 
+ 
   const query=editId
    ?sb.from(tables[editType])
      .update(payload)
@@ -1780,18 +1843,18 @@ $("editorForm").onsubmit=async e=>{
      .eq("user_id",user.id)
    :sb.from(tables[editType])
      .insert({...payload,user_id:user.id});
-
+ 
   const {data:saved,error}=
    await query.select("id");
-
+ 
   if(error)throw error;
-
+ 
   if(!saved?.length){
    throw Error("No se confirmo el guardado.");
   }
-
+ 
   await loadAll();
-
+ 
   navigate({
    account:"accounts",
    transaction:"movements",
@@ -1799,24 +1862,24 @@ $("editorForm").onsubmit=async e=>{
    holding:"investments",
    goal:"goals"
   }[editType]);
-
+ 
  }catch(error){
   $("editorMsg").textContent=error.message;
   $("editorMsg").className="message error";
-
+ 
  }finally{
   busy=false;
   $("saveBtn").disabled=false;
  }
 };
-
+ 
 // =====================================
 // CONFIGURACION
 // =====================================
-
+ 
 $("settingsForm").onsubmit=async e=>{
  e.preventDefault();
-
+ 
  const payload={
   user_id:user.id,
   monthly_income:Number($("sIncome").value),
@@ -1828,21 +1891,21 @@ $("settingsForm").onsubmit=async e=>{
    :null,
   fx_date:$("sFxDate").value||null
  };
-
+ 
  const {error}=await sb.from("finance_settings")
   .upsert(payload,{onConflict:"user_id"});
-
+ 
  $("settingsMsg").textContent=error
   ?error.message
   :"Preferencias guardadas.";
-
+ 
  if(!error)await loadAll();
 };
-
+ 
 // =====================================
 // EXPORTAR REPORTES
 // =====================================
-
+ 
 $("exportBtn").onclick=()=>{
  const rows=[
   ["fecha","tipo","cuenta","categoria",
@@ -1857,32 +1920,92 @@ $("exportBtn").onclick=()=>{
    t.currency
   ])
  ];
-
+ 
  const csv=rows.map(row=>
   row.map(v=>
    '"'+String(v??"").replace(/"/g,'""')+'"'
   ).join(",")
  ).join("\r\n");
-
+ 
  const blob=new Blob(
   ["\ufeff"+csv],
   {type:"text/csv;charset=utf-8"}
  );
-
+ 
  const url=URL.createObjectURL(blob);
  const a=document.createElement("a");
-
+ 
  a.href=url;
  a.download="papi-riki-movimientos.csv";
  a.click();
-
+ 
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
-
+ 
 // =====================================
 // INICIAR APLICACION
 // =====================================
-
+ 
+ 
+// =====================================
+// APARIENCIA PERSONALIZABLE Y FESTIVIDADES
+// =====================================
+const palettes={
+ mint:{accent:"#45e3b5",bg:"#080f1c",panel:"#14243a",panel2:"#0f1c30",line:"#30455e",muted:"#a9bbcf",text:"#f4f8ff"},
+ ocean:{accent:"#65c9ff",bg:"#081525",panel:"#142b43",panel2:"#0d2238",line:"#345774",muted:"#b3cde0",text:"#f2f9ff"},
+ violet:{accent:"#c7a2ff",bg:"#100d21",panel:"#25203f",panel2:"#1b1732",line:"#50436b",muted:"#c0b4d5",text:"#faf6ff"},
+ rose:{accent:"#ff9ac2",bg:"#1c101c",panel:"#38243a",panel2:"#2c1b2e",line:"#62465f",muted:"#d9bacc",text:"#fff5fb"},
+ amber:{accent:"#ffc66b",bg:"#1b140c",panel:"#352719",panel2:"#281f15",line:"#5c4932",muted:"#dac5a5",text:"#fff9f0"},
+ ice:{accent:"#74e1e7",bg:"#0a1922",panel:"#19323d",panel2:"#112831",line:"#375965",muted:"#b6d0d7",text:"#f4ffff"}
+};
+const festivals=[
+ {key:"newyear",month:1,day:1,label:"🎆 Año Nuevo",accent:"#ffd37d"},
+ {key:"valentine",month:2,day:14,label:"💗 San Valentín",accent:"#ff91b6"},
+ {key:"peru",month:7,day:28,label:"🇵🇪 Fiestas Patrias",accent:"#ff7c86"},
+ {key:"halloween",month:10,day:31,label:"🎃 Halloween",accent:"#ffad60"},
+ {key:"christmas",month:12,day:25,label:"🎄 Navidad",accent:"#72e5a3"}
+];
+function nearestFestival(date=new Date()){
+ const year=date.getFullYear();
+ const options=[];
+ for(const y of [year,year+1])for(const f of festivals){
+  const when=new Date(y,f.month-1,f.day,12);
+  options.push({...f,when,distance:when>=date?when-date:Number.POSITIVE_INFINITY});
+ }
+ return options.sort((a,b)=>a.distance-b.distance)[0];
+}
+function appearance(){
+ const palette=localStorage.getItem("papi_palette")||"mint";
+ const mode=localStorage.getItem("papi_theme")||"normal";
+ const base=palettes[palette]||palettes.mint;
+ const festival=mode==="festive"?nearestFestival():festivals.find(f=>f.key===mode);
+ const accent=festival?.accent||base.accent;
+ const root=document.documentElement;
+ for(const [key,value] of Object.entries(base)){
+  root.style.setProperty(key==="accent"?"--mint":"--"+key,value);
+ }
+ root.style.setProperty("--mint",accent);
+ root.style.setProperty("--accent-soft",`color-mix(in srgb, ${accent} 17%, transparent)`);
+ root.style.setProperty("--hero1",`color-mix(in srgb, ${accent} 20%, ${base.panel})`);
+ root.style.setProperty("--hero2",base.panel2);
+ document.querySelector('meta[name="theme-color"]').content=base.bg;
+ if($("colorPalette"))$("colorPalette").value=palette;
+ if($("themeMode"))$("themeMode").value=mode;
+ if($("themeDescription"))$("themeDescription").textContent=festival
+  ?`Temática: ${festival.label}${mode==="festive"?" (festividad más cercana)":""}. Cambia automáticamente al abrir la app.`
+  :"Diseño clásico con tu paleta favorita.";
+ if($("themePreview"))$("themePreview").innerHTML=[base.bg,base.panel,accent,base.muted,base.text].map(c=>`<span class="theme-dot" style="background:${c}"></span>`).join("");
+ const banner=$("seasonBanner");
+ if(banner){banner.hidden=!festival;if(festival)banner.textContent=festival.label+" · Edición especial";}
+}
+$("colorPalette").addEventListener("change",e=>{
+ localStorage.setItem("papi_palette",e.target.value);appearance();
+});
+$("themeMode").addEventListener("change",e=>{
+ localStorage.setItem("papi_theme",e.target.value);appearance();
+});
+appearance();
+ 
 init();
 </script>
 </body>
